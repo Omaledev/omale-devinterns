@@ -10,63 +10,55 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
+
     {
+        // Log to see which data is coming through
+    \Log::info('Registration data:', $data);
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+        'role' => ['required', 'string', 'in:Student,Parent,Teacher'],
+        'admission_number' => ['nullable', 'string', 'max:255'],
+        'employee_id' => ['nullable', 'string', 'max:255'],
+
+        // return Validator::make($data, [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
+        //     'role' => ['required', 'string', 'in:Student,Parent,Teacher'],
+        //     'admission_number' => ['required_if:role,Student', 'string', 'max:255'],
+        //     'employee_id' => ['required_if:role,Teacher', 'string', 'max:255'],
+        // ]);
+    ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
-        return User::create([
+
+        //  dd($data);
+        // Create the user first
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'admission_number' => $data['admission_number'] ?? null,
+            'employee_id' => $data['employee_id'] ?? null,
         ]);
+
+         // Assigning the selected role
+        $user->assignRole($data['role']);
+
+        return $user;
     }
 }
