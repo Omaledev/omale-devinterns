@@ -8,7 +8,7 @@
                 <h4>Add New School</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('schools.store') }}" method="POST">
+                <form action="{{ route('superadmin.schools.store') }}" method="POST">
                     @csrf
 
                     <div class="mb-3">
@@ -58,7 +58,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">Create School</button>
-                        <a href="{{ route('schools.index') }}" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('superadmin.schools.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>
             </div>

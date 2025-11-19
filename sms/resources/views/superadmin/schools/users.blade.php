@@ -6,8 +6,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Users for {{ $school->name }}</h2>
             <div>
-                <a href="{{ route('schools.create-user', $school) }}" class="btn btn-primary">Add User</a>
-                <a href="{{ route('schools.show', $school) }}" class="btn btn-secondary">Back to School</a>
+                <a href="{{ route('superadmin.schools.create-user', $school) }}" class="btn btn-primary">Add User</a>
+                <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-secondary">Back to School</a>
             </div>
         </div>
 

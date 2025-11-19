@@ -26,7 +26,7 @@ class SchoolController extends Controller
             // For other roles - show only their school
             $schools = School::where('id', auth()->user()->school_id)->get();
         }
-        return view('schools.index', compact('schools'));
+        return view('superadmin.schools.index', compact('schools'));
     }
 
     /**
@@ -34,7 +34,7 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        return view('schools.create');
+        return view('superadmin.schools.create');
     }
 
     /**
@@ -52,7 +52,7 @@ class SchoolController extends Controller
 
         School::create($validated);
 
-        return redirect()->route('schools.index')
+        return redirect()->route('superadmin.schools.index')
             ->with('success', 'School created successfully.');
     }
 
@@ -61,7 +61,7 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
-        return view('schools.show', compact('school'));
+        return view('superadmin.schools.show', compact('school'));
     }
 
     /**
@@ -69,7 +69,7 @@ class SchoolController extends Controller
      */
     public function edit(School $school)
     {
-        return view('schools.edit', compact('school'));
+        return view('superadmin.schools.edit', compact('school'));
     }
 
     /**
@@ -87,7 +87,7 @@ class SchoolController extends Controller
 
         $school->update($validated);
 
-        return redirect()->route('schools.index')
+        return redirect()->route('superadmin.schools.index')
             ->with('success', 'School updated successfully.');
     }
 
@@ -98,7 +98,7 @@ class SchoolController extends Controller
     {
         $school->delete();
 
-        return redirect()->route('schools.index')
+        return redirect()->route('superadmin.schools.index')
             ->with('success', 'School deleted successfully.');
     }
 
@@ -109,7 +109,7 @@ class SchoolController extends Controller
     public function createUser(School $school)
     {
         $availableRoles = Role::whereIn('name', ['SchoolAdmin', 'Bursar', 'Teacher'])->get();
-        return view('schools.create-user', compact('school', 'availableRoles'));
+        return view('superadmin.schools.create-user', compact('school', 'availableRoles'));
     }
 
     /**
@@ -133,7 +133,7 @@ class SchoolController extends Controller
 
         $user->assignRole($validated['role']);
 
-        return redirect()->route('schools.show', $school)
+        return redirect()->route('superadmin.schools.show', $school)
             ->with('success', "{$validated['role']} created successfully!");
     }
 
@@ -143,6 +143,6 @@ class SchoolController extends Controller
     public function showUsers(School $school)
     {
         $users = $school->users()->with('roles')->get();
-        return view('schools.users', compact('school', 'users'));
+        return view('superadmin.schools.users', compact('school', 'users'));
     }
 }

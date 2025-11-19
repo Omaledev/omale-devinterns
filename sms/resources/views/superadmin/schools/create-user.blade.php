@@ -6,10 +6,10 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4>Create User for {{ $school->name }}</h4>
-                <a href="{{ route('schools.show', $school) }}" class="btn btn-secondary">Back to School</a>
+                <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-secondary">Back to School</a>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('schools.store-user', $school) }}">
+                <form method="POST" action="{{ route('superadmin.schools.store-user', $school) }}">
                     @csrf
 
                     <div class="row mb-3">
@@ -81,7 +81,7 @@
                     <div class="row mb-0">
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary">Create User</button>
-                            <a href="{{ route('schools.show', $school) }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </div>
                 </form>

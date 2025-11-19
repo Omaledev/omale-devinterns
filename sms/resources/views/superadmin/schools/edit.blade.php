@@ -8,7 +8,7 @@
                 <h4>Edit School</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('schools.update', $school) }}" method="POST">
+                <form action="{{ route('superadmin.schools.update', $school) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -59,7 +59,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">Update School</button>
-                        <a href="{{ route('schools.index') }}" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('superadmin.schools.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>
             </div>

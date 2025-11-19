@@ -5,7 +5,7 @@
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Schools Management</h2>
-            <a href="{{ route('schools.create') }}" class="btn btn-primary">Add New School</a>
+            <a href="{{ route('superadmin.schools.create') }}" class="btn btn-primary">Add New School</a>
         </div>
 
          {{-- School Switcher for SuperAdmin --}}
@@ -54,9 +54,9 @@
                                     <td>{{ $school->phone ?? 'N/A' }}</td>
                                     <td>{{ $school->principal_name ?? 'N/A' }}</td>
                                     <td>
-                                        <a href="{{ route('schools.show', $school) }}" class="btn btn-sm btn-info">View</a>
-                                        <a href="{{ route('schools.edit', $school) }}" class="btn btn-sm btn-warning">Edit</a>
-                                        <form action="{{ route('schools.destroy', $school) }}" method="POST" class="d-inline">
+                                        <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-sm btn-info">View</a>
+                                        <a href="{{ route('superadmin.schools.edit', $school) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <form action="{{ route('superadmin.schools.destroy', $school) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

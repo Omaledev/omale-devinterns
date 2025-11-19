@@ -35,12 +35,20 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // SuperAdmin Routes
 Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
-    Route::resource('schools', SchoolController::class);
+    Route::resource('schools', SchoolController::class)->names([
+        'index' => 'superadmin.schools.index',
+        'create' => 'superadmin.schools.create',
+        'store' => 'superadmin.schools.store',
+        'show' => 'superadmin.schools.show',
+        'edit' => 'superadmin.schools.edit',
+        'update' => 'superadmin.schools.update',
+        'destroy' => 'superadmin.schools.destroy'
+    ]);
     // Superadmin management routes
-    Route::get('/schools/{school}/create-user', [SchoolController::class, 'createUser'])->name('schools.create-user');
-    Route::post('/schools/{school}/store-user', [SchoolController::class, 'storeUser'])->name('schools.store-user');
-    Route::get('/schools/{school}/users', [SchoolController::class, 'showUsers'])->name('schools.users');
-    //     Route::get('/reports', [SuperAdminDashboardController::class, 'reports'])->name('superadmin.reports');
+    Route::get('/schools/{school}/create-user', [SchoolController::class, 'createUser'])->name('superadmin.schools.create-user');
+    Route::post('/schools/{school}/store-user', [SchoolController::class, 'storeUser'])->name('superadmin.schools.store-user');
+    Route::get('/schools/{school}/users', [SchoolController::class, 'showUsers'])->name('superadmin.schools.users');
+    //     Route::get('/reports', [SuperAdminDashboardController::class, 'reports'])->name('superadmin.schools.reports');
 });
 
 // SchoolAdmin Routes
