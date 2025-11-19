@@ -2,26 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SchoolController;
-use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\SuperAdmin\SchoolController;
+use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SchoolAdmin\DashboardController as SchoolAdminDashboardController;
 use App\Http\Controllers\SchoolAdmin\StudentController as SchoolAdminStudentController;
 use App\Http\Controllers\SchoolAdmin\TeacherController as SchoolAdminTeacherController;
 use App\Http\Controllers\SchoolAdmin\ParentController as SchoolAdminParentController;
-use App\Http\Controllers\ParentController;
-use App\Http\Controllers\BursarController;
-use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\ClassController;
-use App\Http\Controllers\ApprovalController;
-use App\Http\Controllers\SubjectController;
-use App\Http\Controllers\TimetableController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\AssessmentController;
-use App\Http\Controllers\GradeController;
-use App\Http\Controllers\FeeStructureController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Teacher\TeacherController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Parent\ParentController;
+use App\Http\Controllers\Bursar\BursarController;
+use App\Http\Controllers\Class\ClassController;
+use App\Http\Controllers\Approval\ApprovalController;
+use App\Http\Controllers\Subject\SubjectController;
+use App\Http\Controllers\Timetable\TimetableController;
+use App\Http\Controllers\Attendance\AttendanceController;
+use App\Http\Controllers\Assessment\AssessmentController;
+use App\Http\Controllers\Grade\GradeController;
+use App\Http\Controllers\FeeStructure\FeeStructureController;
+use App\Http\Controllers\Invoice\InvoiceController;
+use App\Http\Controllers\Payment\PaymentController;
 
 
 Route::get('/', function () {

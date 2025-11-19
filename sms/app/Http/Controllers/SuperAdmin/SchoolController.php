@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\SuperAdmin;
+use App\Http\Controllers\Controller;
 use App\Models\School;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
