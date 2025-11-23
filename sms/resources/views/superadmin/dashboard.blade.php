@@ -1,64 +1,3 @@
-{{-- @extends('layouts.app')
-
-@section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">
-                            <i class="fas fa-crown me-2"></i>SuperAdmin Dashboard
-                        </h4>
-                    </div>
-                    <div>
-                        <p>You have access to all system features.</p>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3 mb-4">
-                                <div class="card bg-success text-white">
-                                    <div class="card-body text-center">
-                                        <h5><i class="fas fa-school fa-2x mb-2"></i></h5>
-                                        <h5>Schools</h5>
-                                        <a href="{{ route('schools.index') }}" class="btn btn-light btn-sm mt-2">
-                                            Manage Schools
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 mb-4">
-                                <div class="card bg-info text-white">
-                                    <div class="card-body text-center">
-                                        <h5><i class="fas fa-users fa-2x mb-2"></i></h5>
-                                        <h5>Users</h5>
-                                        <button class="btn btn-light btn-sm mt-2">
-                                            Manage Users
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 mb-4">
-                                <div class="card bg-warning text-white">
-                                    <div class="card-body text-center">
-                                        <h5><i class="fas fa-user-shield fa-2x mb-2"></i></h5>
-                                        <h5>Roles</h5>
-                                        <button class="btn btn-light btn-sm mt-2">
-                                            Manage Roles
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection --}}
-
 @extends('layouts.app')
 
 @section('content')
@@ -71,7 +10,7 @@
                     <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
                         <i class="fas fa-crown text-dark fa-xl"></i>
                     </div>
-                    <h6 class="text-white mb-1">SuperAdmin Panel</h6>
+                    <h6 class="text-white mb-1">SuperAdmin</h6>
                     <small class="text-white-50">System Administrator</small>
                 </div>
 
@@ -83,23 +22,23 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schools.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index') }}">
                             <i class="fas fa-school me-2"></i>
                             Schools
                             <span class="badge bg-primary float-end">{{ $stats['total_schools'] ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
+                        <a class="nav-link text-white-50" href="{{route('superadmin.users.index')}}">
                             <i class="fas fa-users me-2"></i>
                             All Users
                             <span class="badge bg-info float-end">{{ $stats['total_users'] ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-user-shield me-2"></i>
-                            Roles & Permissions
+                         <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index')}}">
+                        <i class="fas fa-user-shield me-2"></i>
+                        Roles & Permissions
                         </a>
                     </li>
                     <li class="nav-item">
@@ -160,7 +99,7 @@
                             <i class="fas fa-sync me-1"></i>Refresh
                         </button>
                     </div>
-                    <a href="{{ route('schools.create') }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('superadmin.schools.create') }}" class="btn btn-sm btn-warning">
                         <i class="fas fa-plus me-1"></i>Add School
                     </a>
                 </div>
@@ -305,7 +244,7 @@
                                         @foreach($recentSchools as $school)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('schools.show', $school) }}" class="text-decoration-none">
+                                                <a href="{{ route('superadmin.schools.show', $school) }}" class="text-decoration-none">
                                                     <strong>{{ $school->name }}</strong>
                                                 </a>
                                             </td>
@@ -321,7 +260,7 @@
                                 </table>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{{ route('schools.index') }}" class="btn btn-outline-primary btn-sm">
+                                <a href="{{ route('superadmin.schools.index') }}" class="btn btn-outline-primary btn-sm">
                                     View All Schools
                                 </a>
                             </div>
@@ -341,7 +280,7 @@
                         <div class="card-body">
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <a href="{{ route('schools.create') }}" class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column align-items-center">
+                                    <a href="{{ route('superadmin.schools.create') }}" class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column align-items-center">
                                         <i class="fas fa-school fa-2x mb-2"></i>
                                         <span>Add School</span>
                                     </a>

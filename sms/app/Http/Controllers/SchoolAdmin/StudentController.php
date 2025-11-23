@@ -43,6 +43,9 @@ class StudentController extends Controller
             'admission_number' => 'required|string|unique:users,admission_number'
         ]);
 
+
+        
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],

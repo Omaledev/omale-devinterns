@@ -2,10 +2,13 @@
 
 @section('content')
 <div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Schools Management</h2>
-            <a href="{{ route('superadmin.schools.create') }}" class="btn btn-primary">Add New School</a>
+        <div class="col-12">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-4">
+                <h2 class=" ms-2 mb-2 mb-md-2 me-md-3">Schools Management</h2>
+                <div class="ms-md-auto d-flex flex-wrap gap-2">
+                    <a href="{{ route('superadmin.dashboard') }}" class="btn btn-dark ms-2">Back to Dashboard</a>
+                    <a href="{{ route('superadmin.schools.create') }}" class="btn btn-primary">Add New School</a>
+                </div>
         </div>
 
          {{-- School Switcher for SuperAdmin --}}

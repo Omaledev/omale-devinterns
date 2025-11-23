@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use /*HasApiTokens,*/ HasFactory, Notifiable, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone', 
         'password',
         'admission_number',
         'employee_id',
@@ -54,6 +55,41 @@ class User extends Authenticatable
 
     public function school() {
         return $this->belongsTo(School::class);
+    }
+
+    // Teacher relationships-1 user has 1 TeacherProfile
+    public function teacherProfile()
+    {
+        return $this->hasOne(TeacherProfile::class);
+    }
+
+    // Student relationships-1 user has 1 StudentProfile
+    public function studentProfile()
+    {
+        return $this->hasOne(StudentProfile::class);
+    }
+
+    // Parent relationships-1 user has 1 ParentProfile
+    public function parentProfile()
+    {
+        return $this->hasOne(ParentProfile::class);
+    }
+
+     // This is for parents to access their children-many students belongsTo many parents
+    public function children()
+    {
+        return $this->belongsToMany(StudentProfile::class, 'parent_student', 'parent_id', 'student_id')
+                    ->withTimestamps();
+    }
+
+    //  public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
+
+      public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
     }
 
 }

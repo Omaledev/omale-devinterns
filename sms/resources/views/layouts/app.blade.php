@@ -17,7 +17,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Scripts -->
+    <!-- Vite handles Bootstrap CSS and JS -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('styles')
 
@@ -49,7 +49,6 @@
         .nav-link {
             font-weight: 500;
         }
-
     </style>
 </head>
 <body class="bg-light">
@@ -64,7 +63,7 @@
                     <span class="fw-bold fs-4">Axia SMS</span>
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -85,33 +84,28 @@
                     <!-- Right Side Auth Links -->
                     <ul class="navbar-nav ms-auto">
                         @guest
-                            @if (Route::has('login'))
+                            @if (Route::has('sign-in'))
                                 <li class="nav-item">
-                                    <a class="btn btn-outline-secondary me-2" href="{{ route('login') }}">Login</a>
-                                </li>
-                            @endif
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="btn btn-primary" href="{{ route('register') }}">Get Started</a>
+                                    <a class="btn btn-outline-secondary me-2" href="{{ route('sign-in') }}">Sign In/Sign Up</a>
                                 </li>
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="{{ url('/dashboard') }}">
                                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                    <a class="dropdown-item" href="{{ route('sign-out') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt me-2"></i>{{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('sign-out') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -121,8 +115,6 @@
                 </div>
             </div>
         </nav>
-
-
 
         <main>
             <div class="container mt-4">
@@ -135,9 +127,6 @@
             @yield('content')
         </main>
     </div>
-    <!-- Bootstrap JS -->
-     @stack('scripts')
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    @stack('scripts')
 </body>
-
 </html>

@@ -37,6 +37,20 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <!-- Fixed Phone Field - Now using same row layout -->
+                    <div class="row mb-3">
+                        <label for="phone" class="col-md-4 col-form-label text-md-end">Phone Number</label>
+                        <div class="col-md-6">
+                            <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror"
+                                name="phone" value="{{ old('phone') }}">
+                            @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
 
                     <div class="row mb-3">
                         <label for="role" class="col-md-4 col-form-label text-md-end">Role</label>

@@ -19,6 +19,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // This is to override the default auth routes
+      $this->configureAuthRoutes();
+    }
+
+    protected function configureAuthRoutes()
+    {
+        if (method_exists($this->app['router'], 'login')) {
+            $this->app['router']->login = 'sign-in';
+            $this->app['router']->register = 'sign-up';
+            $this->app['router']->logout = 'sign-out';
+        }
     }
 }

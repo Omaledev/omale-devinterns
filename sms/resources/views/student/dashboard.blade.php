@@ -1,10 +1,10 @@
-{{-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <!-- Student Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block bg-primary sidebar collapse">
+            <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
                         @if(auth()->user()->studentProfile && auth()->user()->studentProfile->photo)
@@ -40,6 +40,15 @@
                                 <span class="badge bg-success float-end">{{ $stats['attendance_rate'] ?? '0' }}%</span>
                             </a>
                         </li>
+
+                        <!-- <li class="nav-item">
+                            <a class="nav-link text-white-50" href="{{ route('student.books') }}">
+                                <i class="fas fa-book-open me-2"></i>
+                                Study Materials
+                                <span class="badge bg-info float-end">{{ $stats['new_books'] ?? 0 }}</span>
+                            </a>
+                        </li> -->
+
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('student.results') }}">
                                 <i class="fas fa-chart-bar me-2"></i>
@@ -47,6 +56,14 @@
                                 <span class="badge bg-info float-end">{{ $stats['average_grade'] ?? 'N/A' }}</span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" href="{{ route('student.books') }}">
+                                <i class="fas fa-book-open me-2"></i>
+                                Study Books
+                                <span class="badge bg-info float-end">{{ $stats['new_books'] ?? 0 }}</span>
+                            </a>
+                        </li> 
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('student.fees') }}">
                                 <i class="fas fa-money-bill-wave me-2"></i>
@@ -190,7 +207,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">
                                             Fee Balance</div>
-                                        <div class="h2 mb-0 fw-bold">${{ number_format($stats['fee_balance'] ?? 0, 2) }}</div>
+                                        <div class="h2 mb-0 fw-bold">₦{{ number_format($stats['fee_balance'] ?? 0, 2) }}</div>
                                         <div class="mt-2 small">
                                             <i class="fas fa-exclamation-triangle me-1"></i>
                                             <span>Outstanding</span>
@@ -320,6 +337,13 @@
                                             <span>Pay Fees</span>
                                         </a>
                                     </div>
+                                    <!-- <div class="col-6">
+                                        <a href="{{ route('student.books') }}"
+                                            class="btn btn-outline-secondary w-100 h-100 p-3 d-flex flex-column align-items-center">
+                                            <i class="fas fa-book-open fa-2x mb-2"></i>
+                                            <span>Study Materials</span>
+                                        </a>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -413,4 +437,4 @@
             }
         }
     </style>
-@endpush --}}
+@endpush 

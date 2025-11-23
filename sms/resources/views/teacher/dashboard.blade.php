@@ -1,10 +1,10 @@
-{{-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <!-- Teacher Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block bg-success sidebar collapse">
+            <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
                         @if(auth()->user()->teacherProfile && auth()->user()->teacherProfile->photo)
@@ -35,52 +35,52 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.attendance') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-calendar-check me-2"></i>
                                 Attendance
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.assessments') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-tasks me-2"></i>
                                 Assessments
                                 <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.grades') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Gradebook
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.timetable') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-calendar-alt me-2"></i>
                                 Timetable
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.students') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-user-graduate me-2"></i>
                                 Students
                                 <span class="badge bg-info float-end">{{ $stats['total_students'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.messages') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-comments me-2"></i>
                                 Messages
                                 <span class="badge bg-primary float-end">{{ $stats['unread_messages'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.announcements') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-bullhorn me-2"></i>
                                 Announcements
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('teacher.reports') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-chart-pie me-2"></i>
                                 Reports
                             </a>
@@ -303,30 +303,30 @@
                             <div class="card-body">
                                 <div class="row g-3">
                                     <div class="col-6">
-                                        <a href="{{ route('teacher.attendance.create') }}"
+                                        <a href=""
                                             class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-calendar-check fa-2x mb-2"></i>
                                             <span>Attendance</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{ route('teacher.assessments.create') }}"
+                                        <a href=""
                                             <div class="col-6">
-                                        <a href="{{ route('teacher.assessments.create') }}"
+                                        <a href=""
                                             class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-tasks fa-2x mb-2"></i>
                                             <span>Assessment</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{ route('teacher.grades.create') }}"
+                                        <a href=""
                                             class="btn btn-outline-info w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-chart-bar fa-2x mb-2"></i>
                                             <span>Grades</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{ route('teacher.messages.create') }}"
+                                        <a href=""
                                             class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-comments fa-2x mb-2"></i>
                                             <span>Message</span>
@@ -380,4 +380,4 @@
             </main>
         </div>
     </div>
-@endsection --}}
+@endsection 

@@ -13,12 +13,12 @@
                 </p>
                 <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
                     @auth
-                        <a href="{{ url('/home') }}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
+                        <a href="{{ route('dashboard') }}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
                             <i class="fas fa-arrow-right me-2"></i>Go to Dashboard
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
-                            Register Now
+                        <a href="{{ route('sign-up') }}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
+                            Sign Up Now
                         </a>
                         <a href="#features" class="btn btn-outline-light btn-lg px-5 py-3 fw-semibold">
                             Learn More
@@ -239,12 +239,12 @@
                         difference.
                     </p>
                     @auth
-                        <a href="{{ url('/home') }}" class="btn btn-light btn-lg px-5">
+                        <a href="{{ route('dashboard') }}" class="btn btn-light btn-lg px-5">
                             <i class="fas fa-arrow-right me-2"></i>Access Your Dashboard
                         </a>
                     @else
                         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
-                            <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-5">
+                            <a href="{{ route('sign-in') }}" class="btn btn-outline-light btn-lg px-5">
                                 Sign In
                             </a>
                         </div>

@@ -40,7 +40,6 @@
                             Parents
                         </a>
                     </li>
-                    <!-- ... rest of your sidebar items ... -->
                 </ul>
             </div>
         </div>

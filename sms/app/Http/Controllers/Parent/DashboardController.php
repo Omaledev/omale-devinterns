@@ -9,7 +9,8 @@ class DashboardController extends Controller
 {
    public function index()
     {
-        return view('parent.dashboard');
+        // this is to return the  view('parent.dashboard');
+        return app(ParentController::class)->index();
     }
 }
 

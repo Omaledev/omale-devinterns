@@ -19,6 +19,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Phone</th>
                                 <th>Role</th>
                                 <th>Created</th>
                             </tr>
@@ -28,6 +29,7 @@
                                 <tr>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
+                                     <td>{{ $user->phone }}</td>
                                     <td>
                                         @foreach($user->roles as $role)
                                             <span class="badge bg-primary">{{ $role->name }}</span>

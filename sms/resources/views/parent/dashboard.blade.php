@@ -1,10 +1,10 @@
-{{-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <!-- Parent Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block bg-info sidebar collapse">
+            <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                 <div class="position-sticky pt-3">
                     <div class="text-center mb-4">
                         @if(auth()->user()->parentProfile && auth()->user()->parentProfile->photo)
@@ -297,4 +297,4 @@
             </main>
         </div>
     </div>
-@endsection --}}
+@endsection 

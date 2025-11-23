@@ -17,13 +17,13 @@ class SchoolController extends Controller
     {
         // $schools = School::all();
 
-        // For SuperAdmin - show schools based on active_school filter
+        // For SuperAdmin - showing schools based on active_school filter
         if (auth()->user()?->hasRole('SuperAdmin')) {
             $schools = School::when(session('active_school'), function ($query, $schoolId) {
                 return $query->where('id', $schoolId);
             })->get();
         } else {
-            // For other roles - show only their school
+            // For other roles - showing only their school
             $schools = School::where('id', auth()->user()->school_id)->get();
         }
         return view('superadmin.schools.index', compact('schools'));
@@ -117,24 +117,30 @@ class SchoolController extends Controller
      */
     public function storeUser(Request $request, School $school)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|exists:roles,name'
-        ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'school_id' => $school->id
-        ]);
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'phone' => 'nullable|string|size:11|regex:/^[0-9]+$/',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|exists:roles,name'
+    ]);
+    
+    // Creating user with the create() method->i also ensure it is availabe 
+    // in the user model with a protected fillable
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'phone' => $validated['phone'], 
+        'password' => Hash::make($validated['password']),
+        'school_id' => $school->id
+    ]);
 
-        $user->assignRole($validated['role']);
+    $user->assignRole($validated['role']);
 
-        return redirect()->route('superadmin.schools.show', $school)
-            ->with('success', "{$validated['role']} created successfully!");
+    return redirect()->route('superadmin.schools.show', $school)
+        ->with('success', "{$validated['role']} created successfully!");
+    
     }
 
     /**
@@ -145,4 +151,6 @@ class SchoolController extends Controller
         $users = $school->users()->with('roles')->get();
         return view('superadmin.schools.users', compact('school', 'users'));
     }
+
+    
 }

@@ -1,4 +1,4 @@
-{{-- @extends('layouts.app')
+<!-- @extends('layouts.app')
 
 @section('content')
     <div class="container-fluid">
@@ -23,58 +23,58 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.fee-structures.index') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-money-bill-wave me-2"></i>
                                 Fee Structures
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.invoices.index') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-file-invoice me-2"></i>
                                 Invoices
                                 <span class="badge bg-primary float-end">{{ $stats['pending_invoices'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.payments.index') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-credit-card me-2"></i>
                                 Payments
                                 <span class="badge bg-success float-end">{{ $stats['recent_payments'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.students.index') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-user-graduate me-2"></i>
                                 Students
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.reports.financial') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-chart-pie me-2"></i>
                                 Financial Reports
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.reports.collection') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Collection Reports
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.reports.outstanding') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
                                 Outstanding Fees
                                 <span class="badge bg-danger float-end">{{ $stats['students_with_balance'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.receipts.index') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-receipt me-2"></i>
                                 Receipts
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('bursar.announcements') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-bullhorn me-2"></i>
                                 Fee Announcements
                             </a>
@@ -282,16 +282,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="{{ route('bursar.invoices.create') }}" class="btn btn-outline-primary btn-lg">
+                                    <a href="" class="btn btn-outline-primary btn-lg">
                                         <i class="fas fa-file-invoice me-2"></i>Create Invoice
                                     </a>
-                                    <a href="{{ route('bursar.payments.create') }}" class="btn btn-outline-success btn-lg">
+                                    <a href="" class="btn btn-outline-success btn-lg">
                                         <i class="fas fa-credit-card me-2"></i>Record Payment
                                     </a>
-                                    <a href="{{ route('bursar.fee-structures.create') }}" class="btn btn-outline-info btn-lg">
+                                    <a href="" class="btn btn-outline-info btn-lg">
                                         <i class="fas fa-money-bill-wave me-2"></i>Set Fee Structure
                                     </a>
-                                    <a href="{{ route('bursar.reports.financial') }}" class="btn btn-outline-warning btn-lg">
+                                    <a href="" class="btn btn-outline-warning btn-lg">
                                         <i class="fas fa-chart-pie me-2"></i>Generate Report
                                     </a>
                                 </div>
@@ -326,7 +326,7 @@
                                         @endforeach
                                     </div>
                                     <div class="text-center mt-3">
-                                        <a href="{{ route('bursar.reports.outstanding') }}" class="btn btn-sm btn-outline-danger">
+                                        <a href="" class="btn btn-sm btn-outline-danger">
                                             View All Outstanding
                                         </a>
                                     </div>
@@ -440,4 +440,4 @@
             }
         });
     </script>
-@endpush --}}
+@endpush  -->
