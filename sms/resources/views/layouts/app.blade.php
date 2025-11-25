@@ -102,7 +102,7 @@
                                     <a class="dropdown-item" href="{{ route('sign-out') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        <i class="fas fa-sign-out-alt me-2"></i>{{ __('Logout') }}
+                                        <i class="fas fa-sign-out-alt me-2"></i>{{ __('Sign_Out') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('sign-out') }}" method="POST" class="d-none">

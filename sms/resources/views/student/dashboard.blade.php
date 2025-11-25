@@ -116,7 +116,7 @@
                 <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div>
-                        <h1 class="h2">Student Dashboard</h1>
+                        <h1 class="h2"> <i class="fas fa-chalkboard-teacher text-primary me-2"></i>Student Dashboard at <span class="text-primary fw-bold">{{ auth()->user()->school->name }}</span></h1>
                         <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }}</p>
                         <small class="text-muted">
                             Class: {{ auth()->user()->studentProfile->classLevel->name ?? 'N/A' }} • 

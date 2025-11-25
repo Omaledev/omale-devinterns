@@ -95,7 +95,7 @@
                 <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div>
-                        <h1 class="h2">Parent Dashboard</h1>
+                      <h1 class="h2"> <i class="fas fa-chalkboard-teacher text-primary me-2"></i>Parent Dashboard at <span class="text-primary fw-bold">{{ auth()->user()->school->name }}</span></h1>
                         <p class="text-muted mb-0">Monitoring {{ $stats['children_count'] ?? 0 }} children</p>
                     </div>
                     <div class="btn-toolbar mb-2 mb-md-0">

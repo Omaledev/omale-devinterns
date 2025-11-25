@@ -314,6 +314,26 @@
                                     @enderror
                                 </div>
 
+                                <div class="mb-4">
+                                    <label for="school_id" class="form-label fw-semibold text-dark">
+                                        <i class="fas fa-school me-2 text-primary"></i>Select School
+                                    </label>
+                                    <select id="school_id" class="form-select @error('school_id') is-invalid @enderror" 
+                                            name="school_id" required style="cursor: pointer;">
+                                        <option value="" disabled {{ old('school_id') ? '' : 'selected' }}>Choose your school...</option>
+                                        @foreach($schools as $school)
+                                            <option value="{{ $school->id }}" {{ old('school_id') == $school->id ? 'selected' : '' }}>
+                                                🏫 {{ $school->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('school_id')
+                                        <div class="invalid-feedback d-block">
+                                            <i class="fas fa-exclamation-circle me-1"></i>{{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+
                                 <!-- Role Selection -->
                                 <div class="mb-4">
                                     <label for="role" class="form-label fw-semibold text-dark">
