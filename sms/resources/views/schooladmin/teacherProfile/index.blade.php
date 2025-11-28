@@ -95,9 +95,14 @@
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-primary">
-                        <i class="fas fa-user-plus me-1"></i>Add New Teacher
-                    </a>
+                    <div class="btn-group me-2">
+                        <a href="{{ route('schooladmin.teacher-assignments.create') }}" class="btn btn-success me-3">
+                            <i class="fas fa-link me-1"></i>Assign to Subjects
+                        </a>
+                        <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>Add New Teacher
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -123,7 +128,8 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
-                                            <th>Subjects</th>
+                                            <!-- <th>Subjects</th> -->
+                                            <th>Assigned Subjects/Classes</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>

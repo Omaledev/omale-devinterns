@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ClassroomAssignment;
 use App\Models\ClassLevel;
 use App\Models\Subject;
+use App\Models\Section;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -120,7 +121,77 @@ class TeacherProfileController extends Controller
         return redirect()->route('schooladmin.teachers.index')
             ->with('success', 'Teacher deleted successfully!');
     }
+
     
+    
+    public function showAssignForm()
+    {
+
+    
+    $teachers = User::role('Teacher')
+        ->where('school_id', auth()->user()->school_id)
+        ->where('is_approved', true)
+        ->get();
+         
+            $teachers = User::role('Teacher')
+            ->where('school_id', auth()->user()->school_id)
+            ->where('is_approved', true)
+            ->get();
+        
+        $subjects = Subject::where('school_id', auth()->user()->school_id)
+            ->where('is_active', true)
+            ->get();
+        
+        $classLevels = ClassLevel::where('school_id', auth()->user()->school_id)
+            ->where('is_active', true)
+            ->get();
+        
+        $sections = Section::where('school_id', auth()->user()->school_id)
+            ->where('is_active', true)
+            ->get();
+
+        // Make sure this matches your view path exactly
+        return view('schooladmin.teacherProfile.assign-teachers', compact('teachers', 'subjects', 'classLevels', 'sections'));
+    }
+
+    
+
+    public function assignTeacher(Request $request)
+    {
+        $request->validate([
+            'teacher_id' => 'required|exists:users,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'class_level_id' => 'required|exists:class_levels,id',
+            'section_id' => 'nullable|exists:sections,id',
+            'academic_year' => 'required|string',
+        ]);
+
+        // Check if assignment already exists
+        $existingAssignment = ClassroomAssignment::where([
+            'teacher_id' => $request->teacher_id,
+            'subject_id' => $request->subject_id,
+            'class_level_id' => $request->class_level_id,
+            'school_id' => auth()->user()->school_id,
+            'academic_year' => $request->academic_year,
+        ])->first();
+
+        if ($existingAssignment) {
+            return redirect()->back()
+                ->with('error', 'This teacher is already assigned to this subject and class.');
+        }
+
+        ClassroomAssignment::create([
+            'school_id' => auth()->user()->school_id,
+            'teacher_id' => $request->teacher_id,
+            'subject_id' => $request->subject_id,
+            'class_level_id' => $request->class_level_id,
+            'section_id' => $request->section_id,
+            'academic_year' => $request->academic_year,
+        ]);
+
+        return redirect()->route('schooladmin.teachers.index')
+            ->with('success', 'Teacher assigned successfully!');
+    }
 
     // public function assignments()
     // {

@@ -10,7 +10,15 @@ class ClassroomAssignment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['school_id', 'teacher_id', 'class_level_id', 'section_id', 'subject_id', 'is_active'];
+    
+
+    protected $fillable = [
+        'school_id', 
+        'teacher_id', 
+        'class_level_id', 
+        'section_id', 
+        'subject_id', 
+        'is_active'];
 
     protected static function booted()
     {

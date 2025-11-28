@@ -15,6 +15,7 @@ use App\Http\Controllers\SchoolAdmin\ClassLevelController as SchoolAdminClassLev
 use App\Http\Controllers\SchoolAdmin\SectionController as SchoolAdminSectionController;
 use App\Http\Controllers\SchoolAdmin\SubjectController as SchoolAdminSubjectController;
 use App\Http\Controllers\SchoolAdmin\BursarController as SchoolAdminBursarController;
+use App\Http\Controllers\SchoolAdmin\TeacherAssignmentController as SchoolAdminTeacherAssignmentController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
@@ -49,7 +50,6 @@ use App\Http\Controllers\Payment\PaymentController;
 Route::get('/', function () {
     return view('welcome');
 });
-
 
 /**
  * Dynamic dashboard redirect based on user roles
@@ -132,6 +132,10 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
     Route::resource('teachers', SchoolAdminTeacherProfileController::class);
     Route::resource('parents', SchoolAdminParentProfileController::class);
     Route::resource('bursars', SchoolAdminBursarController::class);
+
+    Route::resource('teacher-assignments', SchoolAdminTeacherAssignmentController::class);
+
+
 });
 
 // Teacher Routes
