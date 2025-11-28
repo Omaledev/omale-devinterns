@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('parent_student', function (Blueprint $table) {
             $table->id();
             $table->foreignId('parent_id')
-               ->constrained('parent_profiles')
+               ->constrained('users')
                ->onDelete('cascade');
             $table->foreignId('student_id')
-               ->constrained('student_profiles')
+               ->constrained('users')
                ->onDelete('cascade');
             $table->string('relationship')->default('parent'); 
-            $table->boolean('is_primary')->default(false);
+            $table->boolean('is_primary')->default(true);
             $table->timestamps();
+            // Unique constraint to prevent duplicate relationships
             $table->unique(['parent_id', 'student_id']);
         });
     }

@@ -27,7 +27,8 @@ class User extends Authenticatable
         'password',
         'admission_number',
         'employee_id',
-        'school_id'
+        'school_id',
+        'address', 
     ];
 
     /**
@@ -76,10 +77,36 @@ class User extends Authenticatable
     }
 
      // This is for parents to access their children-many students belongsTo many parents
-    public function children()
+   public function children()
     {
-        return $this->belongsToMany(StudentProfile::class, 'parent_student', 'parent_id', 'student_id')
+        return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id')
+                    ->withPivot('relationship', 'is_primary')
                     ->withTimestamps();
+    }
+
+     //This is for students to access their parents
+    public function parents()
+    {
+        return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id')
+                    ->withPivot('relationship', 'is_primary')
+                    ->withTimestamps();
+    }
+
+    public function taughtClasses()
+    {
+        return $this->hasMany(ClassroomAssignment::class, 'teacher_id');
+    }
+    
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
+
+    public function uploadedBooks()
+    {
+        return $this->hasMany(Book::class, 'teacher_id');
     }
 
     //  public function roles()

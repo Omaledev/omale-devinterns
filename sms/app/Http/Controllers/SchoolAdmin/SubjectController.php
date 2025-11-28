@@ -13,8 +13,9 @@ class SubjectController extends Controller
      */
     public function index()
     {
-         $subjects = Subject::withCount(['classroomAssignments'])->get();
+        $subjects = Subject::all();
         return view('schooladmin.subjects.index', compact('subjects'));
+
     }
 
     /**
@@ -83,7 +84,7 @@ class SubjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Subject $subject)
     {
           return view('schooladmin.subjects.edit', compact('subject'));
     }

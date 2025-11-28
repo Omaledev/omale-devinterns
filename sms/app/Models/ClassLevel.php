@@ -33,4 +33,21 @@ class ClassLevel extends Model
     {
         return $this->hasMany(Section::class);
     }
+
+    public function classroomAssignments()
+    {
+        return $this->hasMany(ClassroomAssignment::class);
+    }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
+    public function students()
+    {
+        return $this->hasMany(User::class)->whereHas('roles', function($q) {
+            $q->where('name', 'Student');
+        });
+    }
 }

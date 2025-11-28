@@ -29,9 +29,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
+                        <a class="nav-link active text-white" href="{{ route('schooladmin.teachers.index') }}">
                             <i class="fas fa-chalkboard-teacher me-2"></i>
                             Teachers
+                            <span class="badge bg-success float-end">{{ $teachers->count() }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -47,10 +48,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.class-levels.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index') }}">
                             <i class="fas fa-door-open me-2"></i>
-                            Class Levels
-                            <span class="badge bg-warning float-end">{{ $classLevels->count() }}</span>
+                            Classes
                         </a>
                     </li>
                     <li class="nav-item">
@@ -65,7 +65,7 @@
                             Subjects
                         </a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
                             <i class="fas fa-calendar-check me-2"></i>
                             Attendance
@@ -77,24 +77,6 @@
                             Fees
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bullhorn me-2"></i>
-                            Notice
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bus me-2"></i>
-                            Transport
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bed me-2"></i>
-                            Hostel
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -104,108 +86,113 @@
             <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
-                    <h1 class="h2">Class Levels Management</h1>
+                    <h1 class="h2">Teacher Management</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('schooladmin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Class Levels</li>
+                            <li class="breadcrumb-item active">Teachers</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i>Add New Class Level
+                    <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i>Add New Teacher
                     </a>
                 </div>
             </div>
 
-            <!-- Class Levels Table -->
+            <!-- Teachers Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-door-open me-2"></i>All Class Levels
+                                <i class="fas fa-chalkboard-teacher me-2"></i>All Teachers
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search class levels..." id="searchInput">
-                                <span class="badge bg-warning align-self-center">{{ $classLevels->count() }} classes</span>
+                                <input type="text" class="form-control form-control-sm" placeholder="Search teachers..." id="searchInput">
+                                <span class="badge bg-success align-self-center">{{ $teachers->count() }} teachers</span>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            @endif
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-dark">
                                         <tr>
+                                            <th>Employee ID</th>
                                             <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Order</th>
-                                            <th>Sections</th>
-                                            <th>Students</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Subjects</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($classLevels as $classLevel)
+                                        @forelse($teachers as $teacher)
                                             <tr>
                                                 <td>
+                                                    <strong>{{ $teacher->employee_id ?? 'N/A' }}</strong>
+                                                </td>
+                                                <td>
                                                     <div class="d-flex align-items-center">
-                                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-2"
                                                              style="width: 35px; height: 35px;">
                                                             <span class="text-white fw-bold small">
-                                                                {{ substr($classLevel->name, 0, 1) }}
+                                                                {{ substr($teacher->name, 0, 1) }}
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <div class="fw-bold">{{ $classLevel->name }}</div>
-                                                            <small class="text-muted">Order: {{ $classLevel->order }}</small>
+                                                            <div class="fw-bold">{{ $teacher->name }}</div>
+                                                            <small class="text-muted">Joined: {{ $teacher->created_at->format('M Y') }}</small>
                                                         </div>
                                                     </div>
                                                 </td>
+                                                <td>{{ $teacher->email }}</td>
+                                                <td>{{ $teacher->phone ?? 'N/A' }}</td>
                                                 <td>
-                                                    <small class="text-muted">{{ $classLevel->description ?? 'No description' }}</small>
+                                                    @if($teacher->taughtClasses && $teacher->taughtClasses->count() > 0)
+                                                        @foreach($teacher->taughtClasses->take(2) as $assignment)
+                                                            <span class="badge bg-info mb-1">{{ $assignment->subject->code }}</span>
+                                                        @endforeach
+                                                        @if($teacher->taughtClasses->count() > 2)
+                                                            <span class="badge bg-secondary">+{{ $teacher->taughtClasses->count() - 2 }} more</span>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-muted">Not assigned</span>
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-secondary">{{ $classLevel->order }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">{{ $classLevel->sections_count ?? 0 }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary">{{ $classLevel->students_count ?? 0 }}</span>
-                                                </td>
-                                                <td>
-                                                    @if($classLevel->is_active)
+                                                    @if($teacher->is_approved)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
-                                                        <span class="badge bg-secondary">Inactive</span>
+                                                        <span class="badge bg-warning">Pending</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm" role="group">
-                                                        <a href="{{ route('schooladmin.class-levels.edit', $classLevel) }}"
+                                                        <a href="{{ route('schooladmin.teachers.show', $teacher) }}"
+                                                           class="btn btn-outline-info"
+                                                           data-bs-toggle="tooltip"
+                                                           title="View Teacher">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a href="{{ route('schooladmin.teachers.edit', $teacher) }}"
                                                            class="btn btn-outline-warning"
                                                            data-bs-toggle="tooltip"
-                                                           title="Edit Class Level">
+                                                           title="Edit Teacher">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('schooladmin.class-levels.destroy', $classLevel) }}"
+                                                        <form action="{{ route('schooladmin.teachers.destroy', $teacher) }}"
                                                               method="POST"
                                                               class="d-inline"
-                                                              onsubmit="return confirm('Are you sure you want to delete this class level?')">
+                                                              onsubmit="return confirm('Are you sure you want to delete this teacher?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
                                                                     class="btn btn-outline-danger"
                                                                     data-bs-toggle="tooltip"
-                                                                    title="Delete Class Level">
+                                                                    title="Delete Teacher">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -216,11 +203,11 @@
                                             <tr>
                                                 <td colspan="7" class="text-center py-4">
                                                     <div class="text-muted">
-                                                        <i class="fas fa-door-open fa-3x mb-3"></i>
-                                                        <h5>No Class Levels Found</h5>
-                                                        <p>Get started by creating your first class level.</p>
-                                                        <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-primary">
-                                                            <i class="fas fa-plus me-1"></i>Create Class Level
+                                                        <i class="fas fa-chalkboard-teacher fa-3x mb-3"></i>
+                                                        <h5>No Teachers Found</h5>
+                                                        <p>Get started by adding your first teacher.</p>
+                                                        <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-primary">
+                                                            <i class="fas fa-user-plus me-1"></i>Add Teacher
                                                         </a>
                                                     </div>
                                                 </td>

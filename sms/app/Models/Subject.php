@@ -18,10 +18,11 @@ class Subject extends Model
     {
         static::addGlobalScope('school', function (Builder $builder) {
             if (session('active_school')) {
-                $builder->where('school_id', session('active_school'));
+                $builder->where('subjects.school_id', session('active_school'));
             }
         });
     }
+
 
     // Subject relationship with a particular school-a particular Subject belongsTo to a  particualr School.
     public function school()
@@ -29,4 +30,23 @@ class Subject extends Model
         return $this->belongsTo(School::class);
     }
 
+    // Relationship with classroom assignments (teachers teaching this subject)
+    public function classroomAssignments()
+    {
+        return $this->hasMany(ClassroomAssignment::class, 'subject_id');
+    }
+
+
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'classroom_assignments', 'subject_id', 'teacher_id')
+                    ->withTimestamps();
+    }
+    
+
+    public function classLevels()
+    {
+        return $this->belongsToMany(ClassLevel::class, 'classroom_assignments', 'subject_id', 'class_level_id')
+                    ->withTimestamps();
+    }
 }

@@ -119,14 +119,49 @@
         <main>
             <div class="container mt-4">
                 @if(session('success'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success alert-dismissible fade show auto-dismiss" role="alert" data-dismiss-time="5000">
                         {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
             </div>
+
             @yield('content')
         </main>
     </div>
     @stack('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile sidebar toggle for all my dashboards
+        if (document.querySelector('.sidebar')) {
+            const sidebarToggle = document.createElement('button');
+            sidebarToggle.className = 'btn btn-primary d-md-none position-fixed';
+            sidebarToggle.style.cssText = 'bottom: 20px; right: 20px; z-index: 1050; border-radius: 50%; width: 50px; height: 50px;';
+            sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            sidebarToggle.setAttribute('aria-label', 'Toggle sidebar');
+
+            sidebarToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('show');
+            });
+
+            document.body.appendChild(sidebarToggle);
+        }
+
+        const alerts = document.querySelectorAll('.auto-dismiss');
+           alerts.forEach(alert => {
+             const dismissTime = alert.getAttribute('data-dismiss-time') || 5000;
+            
+            setTimeout(() => {
+                alert.classList.add('fading-out');
+                setTimeout(() => {
+                    alert.remove();
+                }, 500);
+            }, dismissTime);
+        });
+
+    });
+
+    
+    </script>
 </body>
 </html>

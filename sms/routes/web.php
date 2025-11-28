@@ -8,13 +8,26 @@ use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UsersController;
 use App\Http\Controllers\SchoolAdmin\DashboardController as SchoolAdminDashboardController;
-use App\Http\Controllers\SchoolAdmin\StudentController as SchoolAdminStudentController;
-use App\Http\Controllers\SchoolAdmin\TeacherController as SchoolAdminTeacherController;
-use App\Http\Controllers\SchoolAdmin\ParentController as SchoolAdminParentController;
+use App\Http\Controllers\SchoolAdmin\StudentProfileController as SchoolAdminStudentProfileController;
+use App\Http\Controllers\SchoolAdmin\TeacherProfileController as SchoolAdminTeacherProfileController;
+use App\Http\Controllers\SchoolAdmin\ParentProfileController as SchoolAdminParentProfileController;
+use App\Http\Controllers\SchoolAdmin\ClassLevelController as SchoolAdminClassLevelController;
+use App\Http\Controllers\SchoolAdmin\SectionController as SchoolAdminSectionController;
+use App\Http\Controllers\SchoolAdmin\SubjectController as SchoolAdminSubjectController;
+use App\Http\Controllers\SchoolAdmin\BursarController as SchoolAdminBursarController;
+use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
+use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
+use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentController;
+use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
+use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
+use App\Http\Controllers\Teacher\MessageController as TeacherMessageController;
+use App\Http\Controllers\Teacher\ReportController as TeacherReportController;
+use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
+use App\Http\Controllers\Teacher\BookController as TeacherBookController;
+use App\Http\Controllers\Teacher\TeacherController as TeacherTeacherController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
-use App\Http\Controllers\Teacher\TeacherController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\ParentController;
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
@@ -112,32 +125,30 @@ Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->group(func
 Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schooladmin.')->group(function () {
     Route::get('/dashboard', [SchoolAdminDashboardController::class, 'index'])->name('dashboard');
      // Resource Routes
-    Route::resource('students', SchoolAdminStudentController::class);
-    Route::resource('class-levels', ClassLevelController::class);
-    Route::resource('sections', SectionController::class);
-    Route::resource('subjects', SubjectController::class);
-    // Route::resource('teachers', SchoolAdminTeacherController::class);
-    // Route::resource('parents', SchoolAdminParentController::class);
-    // Route::resource('classes', ClassController::class);
-
-    // Approval routes
-    // Route::get('/approvals', [ApprovalController::class, 'index'])->name('approvals.index');
-    // Route::post('/approve-user/{user}', [ApprovalController::class, 'approve'])->name('approve-user');
-    // Route::get('/reports', [SchoolAdminDashboardController::class, 'reports'])->name('schooladmin.reports');
+    Route::resource('students', SchoolAdminStudentProfileController::class);
+    Route::resource('class-levels', SchoolAdminClassLevelController::class);
+    Route::resource('sections', SchoolAdminSectionController::class);
+    Route::resource('subjects', SchoolAdminSubjectController::class);
+    Route::resource('teachers', SchoolAdminTeacherProfileController::class);
+    Route::resource('parents', SchoolAdminParentProfileController::class);
+    Route::resource('bursars', SchoolAdminBursarController::class);
 });
 
 // Teacher Routes
 Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
-    Route::resource('students', StudentController::class);
-    Route::resource('attendance', AttendanceController::class);
-    Route::resource('assessments', AssessmentController::class);
-    Route::resource('grades', GradeController::class);
-    Route::resource('messages', MessageController::class);
-    Route::resource('announcements', AnnouncementController::class);
-    Route::resource('reports', ReportController::class);
-    Route::get('/classes', [TeacherController::class, 'Classes'])->name('teacher.classes');
-    Route::get('/students/{class}', [TeacherController::class, 'classStudents'])->name('teacher.class-students');
+    Route::resource('students', TeacherStudentController::class);
+    Route::resource('attendance', TeacherAttendanceController::class);
+    Route::resource('assessments', TeacherAssessmentController::class);
+    Route::resource('assignments', TeacherAssignmentController::class);
+    Route::resource('grades', TeacherGradeController::class);
+    Route::resource('messages', TeacherMessageController::class);
+    Route::resource('announcements', TeacherAnnouncementController::class);
+    Route::resource('reports', TeacherReportController::class);
+    Route::resource('books', TeacherBookController::class);
+    Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('teacher.my-classes');
+    Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('teacher.my-students');
+    Route::get('/students/{class}', [TeacherTeacherController::class, 'classStudents'])->name('teacher.class-students');
 });
 
 // Student Routes
@@ -176,8 +187,8 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
 // Bursar Routes
 Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->group(function () {
     Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('bursar.dashboard');
-    Route::resource('fee-structures', FeeStructureController::class);
-    Route::resource('invoices', InvoiceController::class);
-    Route::resource('payments', PaymentController::class);
-    Route::get('/reports/financial', [BursarController::class, 'financialReports'])->name('bursar.financial-reports');
+    // Route::resource('fee-structures', FeeStructureController::class);
+    // Route::resource('invoices', InvoiceController::class);
+    // Route::resource('payments', PaymentController::class);
+    // Route::get('/reports/financial', [BursarController::class, 'financialReports'])->name('bursar.financial-reports');
 });

@@ -575,18 +575,6 @@
                 }
             });
         }
-
-        // Mobile sidebar toggle
-        const sidebarToggle = document.createElement('button');
-        sidebarToggle.className = 'btn btn-warning d-md-none position-fixed';
-        sidebarToggle.style.cssText = 'bottom: 20px; right: 20px; z-index: 1050; border-radius: 50%; width: 50px; height: 50px;';
-        sidebarToggle.innerHTML = '<i class="fas fa-bars"></i>';
-
-        sidebarToggle.addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('show');
-        });
-
-        document.body.appendChild(sidebarToggle);
     });
 </script>
 @endpush

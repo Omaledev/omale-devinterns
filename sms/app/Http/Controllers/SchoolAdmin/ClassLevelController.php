@@ -34,12 +34,19 @@ class ClassLevelController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'order' => 'required|integer',
+            // 'order' => 'required|integer',
         ]);
+
+        
+        $maxOrder = ClassLevel::where('school_id', session('active_school'))->max('order');
+        $nextOrder = $maxOrder ? $maxOrder + 1 : 1;
 
         ClassLevel::create([
             'school_id' => session('active_school'),
-            ...$request->all()
+            'name' => $request->name,
+            'description' => $request->description,
+            'order' => $nextOrder, 
+            'is_active' => true
         ]);
 
         return redirect()->route('schooladmin.class-levels.index')
@@ -57,7 +64,7 @@ class ClassLevelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(ClassLevel $classLevel)
     {
         return view('schooladmin.class-levels.edit', compact('classLevel'));
     }

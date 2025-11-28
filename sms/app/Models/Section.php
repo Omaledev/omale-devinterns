@@ -34,4 +34,17 @@ class Section extends Model
         return $this->belongsTo(ClassLevel::class);
     }
 
+
+    // Section to students relationship- a Section has many StudentProfiles
+    public function studentProfiles()
+    {
+        return $this->hasMany(StudentProfile::class, 'section_id');
+    }
+
+
+    public function classroomAssignments()
+    {
+        return $this->hasMany(ClassroomAssignment::class);
+    }
+
 }

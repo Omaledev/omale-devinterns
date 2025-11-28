@@ -30,27 +30,40 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="#">
+                            <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
                                 <i class="fas fa-chalkboard-teacher me-2"></i>
                                 Teachers
                                 <span class="badge bg-success float-end">{{ $stats['total_teachers'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="#">
+                            <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index')}}">
                                 <i class="fas fa-users me-2"></i>
                                 Parents
                                 <span class="badge bg-info float-end">{{ $stats['total_parents'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="#">
-                                <i class="fas fa-door-open me-2"></i>
-                                Classes
+                            <a class="nav-link text-white-50" href="{{ route('schooladmin.bursars.index') }}">
+                                <i class="fas fa-money-check me-2"></i>
+                                Bursars
+                                <span class="badge bg-warning float-end">{{ $stats['total_bursars'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="#">
+                            <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index')}}">
+                                <i class="fas fa-door-open me-2"></i>
+                                Class Levels
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" href="{{ route('schooladmin.sections.index') }}">
+                                <i class="fas fa-layer-group me-2"></i>
+                                Sections
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white-50" href="route('schooladmin.subjects.index') }}">
                                 <i class="fas fa-book me-2"></i>
                                 Subjects
                             </a>
@@ -252,21 +265,21 @@
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="#"
+                                        <a href="{{ route('schooladmin.teachers.create') }}"
                                             class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
                                             <span>Add Teacher</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="#"
+                                        <a href="{{ route('schooladmin.parents.create') }}"
                                             class="btn btn-outline-info w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-user-friends fa-2x mb-2"></i>
                                             <span>Add Parent</span>
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="#"
+                                        <a href="{{ route('schooladmin.class-levels.create') }}"
                                             class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-door-open fa-2x mb-2"></i>
                                             <span>Create Class</span>

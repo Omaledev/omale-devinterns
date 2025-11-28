@@ -14,7 +14,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        $sections = Section::with(['classLevel', 'students'])->get();
+        $sections = Section::with(['classLevel', 'studentProfiles'])->get();
         return view('schooladmin.sections.index', compact('sections'));
     }
 
@@ -67,14 +67,14 @@ class SectionController extends Controller
      */
     public function show(Section $section)
     {
-        $section->load(['classLevel', 'students.user']);
+        $section->load(['classLevel', 'studentProfiles.user']);
         return view('schooladmin.sections.show', compact('section'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Section $section)
     {
         $classLevels = ClassLevel::where('is_active', true)->get();
         return view('schooladmin.sections.edit', compact('section', 'classLevels'));
@@ -122,7 +122,7 @@ class SectionController extends Controller
     public function destroy(Section $section)
     {
          // Checking if section has students assigned to it
-        if ($section->students()->count() > 0) {
+        if ($section->studentProfiles()->count() > 0) {
             return redirect()->route('schooladmin.sections.index')
                 ->with('error', 'Cannot delete section. There are students assigned to this section.');
         }

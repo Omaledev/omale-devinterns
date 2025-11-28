@@ -1,75 +1,3 @@
-{{-- @extends('layouts.app')
-
-@section('content')
-<div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="h3">Student Management</h1>
-                <a href="{{ route('schooladmin.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">All Students</h5>
-                    <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New Student
-                    </a>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Admission No.</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($students as $student)
-                                    <tr>
-                                        <td>{{ $student->admission_number ?? 'N/A' }}</td>
-                                        <td>{{ $student->name }}</td>
-                                        <td>{{ $student->email }}</td>
-                                        <td>
-                                            @if($student->is_approved)
-                                                <span class="badge bg-success">Approved</span>
-                                            @else
-                                                <span class="badge bg-warning">Pending</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('schooladmin.students.show', $student) }}" class="btn btn-sm btn-info">View</a>
-                                            <a href="{{ route('schooladmin.students.edit', $student) }}" class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="{{ route('schooladmin.students.destroy', $student) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">No students found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
-
 @extends('layouts.app')
 
 @section('content')
@@ -95,64 +23,46 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.students.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.students.index') }}">
                             <i class="fas fa-user-graduate me-2"></i>
                             Students
-                            <span class="badge bg-primary float-end">{{ $students->count() }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
                             <i class="fas fa-chalkboard-teacher me-2"></i>
                             Teachers
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index') }}">
                             <i class="fas fa-users me-2"></i>
                             Parents
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index') }}">
                             <i class="fas fa-door-open me-2"></i>
                             Classes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.sections.index') }}">
+                            <i class="fas fa-layer-group me-2"></i>
+                            Sections
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.subjects.index') }}">
                             <i class="fas fa-book me-2"></i>
                             Subjects
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-calendar-check me-2"></i>
-                            Attendance
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-money-bill-wave me-2"></i>
-                            Fees
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bullhorn me-2"></i>
-                            Notice
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bus me-2"></i>
-                            Transport
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bed me-2"></i>
-                            Hostel
+                        <a class="nav-link active text-white" href="{{ route('schooladmin.bursars.index') }}">
+                            <i class="fas fa-money-check me-2"></i>
+                            Bursars
+                            <span class="badge bg-warning float-end">{{ $bursars->count() }}</span>
                         </a>
                     </li>
                 </ul>
@@ -164,111 +74,111 @@
             <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
-                    <h1 class="h2">Student Management</h1>
+                    <h1 class="h2">Bursar Management</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('schooladmin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Students</li>
+                            <li class="breadcrumb-item active">Bursars</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
-                        <i class="fas fa-user-plus me-1"></i>Add New Student
+                    <a href="{{ route('schooladmin.bursars.create') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i>Add New Bursar
                     </a>
                 </div>
             </div>
 
-            <!-- Students Table -->
+            <!-- Bursars Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-user-graduate me-2"></i>All Students
+                                <i class="fas fa-money-check me-2"></i>All Bursars
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search students..." id="searchInput">
-                                <span class="badge bg-primary align-self-center">{{ $students->count() }} students</span>
+                                <input type="text" class="form-control form-control-sm" placeholder="Search bursars..." id="searchInput">
+                                <span class="badge bg-warning align-self-center">{{ $bursars->count() }} bursars</span>
                             </div>
                         </div>
                         <div class="card-body">
+                            <!-- @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            @endif -->
+
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-dark">
                                         <tr>
-                                            <th>Admission No.</th>
+                                            <th>Employee ID</th>
                                             <th>Name</th>
-                                            <th>Class</th>
                                             <th>Email</th>
                                             <th>Phone</th>
+                                            <th>Address</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($students as $student)
+                                        @forelse($bursars as $bursar)
                                             <tr>
                                                 <td>
-                                                    <strong>{{ $student->admission_number ?? 'N/A' }}</strong>
+                                                    <strong>{{ $bursar->employee_id ?? 'N/A' }}</strong>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2"
                                                              style="width: 35px; height: 35px;">
                                                             <span class="text-white fw-bold small">
-                                                                {{ substr($student->first_name, 0, 1) }}{{ substr($student->last_name, 0, 1) }}
+                                                                {{ substr($bursar->name, 0, 1) }}
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <div class="fw-bold">{{ $student->first_name }} {{ $student->last_name }}</div>
-                                                            <small class="text-muted">Roll: {{ $student->roll_number ?? 'N/A' }}</small>
+                                                            <div class="fw-bold">{{ $bursar->name }}</div>
+                                                            <small class="text-muted">Joined: {{ $bursar->created_at->format('M Y') }}</small>
                                                         </div>
                                                     </div>
                                                 </td>
+                                                <td>{{ $bursar->email }}</td>
+                                                <td>{{ $bursar->phone ?? 'N/A' }}</td>
                                                 <td>
-                                                    @if($student->class)
-                                                        <span class="badge bg-info">{{ $student->class }}</span>
-                                                        @if($student->section)
-                                                            <small class="text-muted">({{ $student->section }})</small>
-                                                        @endif
-                                                    @else
-                                                        <span class="text-muted">Not assigned</span>
-                                                    @endif
+                                                    <small class="text-muted">{{ Str::limit($bursar->address, 25) ?? 'N/A' }}</small>
                                                 </td>
-                                                <td>{{ $student->email }}</td>
-                                                <td>{{ $student->phone ?? 'N/A' }}</td>
                                                 <td>
-                                                    @if($student->is_active)
+                                                    @if($bursar->is_approved)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
-                                                        <span class="badge bg-secondary">Inactive</span>
+                                                        <span class="badge bg-warning">Pending</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm" role="group">
-                                                        <a href="{{ route('schooladmin.students.show', $student) }}"
+                                                        <a href="{{ route('schooladmin.bursars.show', $bursar) }}"
                                                            class="btn btn-outline-info"
                                                            data-bs-toggle="tooltip"
-                                                           title="View Student">
+                                                           title="View Bursar">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        <a href="{{ route('schooladmin.students.edit', $student) }}"
+                                                        <a href="{{ route('schooladmin.bursars.edit', $bursar) }}"
                                                            class="btn btn-outline-warning"
                                                            data-bs-toggle="tooltip"
-                                                           title="Edit Student">
+                                                           title="Edit Bursar">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('schooladmin.students.destroy', $student) }}"
+                                                        <form action="{{ route('schooladmin.bursars.destroy', $bursar) }}"
                                                               method="POST"
                                                               class="d-inline"
-                                                              onsubmit="return confirm('Are you sure you want to delete this student?')">
+                                                              onsubmit="return confirm('Are you sure you want to delete this bursar?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
                                                                     class="btn btn-outline-danger"
                                                                     data-bs-toggle="tooltip"
-                                                                    title="Delete Student">
+                                                                    title="Delete Bursar">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -279,11 +189,11 @@
                                             <tr>
                                                 <td colspan="7" class="text-center py-4">
                                                     <div class="text-muted">
-                                                        <i class="fas fa-user-graduate fa-3x mb-3"></i>
-                                                        <h5>No Students Found</h5>
-                                                        <p>Get started by adding your first student.</p>
-                                                        <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
-                                                            <i class="fas fa-user-plus me-1"></i>Add Student
+                                                        <i class="fas fa-money-check fa-3x mb-3"></i>
+                                                        <h5>No Bursars Found</h5>
+                                                        <p>Get started by adding your first bursar to manage financial operations.</p>
+                                                        <a href="{{ route('schooladmin.bursars.create') }}" class="btn btn-primary">
+                                                            <i class="fas fa-user-plus me-1"></i>Add Bursar
                                                         </a>
                                                     </div>
                                                 </td>
@@ -292,18 +202,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <!-- Pagination -->
-                            {{-- @if($students->hasPages())
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <div class="text-muted">
-                                        Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} entries
-                                    </div>
-                                    <nav>
-                                        {{ $students->links() }}
-                                    </nav>
-                                </div>
-                            @endif --}}
                         </div>
                     </div>
                 </div>

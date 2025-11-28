@@ -23,9 +23,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.students.index') }}">
+                        <a class="nav-link active text-white" href="{{ route('schooladmin.students.index') }}">
                             <i class="fas fa-user-graduate me-2"></i>
                             Students
+                            <span class="badge bg-primary float-end">{{ $students->count() }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -40,23 +41,16 @@
                             Parents
                         </a>
                     </li>
-                    <li class="nav-item">
+                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="{{ route('schooladmin.bursars.index') }}">
                             <i class="fas fa-users me-2"></i>
-                            Bursars
+                            Bursar
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.class-levels.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index') }}">
                             <i class="fas fa-door-open me-2"></i>
-                            Class Levels
-                            <span class="badge bg-warning float-end">{{ $classLevels->count() }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.sections.index') }}">
-                            <i class="fas fa-layer-group me-2"></i>
-                            Sections
+                            Classes
                         </a>
                     </li>
                     <li class="nav-item">
@@ -65,7 +59,7 @@
                             Subjects
                         </a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
                             <i class="fas fa-calendar-check me-2"></i>
                             Attendance
@@ -104,85 +98,82 @@
             <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
-                    <h1 class="h2">Class Levels Management</h1>
+                    <h1 class="h2">Student Management</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('schooladmin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Class Levels</li>
+                            <li class="breadcrumb-item active">Students</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i>Add New Class Level
+                    <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-1"></i>Add New Student
                     </a>
                 </div>
             </div>
 
-            <!-- Class Levels Table -->
+            <!-- Students Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-door-open me-2"></i>All Class Levels
+                                <i class="fas fa-user-graduate me-2"></i>All Students
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search class levels..." id="searchInput">
-                                <span class="badge bg-warning align-self-center">{{ $classLevels->count() }} classes</span>
+                                <input type="text" class="form-control form-control-sm" placeholder="Search students..." id="searchInput">
+                                <span class="badge bg-primary align-self-center">{{ $students->count() }} students</span>
                             </div>
                         </div>
                         <div class="card-body">
-                            @if(session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            @endif
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-dark">
                                         <tr>
+                                            <th>Admission No.</th>
                                             <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Order</th>
-                                            <th>Sections</th>
-                                            <th>Students</th>
+                                            <th>Class</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($classLevels as $classLevel)
+                                        @forelse($students as $student)
                                             <tr>
                                                 <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-2"
-                                                             style="width: 35px; height: 35px;">
+                                                    <strong>{{ $student->admission_number ?? 'N/A' }}</strong>
+                                                </td>
+                                               <td>
+                                                      <div class="d-flex align-items-center">
+                                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
+                                                            style="width: 35px; height: 35px;">
                                                             <span class="text-white fw-bold small">
-                                                                {{ substr($classLevel->name, 0, 1) }}
+                                                                {{ substr($student->name, 0, 1) }}
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <div class="fw-bold">{{ $classLevel->name }}</div>
-                                                            <small class="text-muted">Order: {{ $classLevel->order }}</small>
+                                                            <div class="fw-bold">{{ $student->name }}</div>
+                                                            <small class="text-muted">Joined: {{ $student->created_at->format('M Y') }}</small>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <small class="text-muted">{{ $classLevel->description ?? 'No description' }}</small>
+                                                    @if($student->class)
+                                                        <span class="badge bg-info">{{ $student->class }}</span>
+                                                        @if($student->section)
+                                                            <small class="text-muted">({{ $student->section }})</small>
+                                                        @endif
+                                                    @else
+                                                        <span class="text-muted">Not assigned</span>
+                                                    @endif
                                                 </td>
+                                                <td>{{ $student->email }}</td>
+                                                <td>{{ $student->phone ?? 'N/A' }}</td>
                                                 <td>
-                                                    <span class="badge bg-secondary">{{ $classLevel->order }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">{{ $classLevel->sections_count ?? 0 }}</span>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-primary">{{ $classLevel->students_count ?? 0 }}</span>
-                                                </td>
-                                                <td>
-                                                    @if($classLevel->is_active)
+                                                    @if($student->is_active)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
                                                         <span class="badge bg-secondary">Inactive</span>
@@ -190,22 +181,28 @@
                                                 </td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm" role="group">
-                                                        <a href="{{ route('schooladmin.class-levels.edit', $classLevel) }}"
+                                                        <a href="{{ route('schooladmin.students.show', $student) }}"
+                                                           class="btn btn-outline-info"
+                                                           data-bs-toggle="tooltip"
+                                                           title="View Student">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        <a href="{{ route('schooladmin.students.edit', $student) }}"
                                                            class="btn btn-outline-warning"
                                                            data-bs-toggle="tooltip"
-                                                           title="Edit Class Level">
+                                                           title="Edit Student">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('schooladmin.class-levels.destroy', $classLevel) }}"
+                                                        <form action="{{ route('schooladmin.students.destroy', $student) }}"
                                                               method="POST"
                                                               class="d-inline"
-                                                              onsubmit="return confirm('Are you sure you want to delete this class level?')">
+                                                              onsubmit="return confirm('Are you sure you want to delete this student?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit"
                                                                     class="btn btn-outline-danger"
                                                                     data-bs-toggle="tooltip"
-                                                                    title="Delete Class Level">
+                                                                    title="Delete Student">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -216,11 +213,11 @@
                                             <tr>
                                                 <td colspan="7" class="text-center py-4">
                                                     <div class="text-muted">
-                                                        <i class="fas fa-door-open fa-3x mb-3"></i>
-                                                        <h5>No Class Levels Found</h5>
-                                                        <p>Get started by creating your first class level.</p>
-                                                        <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-primary">
-                                                            <i class="fas fa-plus me-1"></i>Create Class Level
+                                                        <i class="fas fa-user-graduate fa-3x mb-3"></i>
+                                                        <h5>No Students Found</h5>
+                                                        <p>Get started by adding your first student.</p>
+                                                        <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
+                                                            <i class="fas fa-user-plus me-1"></i>Add Student
                                                         </a>
                                                     </div>
                                                 </td>
@@ -229,6 +226,18 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Pagination -->
+                            {{-- @if($students->hasPages())
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="text-muted">
+                                        Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} entries
+                                    </div>
+                                    <nav>
+                                        {{ $students->links() }}
+                                    </nav>
+                                </div>
+                            @endif --}}
                         </div>
                     </div>
                 </div>

@@ -29,13 +29,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index')}}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
                             <i class="fas fa-chalkboard-teacher me-2"></i>
                             Teachers
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index')}}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index') }}">
                             <i class="fas fa-users me-2"></i>
                             Parents
                         </a>
@@ -53,9 +53,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.subjects.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('schooladmin.subjects.index') }}">
                             <i class="fas fa-book me-2"></i>
                             Subjects
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-white" href="{{ route('schooladmin.bursars.index') }}">
+                            <i class="fas fa-money-check me-2"></i>
+                            Bursars
                         </a>
                     </li>
                 </ul>
@@ -67,43 +73,43 @@
             <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
-                    <h1 class="h2">Edit Subject</h1>
+                    <h1 class="h2">Edit Bursar</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('schooladmin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('schooladmin.subjects.index') }}">Subjects</a></li>
-                            <li class="breadcrumb-item active">Edit Subject</li>
+                            <li class="breadcrumb-item"><a href="{{ route('schooladmin.bursars.index') }}">Bursars</a></li>
+                            <li class="breadcrumb-item active">Edit {{ $bursar->name }}</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.subjects.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>Back to Subjects
+                    <a href="{{ route('schooladmin.bursars.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to List
                     </a>
                 </div>
             </div>
 
-            <!-- Subject Form -->
+            <!-- Edit Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-edit me-2"></i>Edit Subject Information
+                                <i class="fas fa-edit me-2"></i>Edit Bursar Information
                             </h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('schooladmin.subjects.update', $subject) }}" method="POST">
+                            <form action="{{ route('schooladmin.bursars.update', $bursar) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Subject Name <span class="text-danger">*</span></label>
+                                            <label for="name" class="form-label">Full Name *</label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                   id="name" name="name" value="{{ old('name', $subject->name) }}"
-                                                   placeholder="e.g., Mathematics, English" required>
+                                                   id="name" name="name" value="{{ old('name', $bursar->name) }}"
+                                                   placeholder="Enter bursar's full name" required>
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -112,12 +118,38 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="code" class="form-label">Subject Code <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('code') is-invalid @enderror"
-                                                   id="code" name="code" value="{{ old('code', $subject->code) }}"
-                                                   placeholder="e.g., MATH, ENG" required>
-                                            <small class="form-text text-muted">Unique code for the subject within your school</small>
-                                            @error('code')
+                                            <label for="email" class="form-label">Email Address *</label>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                                   id="email" name="email" value="{{ old('email', $bursar->email) }}"
+                                                   placeholder="Enter email address" required>
+                                            @error('email')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="employee_id" class="form-label">Employee ID *</label>
+                                            <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
+                                                   id="employee_id" name="employee_id" 
+                                                   value="{{ old('employee_id', $bursar->employee_id) }}"
+                                                   placeholder="e.g., BUR2024001" required>
+                                            @error('employee_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label">Phone Number</label>
+                                            <input type="tel" class="form-control @error('phone') is-invalid @enderror"
+                                                   id="phone" name="phone" value="{{ old('phone', $bursar->phone) }}"
+                                                   placeholder="Enter phone number">
+                                            @error('phone')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -125,38 +157,32 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control @error('description') is-invalid @enderror"
-                                              id="description" name="description" rows="3"
-                                              placeholder="Optional subject description">{{ old('description', $subject->description) }}</textarea>
-                                    @error('description')
+                                    <label for="address" class="form-label">Address</label>
+                                    <textarea class="form-control @error('address') is-invalid @enderror"
+                                              id="address" name="address" rows="3"
+                                              placeholder="Enter bursar's address">{{ old('address', $bursar->address) }}</textarea>
+                                    @error('address')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3">
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
-                                               value="1" {{ old('is_active', $subject->is_active) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_active">
-                                            Active Subject
+                                        <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved"
+                                               value="1" {{ old('is_approved', $bursar->is_approved) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="is_approved">
+                                            Active Bursar
                                         </label>
                                     </div>
-                                    <small class="form-text text-muted">Inactive subjects won't be available for new assignments</small>
                                 </div>
 
-                                <!-- Form Actions -->
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('schooladmin.subjects.index') }}" class="btn btn-outline-secondary">
-                                                <i class="fas fa-times me-1"></i>Cancel
-                                            </a>
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Update Subject
-                                            </button>
-                                        </div>
-                                    </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{{ route('schooladmin.bursars.index') }}" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-1"></i>Cancel
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-1"></i>Update Bursar
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -167,55 +193,3 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-    .sidebar {
-        min-height: calc(100vh - 56px);
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-    }
-
-    .sidebar .nav-link {
-        color: #adb5bd;
-        padding: 0.75rem 1rem;
-        border-radius: 0.375rem;
-        margin: 0.125rem 0.5rem;
-        transition: all 0.15s ease;
-    }
-
-    .sidebar .nav-link:hover {
-        color: #fff;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar .nav-link.active {
-        color: #fff;
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .sidebar .nav-link i {
-        width: 20px;
-        text-align: center;
-    }
-
-    .card {
-        border: none;
-        border-radius: 0.5rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .form-label {
-        font-weight: 500;
-        color: #495057;
-    }
-
-    .breadcrumb {
-        margin-bottom: 0;
-    }
-</style>
-@endpush
