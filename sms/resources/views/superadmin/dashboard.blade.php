@@ -286,7 +286,7 @@
                                     </a>
                                 </div>
                                 <div class="col-6">
-                                    <a href="#" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
+                                    <a href="{{ route('superadmin.schools.create-user', $school) }}" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
                                         <i class="fas fa-user-plus fa-2x mb-2"></i>
                                         <span>Create User</span>
                                     </a>
