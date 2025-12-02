@@ -105,24 +105,24 @@ Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordControlle
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // SuperAdmin Routes
-Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->group(function () {
-    Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
-    Route::get('/users/index', [UsersController::class, 'index'])->name('superadmin.users.index');
-    //  Route::resource('users', SuperAdminUsersController::class);
+Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
+    Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('dashboard');
+    // Route::get('/users/index', [UsersController::class, 'index'])->name('superadmin.users.index');
+    Route::resource('users', SuperAdminUsersController::class);
     
     Route::resource('schools', SchoolController::class)->names([
-        'index' => 'superadmin.schools.index',
-        'create' => 'superadmin.schools.create',
-        'store' => 'superadmin.schools.store',
-        'show' => 'superadmin.schools.show',
-        'edit' => 'superadmin.schools.edit',
-        'update' => 'superadmin.schools.update',
-        'destroy' => 'superadmin.schools.destroy'
+        'index' => 'schools.index',
+        'create' => 'schools.create',
+        'store' => 'schools.store',
+        'show' => 'schools.show',
+        'edit' => 'schools.edit',
+        'update' => 'schools.update',
+        'destroy' => 'schools.destroy'
     ]);
     // Superadmin management routes
-    Route::get('/schools/{school}/create-user', [SchoolController::class, 'createUser'])->name('superadmin.schools.create-user');
-    Route::post('/schools/{school}/store-user', [SchoolController::class, 'storeUser'])->name('superadmin.schools.store-user');
-    Route::get('/schools/{school}/users', [SchoolController::class, 'showUsers'])->name('superadmin.schools.users');
+    Route::get('/schools/{school}/create-user', [SchoolController::class, 'createUser'])->name('schools.create-user');
+    Route::post('/schools/{school}/store-user', [SchoolController::class, 'storeUser'])->name('schools.store-user');
+    Route::get('/schools/{school}/users', [SchoolController::class, 'showUsers'])->name('schools.users');
 });
 
 // SchoolAdmin Routes

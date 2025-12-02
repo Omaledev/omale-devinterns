@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\School;
-use Spatie\Permission\Models\Role; // If using Spatie Permission
+use Spatie\Permission\Models\Role; 
 
 class UsersController extends Controller
 {
@@ -17,7 +17,7 @@ class UsersController extends Controller
     {
         $query = User::with(['school', 'roles']);
         
-        // Apply filters
+        
         if ($request->filled('school_id')) {
             $query->where('school_id', $request->school_id);
         }
@@ -37,9 +37,9 @@ class UsersController extends Controller
             });
         }
         
-        $users = $query->orderBy('created_at', 'desc')->paginate(20);
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
         $schools = School::all();
-        $roles = Role::all(); // Get all roles for filter
+        $roles = Role::all(); 
         
         return view('superadmin.users.index', compact('users', 'schools', 'roles'));
     }
@@ -76,7 +76,7 @@ class UsersController extends Controller
             'school_id' => $validated['school_id'],
         ]);
         
-        // Assign role
+        
         $user->assignRole($validated['role']);
         
         return redirect()->route('superadmin.users.index')
@@ -123,7 +123,7 @@ class UsersController extends Controller
             'school_id' => $validated['school_id'],
         ];
         
-        // Update password only if provided
+        // Update password only if was provided
         if (!empty($validated['password'])) {
             $updateData['password'] = bcrypt($validated['password']);
         }
