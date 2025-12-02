@@ -6,7 +6,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
-use App\Http\Controllers\SuperAdmin\UsersController;
+use App\Http\Controllers\SuperAdmin\UsersController ;
+use App\Http\Controllers\SuperAdmin\UsersController as SuperAdminUsersController;
 use App\Http\Controllers\SchoolAdmin\DashboardController as SchoolAdminDashboardController;
 use App\Http\Controllers\SchoolAdmin\StudentProfileController as SchoolAdminStudentProfileController;
 use App\Http\Controllers\SchoolAdmin\TeacherProfileController as SchoolAdminTeacherProfileController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\SchoolAdmin\SectionController as SchoolAdminSectionCont
 use App\Http\Controllers\SchoolAdmin\SubjectController as SchoolAdminSubjectController;
 use App\Http\Controllers\SchoolAdmin\BursarController as SchoolAdminBursarController;
 use App\Http\Controllers\SchoolAdmin\TeacherAssignmentController as SchoolAdminTeacherAssignmentController;
+use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAcademicSessionController;
+use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
@@ -105,6 +108,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('superadmin.dashboard');
     Route::get('/users/index', [UsersController::class, 'index'])->name('superadmin.users.index');
+    //  Route::resource('users', SuperAdminUsersController::class);
     
     Route::resource('schools', SchoolController::class)->names([
         'index' => 'superadmin.schools.index',
@@ -132,9 +136,17 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
     Route::resource('teachers', SchoolAdminTeacherProfileController::class);
     Route::resource('parents', SchoolAdminParentProfileController::class);
     Route::resource('bursars', SchoolAdminBursarController::class);
-
     Route::resource('teacher-assignments', SchoolAdminTeacherAssignmentController::class);
+    
+    Route::get('/students/export', [SchoolAdminStudentProfileController::class, 'export'])->name('students.export');
+    Route::post('/students/import', [SchoolAdminStudentProfileController::class, 'import'])->name('students.import');
+    Route::get('/students/download-template', [SchoolAdminStudentProfileController::class, 'downloadTemplate'])->name('students.download-template');
 
+    Route::resource('academic-sessions', SchoolAdminAcademicSessionController::class);
+    Route::post('academic-sessions/{session}/activate', [SchoolAdminAcademicSessionController::class, 'activate'])->name('academic-sessions.activate');
+
+    Route::resource('terms', SchoolAdminTermController::class);
+    Route::post('terms/{term}/activate', [SchoolAdminTermController::class, 'activate'])->name('terms.activate');
 
 });
 

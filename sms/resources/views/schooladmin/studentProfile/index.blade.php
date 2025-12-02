@@ -4,94 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-            <div class="position-sticky pt-3">
-                <div class="text-center mb-4">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                        style="width: 60px; height: 60px;">
-                        <span class="text-white fw-bold fs-4">A</span>
-                    </div>
-                    <h6 class="text-white mb-1">{{ auth()->user()->school->name }}</h6>
-                    <small class="text-white-50">School Admin</small>
-                </div>
-
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.students.index') }}">
-                            <i class="fas fa-user-graduate me-2"></i>
-                            Students
-                            <span class="badge bg-primary float-end">{{ $students->count() }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>
-                            Teachers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index') }}">
-                            <i class="fas fa-users me-2"></i>
-                            Parents
-                        </a>
-                    </li>
-                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.bursars.index') }}">
-                            <i class="fas fa-users me-2"></i>
-                            Bursar
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index') }}">
-                            <i class="fas fa-door-open me-2"></i>
-                            Classes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.subjects.index') }}">
-                            <i class="fas fa-book me-2"></i>
-                            Subjects
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-calendar-check me-2"></i>
-                            Attendance
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-money-bill-wave me-2"></i>
-                            Fees
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bullhorn me-2"></i>
-                            Notice
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bus me-2"></i>
-                            Transport
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bed me-2"></i>
-                            Hostel
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+       @include('schooladmin.partials.sidebar')
 
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -106,12 +19,39 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary">
-                        <i class="fas fa-user-plus me-1"></i>Add New Student
-                    </a>
+                <div class="row g-2 mb-2 mb-md-0">
+                    <!-- Export Button -->
+                    <div class="col-6 col-sm-4 col-md-auto">
+                        <a href="{{ route('schooladmin.students.export') }}" class="btn btn-success btn-sm w-100 text-nowrap">
+                            <i class="fas fa-download me-1"></i>
+                            <span class="d-none d-md-inline">Export Students</span>
+                            <span class="d-inline d-md-none">Export</span>
+                        </a>
+                    </div>
+
+
+                    
+                    
+                    <!-- Import Button -->
+                    <div class="col-6 col-sm-4 col-md-auto">
+                        <button type="button" class="btn btn-info btn-sm w-100 text-nowrap" data-bs-toggle="modal" data-bs-target="#importModal">
+                            <i class="fas fa-upload me-1"></i>
+                            <span class="d-none d-md-inline">Import Students</span>
+                            <span class="d-inline d-md-none">Import</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Add Student Button -->
+                    <div class="col-12 col-sm-4 col-md-auto">
+                        <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary btn-sm w-100 text-nowrap">
+                            <i class="fas fa-user-plus me-1"></i>
+                            <span class="d-none d-md-inline">Add New Student</span>
+                            <span class="d-inline d-md-none">Add Student</span>
+                        </a>
+                    </div>
                 </div>
             </div>
+            
 
             <!-- Students Table -->
             <div class="row">
@@ -239,6 +179,75 @@
                                 </div>
                             @endif --}}
                         </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Import Students Modal -->
+            <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="importModalLabel">
+                                <i class="fas fa-upload me-2"></i>Import Students from Excel
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{ route('schooladmin.students.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <!-- Success Message -->
+                                @if(session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        {{ session('success') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
+
+                                <!-- Error Message -->
+                                @if(session('error'))
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        {!! session('error') !!}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
+
+                                <div class="mb-3">
+                                    <label for="file" class="form-label">Select Excel/CSV File</label>
+                                    <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls,.csv" required>
+                                    <div class="form-text">
+                                        Supported formats: .xlsx, .xls, .csv (Max: 10MB)
+                                    </div>
+                                </div>
+
+                                <!-- Download Template -->
+                                <div class="mb-3">
+                                    <a href="{{ route('schooladmin.students.download-template') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-file-download me-1"></i>Download Template
+                                    </a>
+                                    <small class="text-muted ms-2">Use our template for correct formatting</small>
+                                </div>
+
+                                <!-- Required Columns Info -->
+                                <div class="alert alert-info">
+                                    <h6 class="alert-heading">Required Columns:</h6>
+                                    <ul class="mb-0 small">
+                                        <li><strong>email</strong> - Student's email (must be unique)</li>
+                                        <li><strong>name</strong> - Student's full name</li>
+                                        <li><strong>class_level_id</strong> - Class ID number</li>
+                                        <li><strong>student_id</strong> - School admission number</li>
+                                        <li><strong>Optional:</strong> admission_date, date_of_birth, gender, contact, address</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-upload me-1"></i>Import Students
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

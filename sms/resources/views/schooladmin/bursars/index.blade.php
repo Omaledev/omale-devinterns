@@ -4,70 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-            <div class="position-sticky pt-3">
-                <div class="text-center mb-4">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                        style="width: 60px; height: 60px;">
-                        <span class="text-white fw-bold fs-4">A</span>
-                    </div>
-                    <h6 class="text-white mb-1">{{ auth()->user()->school->name }}</h6>
-                    <small class="text-white-50">School Admin</small>
-                </div>
-
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.students.index') }}">
-                            <i class="fas fa-user-graduate me-2"></i>
-                            Students
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>
-                            Teachers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index') }}">
-                            <i class="fas fa-users me-2"></i>
-                            Parents
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index') }}">
-                            <i class="fas fa-door-open me-2"></i>
-                            Classes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.sections.index') }}">
-                            <i class="fas fa-layer-group me-2"></i>
-                            Sections
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.subjects.index') }}">
-                            <i class="fas fa-book me-2"></i>
-                            Subjects
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.bursars.index') }}">
-                            <i class="fas fa-money-check me-2"></i>
-                            Bursars
-                            <span class="badge bg-warning float-end">{{ $bursars->count() }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        @include('schooladmin.partials.sidebar')
 
         <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -103,13 +40,6 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- @if(session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                </div>
-                            @endif -->
-
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-dark">

@@ -16,7 +16,7 @@ class DashboardController extends Controller
             'total_students' => User::role('Student')->where('school_id', $school->id)->count(),
             'total_teachers' => User::role('Teacher')->where('school_id', $school->id)->count(),
             'total_parents' => User::role('Parent')->where('school_id', $school->id)->count(),
-            'total_classes' => 0, // this Will update when the Class model exists
+            'total_classes' => 0, 
             'pending_approvals' => User::where('school_id', $school->id)->count(),
         ];
 

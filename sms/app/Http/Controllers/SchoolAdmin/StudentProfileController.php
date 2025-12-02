@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\StudentProfile;
 use Illuminate\Support\Facades\Hash;
+use App\Exports\StudentsExport;
+use App\Imports\StudentsImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Role;
 
 class StudentProfileController extends Controller
@@ -202,5 +206,72 @@ class StudentProfileController extends Controller
 
         return redirect()->route('schooladmin.students.index')
             ->with('success', 'Student deleted successfully!');
+    }
+
+        public function export() 
+    {   
+        // Authorization check
+        if (!auth()->user()->hasAnyRole(['SchoolAdmin', 'SuperAdmin'])) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        // School context to filename
+        $filename = 'students-' . auth()->user()->school_id . '-' . date('Y-m-d') . '.xlsx';
+        
+        return Excel::download(new StudentsExport, $filename);
+    }
+
+    public function import(Request $request) 
+    {
+        // Authorization check
+        if (!auth()->user()->hasAnyRole(['SchoolAdmin', 'SuperAdmin'])) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:10240' // 10MB max
+        ]);
+        
+        try {
+            Excel::import(new StudentsImport, $request->file('file'));
+            
+            return back()->with('success', 'Students imported successfully!');
+            
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Row {$failure->row()}: {$failure->errors()[0]}";
+            }
+            
+            return back()->with('error', implode('<br>', $errorMessages));
+            
+        } catch (\Exception $e) {
+            return back()->with('error', 'Import failed: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        if (!auth()->user()->hasAnyRole(['SchoolAdmin', 'SuperAdmin'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Creating a simple template
+        $template = new class implements \Maatwebsite\Excel\Concerns\FromArray {
+            public function array(): array {
+                return [
+                    // Headers
+                    ['email', 'name', 'class_level_id', 'student_id', 'admission_date', 'date_of_birth', 'gender', 'contact', 'address'],
+                    // Example row 1
+                    ['student1@school.com', 'John Doe', '1', 'STD001', '2024-01-15', '2008-05-20', 'Male', '1234567890', '123 Main St'],
+                    // Example row 2
+                    ['student2@school.com', 'Jane Smith', '1', 'STD002', '2024-01-15', '2008-07-15', 'Female', '0987654321', '456 Oak Ave'],
+                ];
+            }
+        };
+        
+        return Excel::download($template, 'student-import-template.xlsx');
     }
 }

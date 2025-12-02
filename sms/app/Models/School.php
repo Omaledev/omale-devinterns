@@ -30,5 +30,35 @@ class School extends Model
         return $this->hasMany(User::class);
     }
 
+    public function academicSessions()
+    {
+        return $this->hasMany(AcademicSession::class);
+    }
+
+    public function terms()
+    {
+        return $this->hasMany(Term::class);
+    }
+
+    public function studentProfiles()
+    {
+        return $this->hasMany(StudentProfile::class);
+    }
+
+    public function classLevels()
+    {
+        return $this->hasMany(ClassLevel::class);
+    }
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class);
+    }
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
+    }
+
 
 }
