@@ -1,4 +1,4 @@
-<div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+  <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
             <div class="position-sticky pt-3">
                 <div class="text-center mb-4">
                     <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
@@ -10,13 +10,13 @@
 
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('superadmin.dashboard') }}">
+                        <a class="nav-link active text-white" href="{{ route('superadmin.dashboard') }}">
                             <i class="fas fa-tachometer-alt me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('superadmin.schools.index') }}">
+                        <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index') }}">
                             <i class="fas fa-school me-2"></i>
                             Schools
                             <span class="badge bg-primary float-end">{{ $stats['total_schools'] ?? 0 }}</span>

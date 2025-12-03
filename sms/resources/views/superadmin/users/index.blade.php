@@ -2,10 +2,17 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <h2>Users Management</h2>
-            <a href="{{ route('superadmin.users.create') }}" class="btn btn-primary">Add New User</a>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+        <div class="mb-3 mb-md-0">
+            <h2 class="h4 mb-0">Users Management</h2>
+            <a href="{{ route('superadmin.dashboard') }}" class="text-decoration-none small">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+        <div>
+            <a href="{{ route('superadmin.users.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add New User
+            </a>
         </div>
     </div>
 

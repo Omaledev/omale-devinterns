@@ -2,13 +2,35 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Create New User</h3>
-                    <a href="{{ route('superadmin.users.index') }}" class="btn btn-secondary float-end">Back to Users</a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="mb-2 mb-md-0">
+                            <h3 class="h5 mb-1">
+                                <i class="fas fa-user-plus text-primary me-2"></i>
+                                Create New User
+                            </h3>
+                            <div class="text-muted small">
+                                <a href="{{ route('superadmin.users.index') }}" class="text-decoration-none me-3">
+                                    <i class="fas fa-arrow-left me-1"></i> Back to Users
+                                </a>
+                                <span class="d-none d-md-inline">|</span>
+                                <span class="ms-2">Add a new system user</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('superadmin.users.index') }}" class="btn btn-outline-secondary d-none d-md-block">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" form="userForm" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Create User
+                            </button>
+                        </div>
+                    </div>
                 </div>
+  
                 <div class="card-body">
                     <form action="{{ route('superadmin.users.store') }}" method="POST">
                         @csrf

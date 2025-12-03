@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\AcademicSession;
 use App\Models\Term;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         
         // Share active session and term with all views
         $this->shareActiveSessionAndTerm();
+
+         Paginator::useBootstrap(); 
     }
 
     protected function configureAuthRoutes()
