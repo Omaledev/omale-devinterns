@@ -128,6 +128,11 @@ Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('supe
 // SchoolAdmin Routes
 Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schooladmin.')->group(function () {
     Route::get('/dashboard', [SchoolAdminDashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/students/export', [SchoolAdminStudentProfileController::class, 'export'])->name('students.export');
+    Route::post('/students/import', [SchoolAdminStudentProfileController::class, 'import'])->name('students.import');
+    Route::get('/students/download-template', [SchoolAdminStudentProfileController::class, 'downloadTemplate'])->name('students.download-template');
+    
      // Resource Routes
     Route::resource('students', SchoolAdminStudentProfileController::class);
     Route::resource('class-levels', SchoolAdminClassLevelController::class);
@@ -138,10 +143,6 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
     Route::resource('bursars', SchoolAdminBursarController::class);
     Route::resource('teacher-assignments', SchoolAdminTeacherAssignmentController::class);
     
-    Route::get('/students/export', [SchoolAdminStudentProfileController::class, 'export'])->name('students.export');
-    Route::post('/students/import', [SchoolAdminStudentProfileController::class, 'import'])->name('students.import');
-    Route::get('/students/download-template', [SchoolAdminStudentProfileController::class, 'downloadTemplate'])->name('students.download-template');
-
     Route::resource('academic-sessions', SchoolAdminAcademicSessionController::class);
     Route::post('academic-sessions/{session}/activate', [SchoolAdminAcademicSessionController::class, 'activate'])->name('academic-sessions.activate');
 

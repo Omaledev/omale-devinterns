@@ -233,7 +233,7 @@ class StudentProfileController extends Controller
         ]);
         
         try {
-            Excel::import(new StudentsImport, $request->file('file'));
+            Excel::import(new StudentsImport, $request->file('file')->store('temp'));
             
             return back()->with('success', 'Students imported successfully!');
             
