@@ -19,6 +19,7 @@ use App\Http\Controllers\SchoolAdmin\BursarController as SchoolAdminBursarContro
 use App\Http\Controllers\SchoolAdmin\TeacherAssignmentController as SchoolAdminTeacherAssignmentController;
 use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAcademicSessionController;
 use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
+use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
@@ -148,6 +149,9 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
 
     Route::resource('terms', SchoolAdminTermController::class);
     Route::post('terms/{term}/activate', [SchoolAdminTermController::class, 'activate'])->name('terms.activate');
+
+    Route::get('timetables/export', [SchoolAdminTimetableController::class, 'export'])->name('timetables.export');
+    Route::resource('timetables', SchoolAdminTimetableController::class);
 
 });
 
