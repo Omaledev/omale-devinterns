@@ -103,27 +103,47 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="class" class="form-label">Class/Grade</label>
-                                            <select class="form-select @error('class') is-invalid @enderror" id="class" name="class">
+                                            <label for="class_level_id" class="form-label">Class <span class="text-danger">*</span></label>
+                                            <select class="form-select @error('class_level_id') is-invalid @enderror" 
+                                                    id="class_level_id" 
+                                                    name="class_level_id">
+                                                
                                                 <option value="">Select Class</option>
-                                                <option value="Grade 1" {{ old('class', $student->class) == 'Grade 1' ? 'selected' : '' }}>Grade 1</option>
-                                                <option value="Grade 2" {{ old('class', $student->class) == 'Grade 2' ? 'selected' : '' }}>Grade 2</option>
-                                                <option value="Grade 3" {{ old('class', $student->class) == 'Grade 3' ? 'selected' : '' }}>Grade 3</option>
-                                                <option value="Grade 4" {{ old('class', $student->class) == 'Grade 4' ? 'selected' : '' }}>Grade 4</option>
-                                                <option value="Grade 5" {{ old('class', $student->class) == 'Grade 5' ? 'selected' : '' }}>Grade 5</option>
-                                                <option value="Grade 6" {{ old('class', $student->class) == 'Grade 6' ? 'selected' : '' }}>Grade 6</option>
+                                                
+                                                @foreach($classLevels as $class)
+                                                    <option value="{{ $class->id }}" 
+                                                        {{-- Check if the student's current profile class matches this option --}}
+                                                        {{ (old('class_level_id', $student->studentProfile->class_level_id ?? '') == $class->id) ? 'selected' : '' }}>
+                                                        {{ $class->name }}
+                                                    </option>
+                                                @endforeach
+                                                
                                             </select>
-                                            @error('class')
+                                            @error('class_level_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="section" class="form-label">Section</label>
-                                            <input type="text" class="form-control @error('section') is-invalid @enderror"
-                                                   id="section" name="section" value="{{ old('section', $student->section) }}"
-                                                   placeholder="Enter section">
-                                            @error('section')
+                                            <label for="section_id" class="form-label">Section</label>
+                                            <select class="form-select @error('section_id') is-invalid @enderror" 
+                                                    id="section_id" 
+                                                    name="section_id">
+                                                
+                                                <option value="">Select Section</option>
+                                                
+                                                @foreach($sections as $section)
+                                                    <option value="{{ $section->id }}" 
+                                                        {{-- Logic: Check 'old' input first (if validation failed), otherwise check database value --}}
+                                                        {{ (old('section_id', $student->studentProfile->section_id ?? '') == $section->id) ? 'selected' : '' }}>
+                                                        
+                                                        {{ $section->name }} 
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
+                                            
+                                            @error('section_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>

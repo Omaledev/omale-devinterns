@@ -18,7 +18,7 @@ class Subject extends Model
     {
         static::addGlobalScope('school', function (Builder $builder) {
             if (session('active_school')) {
-                $builder->where('subjects.school_id', session('active_school'));
+                $builder->where($builder->getModel()->getTable() . '.school_id', session('active_school'));
             }
         });
     }

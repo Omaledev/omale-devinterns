@@ -94,7 +94,14 @@ class User extends Authenticatable
 
     public function taughtClasses()
     {
-        return $this->hasMany(ClassroomAssignment::class, 'teacher_id');
+        return $this->hasManyThrough(
+            ClassroomAssignment::class, // The model needed
+            TeacherProfile::class,      // The intermediate model
+            'user_id',                  // Foreign key on teacher_profiles table
+            'teacher_id',               // Foreign key on classroom_assignments table
+            'id',                       // Local key on users table
+            'id'                        // Local key on teacher_profiles table
+        );
     }
     
 
@@ -124,6 +131,11 @@ class User extends Authenticatable
         return $query->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%");
+    }
+
+    public function markedAttendances()
+    {
+        return $this->hasMany(Attendance::class, 'teacher_id');
     }
 
 }

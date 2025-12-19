@@ -19,11 +19,13 @@ class TeacherProfileController extends Controller
      */
     public function index()
     {
-        $teachers = User::role('Teacher')
-            ->where('school_id', auth()->user()->school_id)
-            ->get();
-        
-        return view('schooladmin.teacherProfile.index', compact('teachers'));
+      
+    $teachers = User::role('Teacher')
+        ->where('school_id', auth()->user()->school_id)
+        ->with(['taughtClasses.subject']) 
+        ->get();
+    
+    return view('schooladmin.teacherProfile.index', compact('teachers'));
 
     }
 

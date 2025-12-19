@@ -24,7 +24,7 @@ class ClassroomAssignment extends Model
     {
         static::addGlobalScope('school', function (Builder $builder) {
             if (session('active_school')) {
-                $builder->where('school_id', session('active_school'));
+               $builder->where($builder->getModel()->getTable() . '.school_id', session('active_school'));
             }
         });
     }

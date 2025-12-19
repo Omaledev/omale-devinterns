@@ -20,11 +20,12 @@ use App\Http\Controllers\SchoolAdmin\TeacherAssignmentController as SchoolAdminT
 use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAcademicSessionController;
 use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
 use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
+
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
+
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
-use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentController;
-use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\MessageController as TeacherMessageController;
 use App\Http\Controllers\Teacher\ReportController as TeacherReportController;
@@ -43,7 +44,6 @@ use App\Http\Controllers\Subject\SubjectController;
 use App\Http\Controllers\Class\ClassController;
 use App\Http\Controllers\Approval\ApprovalController;
 use App\Http\Controllers\Timetable\TimetableController;
-use App\Http\Controllers\Attendance\AttendanceController;
 use App\Http\Controllers\Assessment\AssessmentController;
 use App\Http\Controllers\Grade\GradeController;
 use App\Http\Controllers\FeeStructure\FeeStructureController;
@@ -156,20 +156,28 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
 });
 
 // Teacher Routes
-Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->group(function () {
-    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+    // Attendance Routes
+    Route::get('/attendance/select', [TeacherAttendanceController::class, 'select'])->name('attendance.select');
+    Route::post('/attendance/create', [TeacherAttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance/store', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/summary', [TeacherAttendanceController::class, 'summary'])->name('attendance.summary');
+
+    Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('my-classes');
+     Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('my-students');
+    Route::get('/students/{class}', [TeacherTeacherController::class, 'classStudents'])->name('class-students');
+
+
     Route::resource('students', TeacherStudentController::class);
-    Route::resource('attendance', TeacherAttendanceController::class);
     Route::resource('assessments', TeacherAssessmentController::class);
-    Route::resource('assignments', TeacherAssignmentController::class);
+    // Route::resource('assignments', TeacherAssignmentController::class);
     Route::resource('grades', TeacherGradeController::class);
     Route::resource('messages', TeacherMessageController::class);
     Route::resource('announcements', TeacherAnnouncementController::class);
     Route::resource('reports', TeacherReportController::class);
     Route::resource('books', TeacherBookController::class);
-    Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('teacher.my-classes');
-    Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('teacher.my-students');
-    Route::get('/students/{class}', [TeacherTeacherController::class, 'classStudents'])->name('teacher.class-students');
+   
 });
 
 // Student Routes

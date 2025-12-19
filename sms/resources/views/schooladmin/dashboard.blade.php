@@ -14,47 +14,47 @@
                     <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }}</p>
                 </div>
                <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group me-2">
-        <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-download me-1"></i>Export
-            </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a class="dropdown-item" href="{{ route('schooladmin.students.export') }}">
-                        <i class="fas fa-user-graduate me-2"></i>Students (Excel)
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="{{ route('schooladmin.timetables.export') }}">
-                        <i class="fas fa-calendar-alt me-2"></i>Timetable (PDF)
-                    </a>
-                </li>
-            </ul>
-        </div>
+                    <div class="btn-group me-2">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-download me-1"></i>Export
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('schooladmin.students.export') }}">
+                                        <i class="fas fa-user-graduate me-2"></i>Students (Excel)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('schooladmin.timetables.export') }}">
+                                        <i class="fas fa-calendar-alt me-2"></i>Timetable (PDF)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
-        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">
-            <i class="fas fa-print me-1"></i>Print
-        </button>
-    </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+                            <i class="fas fa-print me-1"></i>Print
+                        </button>
+                    </div>
 
-    <div class="dropdown">
-        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="quickAddDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-plus me-1"></i>Quick Add
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickAddDropdown">
-            <li><h6 class="dropdown-header">Academic</h6></li>
-            <li><a class="dropdown-item" href="{{ route('schooladmin.timetables.create') }}">Add Timetable</a></li>
-            <li><a class="dropdown-item" href="{{ route('schooladmin.class-levels.create') }}">Add Class</a></li>
-            <li><a class="dropdown-item" href="{{ route('schooladmin.subjects.create') }}">Add Subject</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><h6 class="dropdown-header">Users</h6></li>
-            <li><a class="dropdown-item" href="{{ route('schooladmin.students.create') }}">Add Student</a></li>
-            <li><a class="dropdown-item" href="{{ route('schooladmin.teachers.create') }}">Add Teacher</a></li>
-        </ul>
-    </div>
-</div>
-            </div>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="quickAddDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-plus me-1"></i>Quick Add
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickAddDropdown">
+                            <li><h6 class="dropdown-header">Academic</h6></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.timetables.create') }}">Add Timetable</a></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.class-levels.create') }}">Add Class</a></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.subjects.create') }}">Add Subject</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">Users</h6></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.students.create') }}">Add Student</a></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.teachers.create') }}">Add Teacher</a></li>
+                        </ul>
+                    </div>
+                </div>
+                            </div>
 
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">

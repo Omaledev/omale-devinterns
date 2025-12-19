@@ -17,9 +17,10 @@ class ClassLevel extends Model
     {
         static::addGlobalScope('school', function (Builder $builder) {
             if (session('active_school')) {
-                $builder->where('school_id', session('active_school'));
+                $builder->where($builder->getModel()->getTable() . '.school_id', session('active_school'));
             }
         });
+    
     }
 
     // School relationship with ClassLevel-a particular Class_Level belong to a school-this relate to the foreignId in Class_Level table
@@ -46,8 +47,11 @@ class ClassLevel extends Model
 
     public function students()
     {
-        return $this->hasMany(User::class)->whereHas('roles', function($q) {
-            $q->where('name', 'Student');
-        });
+        return $this->hasMany(StudentProfile::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'class_level_id');
     }
 }

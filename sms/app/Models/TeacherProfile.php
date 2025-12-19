@@ -41,5 +41,17 @@ class TeacherProfile extends Model
     {
         return $this->hasMany(ClassroomAssignment::class, 'teacher_id');
     }
+    
+    public function assignedClasses()
+    {
+        return $this->belongsToMany(
+            ClassLevel::class, 
+            'classroom_assignments', 
+            'teacher_id',          
+            'class_level_id'
+        )
+        ->withPivot('subject_id', 'section_id') 
+        ->wherePivot('is_active', true); 
+    }
 
 }

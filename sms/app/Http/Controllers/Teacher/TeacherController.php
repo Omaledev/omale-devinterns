@@ -4,62 +4,54 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\TeacherProfile;
+use App\Models\ClassLevel;
+use App\Models\User; 
 
 class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function myClasses()
     {
-        //
+        $user = auth()->user();
+        $schoolId = session('active_school');
+        
+        $teacherProfile = TeacherProfile::where('user_id', $user->id)->first();
+
+        if (!$teacherProfile) {
+            return view('teacher.my-classes', ['classes' => []]);
+        }
+
+        $classes = $teacherProfile->assignedClasses()
+                   ->where('class_levels.school_id', $schoolId)
+                    ->get()
+                    ->unique('id'); 
+
+        return view('teacher.my-classes', compact('classes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function classStudents($classId)
     {
-        //
-    }
+        $user = auth()->user();
+        $teacherProfile = TeacherProfile::where('user_id', $user->id)->firstOrFail();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+       
+        $isAssigned = $teacherProfile->assignedClasses()
+                        ->where('class_levels.id', $classId)
+                        ->exists();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if (!$isAssigned) {
+            abort(403, 'Access denied. You are not assigned to this class.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $class = ClassLevel::findOrFail($classId);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $students = User::role('Student')
+            ->whereHas('studentProfile', function($query) use ($classId) {
+                $query->where('class_level_id', $classId);
+            })
+            ->with('studentProfile') 
+            ->get();
+        
+        return view('teacher.class-students', compact('class', 'students'));
     }
 }
