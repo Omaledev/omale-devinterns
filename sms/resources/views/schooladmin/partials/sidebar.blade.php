@@ -57,7 +57,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="route('schooladmin.subjects.index') }}">
+                            <a class="nav-link text-white-50" href="{{route('schooladmin.subjects.index') }}">
                                 <i class="fas fa-book me-2"></i>
                                 Subjects
                             </a>
