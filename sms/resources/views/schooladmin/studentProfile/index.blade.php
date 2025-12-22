@@ -98,11 +98,19 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if($student->class)
-                                                        <span class="badge bg-info">{{ $student->class }}</span>
-                                                        @if($student->section)
-                                                            <small class="text-muted">({{ $student->section }})</small>
+                                                    @if($student->studentProfile && $student->studentProfile->classLevel)
+                                                        
+                                                        <span class="badge bg-info">
+                                                            {{ $student->studentProfile->classLevel->name }}
+                                                        </span>
+
+                                                        {{-- Check if section exists --}}
+                                                        @if($student->studentProfile->section)
+                                                            <small class="text-muted">
+                                                                ({{ $student->studentProfile->section->name }})
+                                                            </small>
                                                         @endif
+
                                                     @else
                                                         <span class="text-muted">Not assigned</span>
                                                     @endif

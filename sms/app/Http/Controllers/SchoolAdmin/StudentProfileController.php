@@ -24,7 +24,7 @@ class StudentProfileController extends Controller
     {
         $students = User::role('Student')
             ->where('school_id', auth()->user()->school_id)
-            ->with('school')
+           ->with(['studentProfile.classLevel', 'studentProfile.section'])
             ->get();
 
         return view('schooladmin.studentProfile.index', compact('students'));
