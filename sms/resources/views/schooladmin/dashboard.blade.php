@@ -44,6 +44,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickAddDropdown">
                             <li><h6 class="dropdown-header">Academic</h6></li>
+                            <li><a class="dropdown-item" href="{{ route('schooladmin.assessments.index') }}">Assessment Setup</a></li>
                             <li><a class="dropdown-item" href="{{ route('schooladmin.timetables.create') }}">Add Timetable</a></li>
                             <li><a class="dropdown-item" href="{{ route('schooladmin.class-levels.create') }}">Add Class</a></li>
                             <li><a class="dropdown-item" href="{{ route('schooladmin.subjects.create') }}">Add Subject</a></li>

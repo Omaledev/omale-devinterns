@@ -60,5 +60,9 @@ class School extends Model
         return $this->hasMany(Subject::class);
     }
 
+    public function AssessmentType() {
+        return $this->hasMany(AssessmentType::class);
+    }
+
 
 }

@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
+
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UsersController ;
 use App\Http\Controllers\SuperAdmin\UsersController as SuperAdminUsersController;
+
 use App\Http\Controllers\SchoolAdmin\DashboardController as SchoolAdminDashboardController;
 use App\Http\Controllers\SchoolAdmin\StudentProfileController as SchoolAdminStudentProfileController;
 use App\Http\Controllers\SchoolAdmin\TeacherProfileController as SchoolAdminTeacherProfileController;
@@ -20,6 +22,7 @@ use App\Http\Controllers\SchoolAdmin\TeacherAssignmentController as SchoolAdminT
 use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAcademicSessionController;
 use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
 use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
+use App\Http\Controllers\SchoolAdmin\AssessmentTypeController as SchoolAdminAssessmentTypeController;
 
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
@@ -130,9 +133,17 @@ Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('supe
 Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schooladmin.')->group(function () {
     Route::get('/dashboard', [SchoolAdminDashboardController::class, 'index'])->name('dashboard');
 
+    // Bulk import and export routes
     Route::get('/students/export', [SchoolAdminStudentProfileController::class, 'export'])->name('students.export');
     Route::post('/students/import', [SchoolAdminStudentProfileController::class, 'import'])->name('students.import');
     Route::get('/students/download-template', [SchoolAdminStudentProfileController::class, 'downloadTemplate'])->name('students.download-template');
+
+    // Assessments routes
+    Route::get('/assessments', [SchoolAdminAssessmentTypeController::class, 'index'])->name('assessments.index');
+    Route::post('/assessments', [SchoolAdminAssessmentTypeController::class, 'store'])->name('assessments.store');
+    Route::delete('/assessments/{assessmentType}', [SchoolAdminAssessmentTypeController::class, 'destroy'])->name('assessments.destroy');
+
+// });
     
      // Resource Routes
     Route::resource('students', SchoolAdminStudentProfileController::class);
