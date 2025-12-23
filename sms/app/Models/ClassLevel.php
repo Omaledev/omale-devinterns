@@ -54,4 +54,9 @@ class ClassLevel extends Model
     {
         return $this->hasMany(Attendance::class, 'class_level_id');
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

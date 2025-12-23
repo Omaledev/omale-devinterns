@@ -34,4 +34,9 @@ class Term extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

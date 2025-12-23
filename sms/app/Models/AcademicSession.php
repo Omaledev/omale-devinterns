@@ -33,6 +33,11 @@ class AcademicSession extends Model
     {
         return $this->hasMany(Term::class);
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }
 
 

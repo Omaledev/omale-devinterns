@@ -138,4 +138,20 @@ class User extends Authenticatable
         return $this->hasMany(Attendance::class, 'teacher_id');
     }
 
+    /**
+     * Get all grades recorded for this student.
+     */
+    public function grades()
+    {
+        return $this->hasMany(Grade::class, 'student_id');
+    }
+
+    /**
+     * Get all grades entered by this teacher.
+     */
+    public function gradesEntered()
+    {
+        return $this->hasMany(Grade::class, 'teacher_id');
+    }
+
 }

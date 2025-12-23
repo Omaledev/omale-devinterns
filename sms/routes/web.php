@@ -1,15 +1,18 @@
 <?php
 
+// Home routes
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 
+// SuperAdmin routes
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UsersController ;
 use App\Http\Controllers\SuperAdmin\UsersController as SuperAdminUsersController;
 
+// SchoolAdmin routes
 use App\Http\Controllers\SchoolAdmin\DashboardController as SchoolAdminDashboardController;
 use App\Http\Controllers\SchoolAdmin\StudentProfileController as SchoolAdminStudentProfileController;
 use App\Http\Controllers\SchoolAdmin\TeacherProfileController as SchoolAdminTeacherProfileController;
@@ -24,17 +27,19 @@ use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController
 use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
 use App\Http\Controllers\SchoolAdmin\AssessmentTypeController as SchoolAdminAssessmentTypeController;
 
+// Teacher routes
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
+use App\Http\Controllers\Teacher\TeacherController as TeacherTeacherController;
 use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
+use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
+
 
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
-use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\MessageController as TeacherMessageController;
 use App\Http\Controllers\Teacher\ReportController as TeacherReportController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Teacher\BookController as TeacherBookController;
-use App\Http\Controllers\Teacher\TeacherController as TeacherTeacherController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
@@ -178,6 +183,11 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('my-classes');
      Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('my-students');
     Route::get('/students/{class}', [TeacherTeacherController::class, 'classStudents'])->name('class-students');
+
+    Route::get('/grades', [TeacherGradeController::class, 'index'])->name('grades.index');
+    Route::get('/grades/create', [TeacherGradeController::class, 'create'])->name('grades.create');
+    Route::post('/grades/store', [TeacherGradeController::class, 'store'])->name('grades.store');
+    Route::post('/grades/lock', [TeacherGradeController::class, 'lock'])->name('grades.lock');
 
 
     Route::resource('students', TeacherStudentController::class);

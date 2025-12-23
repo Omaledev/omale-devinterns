@@ -49,4 +49,9 @@ class Subject extends Model
         return $this->belongsToMany(ClassLevel::class, 'classroom_assignments', 'subject_id', 'class_level_id')
                     ->withTimestamps();
     }
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
 }

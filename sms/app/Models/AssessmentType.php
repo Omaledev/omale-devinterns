@@ -17,10 +17,6 @@ class AssessmentType extends Model
         'max_score'
     ];
 
-    public function school(){
-       return $this->belongsTo(School::class);
-    }
-
     protected static function booted()
     {
         static::addGlobalScope('school', function (Builder $builder) {
@@ -28,5 +24,15 @@ class AssessmentType extends Model
                 $builder->where($builder->getModel()->getTable() . '.school_id', session('active_school'));
             }
         });
+    }
+
+    public function school(){
+       return $this->belongsTo(School::class);
+    }
+
+
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
     }
 }
