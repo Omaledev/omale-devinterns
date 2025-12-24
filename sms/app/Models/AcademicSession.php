@@ -38,6 +38,8 @@ class AcademicSession extends Model
     {
         return $this->hasMany(Grade::class);
     }
+
+    
 }
 
 

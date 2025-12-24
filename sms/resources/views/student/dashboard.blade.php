@@ -125,9 +125,20 @@
                     </div>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-download me-1"></i>Report Card
-                            </button>
+                           @php
+                                // Helper to get active session/term IDs for the link
+                                $activeSession = \App\Models\AcademicSession::where('school_id', auth()->user()->school_id)->where('is_active', true)->first();
+                                $activeTerm = \App\Models\Term::whereHas('academicSession', fn($q) => $q->where('school_id', auth()->user()->school_id))->where('is_active', true)->first();
+                            @endphp
+
+                            @if($activeSession && $activeTerm)
+                                <a href="{{ route('student.reports.download', ['student' => auth()->id(), 'session_id' => $activeSession->id, 'term_id' => $activeTerm->id]) }}" 
+                                class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-download me-1"></i>Report Card
+                                </a>
+                            @else
+                                <button class="btn btn-sm btn-outline-secondary" disabled>No Active Term</button>
+                            @endif
                             <button type="button" class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-print me-1"></i>Print Schedule
                             </button>

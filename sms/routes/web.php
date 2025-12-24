@@ -32,6 +32,7 @@ use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardControll
 use App\Http\Controllers\Teacher\TeacherController as TeacherTeacherController;
 use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
+use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardController;
 
 
 use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
@@ -189,14 +190,14 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/grades/store', [TeacherGradeController::class, 'store'])->name('grades.store');
     Route::post('/grades/lock', [TeacherGradeController::class, 'lock'])->name('grades.lock');
 
+    Route::get('/reports', [TeacherReportCardController::class, 'index'])->name('reports.index');
+    Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
+    ->name('reports.download');
 
-    Route::resource('students', TeacherStudentController::class);
+
     Route::resource('assessments', TeacherAssessmentController::class);
-    // Route::resource('assignments', TeacherAssignmentController::class);
-    Route::resource('grades', TeacherGradeController::class);
     Route::resource('messages', TeacherMessageController::class);
     Route::resource('announcements', TeacherAnnouncementController::class);
-    Route::resource('reports', TeacherReportController::class);
     Route::resource('books', TeacherBookController::class);
    
 });
@@ -213,6 +214,9 @@ Route::middleware(['auth', 'role:Student'])->prefix('student')->group(function (
     Route::get('/teachers', [StudentController::class, 'teachers'])->name('student.teachers');
     Route::get('/messages', [StudentController::class, 'messages'])->name('student.messages');
     Route::get('/announcements', [StudentController::class, 'announcements'])->name('student.announcements');
+    Route::get('/reports', [StudentController::class, 'index'])->name('reports.index');
+    Route::get('/reports/download/{student}', [StudentController::class,'download'])
+    ->name('reports.download');
     Route::get('/books', [StudentController::class, 'books'])->name('student.books');
     Route::get('/books/{book}/download', [StudentController::class, 'downloadBook'])->name('student.books.download');
 });

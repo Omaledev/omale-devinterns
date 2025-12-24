@@ -57,6 +57,7 @@ class TermController extends Controller
 
         Term::create([
             'academic_session_id' => $validated['academic_session_id'],
+            'school_id' => auth()->user()->school_id,
             'name' => $validated['name'],
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],

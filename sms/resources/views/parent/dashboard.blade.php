@@ -145,6 +145,12 @@
                                         View Details
                                     </a>
                                 </div>
+                                @if($activeSession && $activeTerm)
+                                    <a href="{{ route('parent.reports.download', ['student' => $child->user->id, 'session_id' => $activeSession->id, 'term_id' => $activeTerm->id]) }}" 
+                                    class="btn btn-sm btn-outline-danger ms-1">
+                                        <i class="fas fa-file-pdf"></i> Report
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
