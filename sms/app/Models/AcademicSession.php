@@ -39,6 +39,14 @@ class AcademicSession extends Model
         return $this->hasMany(Grade::class);
     }
 
+    /**
+     * Get the invoices generated in this academic session.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     
 }
 

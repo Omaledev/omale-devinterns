@@ -59,4 +59,12 @@ class ClassLevel extends Model
     {
         return $this->hasMany(Grade::class);
     }
+
+    /**
+     * Get the fee structures for this class level.
+     */
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class);
+    }
 }

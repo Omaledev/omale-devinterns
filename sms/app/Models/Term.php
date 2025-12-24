@@ -39,4 +39,20 @@ class Term extends Model
     {
         return $this->hasMany(Grade::class);
     }
+
+    /**
+     * Get the fee structures created for this term.
+     */
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class);
+    }
+
+    /**
+     * Get the invoices generated for this term.
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }

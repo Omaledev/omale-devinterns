@@ -4,23 +4,47 @@ namespace App\Http\Controllers\Bursar;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use APP\Models\User;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
-    public function index()
-{
-    $school = auth()->user()->school;
+public function index()
+    {
+        $school = auth()->user()->school;
 
-    $stats = [
-        'total_students' => User::role('Student')->where('school_id', $school->id)->count(),
-        'total_teachers' => User::role('Teacher')->where('school_id', $school->id)->count(),
-        'total_parents' => User::role('Parent')->where('school_id', $school->id)->count(),
-        'total_bursars' => User::role('Bursar')->where('school_id', $school->id)->count(),
-        'total_classes' => 0, 
-        'pending_approvals' => User::where('school_id', $school->id)->count(),
-    ];
+        // Basic Stats
+        $stats = [
+            'total_students' => \App\Models\User::role('Student')->whereHas('studentProfile', fn($q) => $q->where('school_id', $school->id))->count(),
+            'total_teachers' => \App\Models\User::role('Teacher')->whereHas('teacherProfile', fn($q) => $q->where('school_id', $school->id))->count(),
+            'total_parents' => \App\Models\User::role('Parent')->whereHas('parentProfile', fn($q) => $q->where('school_id', $school->id))->count(),
+            'pending_invoices' => \App\Models\Invoice::where('school_id', $school->id)->where('status', 'UNPAID')->count(),
+            
+            // To be calculated properly for my Day 16 & 17 task
+            'total_collection' => 0, 
+            'outstanding_balance' => \App\Models\Invoice::where('school_id', $school->id)->sum('total_amount') - \App\Models\Invoice::where('school_id', $school->id)->sum('paid_amount'),
+            'collection_rate' => 0,
+        ];
 
-    return view('schooladmin.dashboard', compact('stats'));
-}
+        // Recent Payments (Empty for now - Day 16 Feature)
+        // I pass an empty array [] so that  the loop in the view doesn't crash
+        $recentPayments = []; 
+
+        // Outstanding Fees-fetching this from the Invoices
+        $outstandingFees = \App\Models\Invoice::where('school_id', $school->id)
+            ->where('status', '!=', 'PAID')
+            ->with(['student.studentProfile.classLevel'])
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(function($invoice) {
+                // Temporary 'balance' property since the view expects it
+                $invoice->balance = $invoice->total_amount - $invoice->paid_amount;
+                return $invoice;
+            });
+
+        // Class Summary (Empty for now)
+        $classSummary = [];
+
+        return view('bursar.dashboard', compact('stats', 'recentPayments', 'outstandingFees', 'classSummary'));
+    }
 }

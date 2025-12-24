@@ -68,13 +68,28 @@
                                 Attendance
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="#">
+                       <li class="nav-item">
+                            <a class="nav-link text-white-50 collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#feesSubmenu" aria-expanded="false">
                                 <i class="fas fa-money-bill-wave me-2"></i>
                                 Fees
+                                <i class="fas fa-chevron-down ms-auto" style="font-size: 0.8em;"></i>
                             </a>
+                            <div class="collapse" id="feesSubmenu">
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white-50" href="{{ route('finance.fee-structures.index') }}">
+                                            <i class="fas fa-list-alt me-2"></i> Structure Setup
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white-50" href="{{ route('finance.invoices.index') }}">
+                                            <i class="fas fa-file-invoice-dollar me-2"></i> Student Invoices
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li class="nav-item">
+                                                <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.academic-sessions.index') }}">
                                 <i class="fas fa-calendar-alt me-2"></i>
                                 Academic Sessions

@@ -1,87 +1,9 @@
-<!-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <!-- Bursar Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block bg-warning sidebar collapse">
-                <div class="position-sticky pt-3">
-                    <div class="text-center mb-4">
-                        <div class="bg-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                            style="width: 60px; height: 60px;">
-                            <span class="text-white fw-bold fs-4">{{ substr(auth()->user()->name, 0, 1) }}</span>
-                        </div>
-                        <h6 class="text-white mb-1">{{ auth()->user()->name }}</h6>
-                        <small class="text-white-50">Bursar • Finance Manager</small>
-                    </div>
-
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active text-white" href="{{ route('bursar.dashboard') }}">
-                                <i class="fas fa-tachometer-alt me-2"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-money-bill-wave me-2"></i>
-                                Fee Structures
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-file-invoice me-2"></i>
-                                Invoices
-                                <span class="badge bg-primary float-end">{{ $stats['pending_invoices'] ?? 0 }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-credit-card me-2"></i>
-                                Payments
-                                <span class="badge bg-success float-end">{{ $stats['recent_payments'] ?? 0 }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-user-graduate me-2"></i>
-                                Students
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-chart-pie me-2"></i>
-                                Financial Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-chart-bar me-2"></i>
-                                Collection Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                Outstanding Fees
-                                <span class="badge bg-danger float-end">{{ $stats['students_with_balance'] ?? 0 }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-receipt me-2"></i>
-                                Receipts
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-bullhorn me-2"></i>
-                                Fee Announcements
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            @include('bursar.partials.sidebar')
 
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -312,21 +234,29 @@
                                         <div class="list-group-item d-flex align-items-center px-0 border-0">
                                             <div class="bg-danger rounded-circle d-flex align-items-center justify-content-center me-3"
                                                 style="width: 40px; height: 40px;">
-                                                <span class="text-white fw-bold small">{{ substr($fee->student->user->name, 0, 1) }}</span>
+                                                {{-- FIXED: Use safe navigation and remove extra ->user --}}
+                                                <span class="text-white fw-bold small">
+                                                    {{ substr($fee->student?->name ?? 'U', 0, 1) }}
+                                                </span>
                                             </div>
                                             <div class="flex-grow-1">
-                                                <div class="small fw-bold">{{ $fee->student->user->name }}</div>
-                                                <div class="text-muted small">{{ $fee->student->classLevel->name ?? 'N/A' }}</div>
+                                                {{-- FIXED: Direct access to student name --}}
+                                                <div class="small fw-bold">{{ $fee->student?->name ?? 'Unknown Student' }}</div>
+                                                
+                                                {{-- FIXED: Correct path to Class Level --}}
+                                                <div class="text-muted small">
+                                                    {{ $fee->student?->studentProfile?->classLevel?->name ?? 'N/A' }}
+                                                </div>
                                             </div>
                                             <div class="text-end">
-                                                <div class="fw-bold text-danger">${{ number_format($fee->balance, 2) }}</div>
-                                                <small class="text-muted">Overdue</small>
+                                                <div class="fw-bold text-danger">₦{{ number_format($fee->balance, 2) }}</div>
+                                                <small class="text-muted">Due</small>
                                             </div>
                                         </div>
                                         @endforeach
                                     </div>
                                     <div class="text-center mt-3">
-                                        <a href="" class="btn btn-sm btn-outline-danger">
+                                        <a href="{{ route('finance.invoices.index') }}" class="btn btn-sm btn-outline-danger">
                                             View All Outstanding
                                         </a>
                                     </div>
@@ -440,4 +370,4 @@
             }
         });
     </script>
-@endpush  -->
+@endpush  

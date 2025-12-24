@@ -10,23 +10,23 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        // Adding SetActiveSchool to global web middleware (runs on every request)
+    ->withMiddleware(function (Middleware $middleware) {
+        // Global Middleware (Runs on every request)
         $middleware->web(append: [
             \App\Http\Middleware\SetActiveSchool::class,
         ]);
 
-        // Alias middleware for specific route protection
+        // Middleware Aliases (Used in Routes)
         $middleware->alias([
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
-        'permission' => \App\Http\Middleware\RoleMiddleware::class,
-         \App\Http\Middleware\SetActiveSchool::class,
-        //   'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        //     'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-        //     'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
-             // Other middleware aliases here too
+            // Using Spatie package
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            
+            // custom aliases
+            'set_school' => \App\Http\Middleware\SetActiveSchool::class, 
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

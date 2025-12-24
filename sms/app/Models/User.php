@@ -121,11 +121,7 @@ class User extends Authenticatable
     //     return $this->belongsToMany(Role::class);
     // }
 
-      public function hasRole($role)
-    {
-        return $this->roles()->where('name', $role)->exists();
-    }
-
+     
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', "%{$search}%")
@@ -152,6 +148,14 @@ class User extends Authenticatable
     public function gradesEntered()
     {
         return $this->hasMany(Grade::class, 'teacher_id');
+    }
+
+    /**
+     * Get the invoices for this user (student).
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'student_id');
     }
 
 }

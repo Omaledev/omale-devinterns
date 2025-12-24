@@ -64,5 +64,15 @@ class School extends Model
         return $this->hasMany(AssessmentType::class);
     }
 
+    public function feeStructures()
+    {
+        return $this->hasMany(FeeStructure::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
 
 }

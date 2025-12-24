@@ -26,6 +26,9 @@ use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAca
 use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
 use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
 use App\Http\Controllers\SchoolAdmin\AssessmentTypeController as SchoolAdminAssessmentTypeController;
+// Shared Routes between schooladmin and bursar
+use App\Http\Controllers\SchoolAdmin\FeeStructureController as SchoolAdminFeeStructureController;
+use App\Http\Controllers\SchoolAdmin\InvoiceController as SchoolAdminInvoiceController;
 
 // Teacher routes
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
@@ -241,8 +244,18 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
 // Bursar Routes
 Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->group(function () {
     Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('bursar.dashboard');
-    // Route::resource('fee-structures', FeeStructureController::class);
-    // Route::resource('invoices', InvoiceController::class);
-    // Route::resource('payments', PaymentController::class);
-    // Route::get('/reports/financial', [BursarController::class, 'financialReports'])->name('bursar.financial-reports');
 });
+
+//  Fees routes for schoolAdmin and Bursar (Allow BOTH roles)
+Route::middleware(['auth', 'role:SuperAdmin|SchoolAdmin|Bursar']) 
+    ->prefix('finance') 
+    ->name('finance.')
+    ->group(function () {
+        // Fee Structures
+        Route::resource('fee-structures', SchoolAdminFeeStructureController::class);
+        // Invoices
+        Route::get('invoices/generate', [SchoolAdminInvoiceController::class, 'create'])->name('invoices.generate');
+        Route::post('invoices/generate', [SchoolAdminInvoiceController::class, 'store'])->name('invoices.store');
+        Route::resource('invoices', SchoolAdminInvoiceController::class);
+});
+
