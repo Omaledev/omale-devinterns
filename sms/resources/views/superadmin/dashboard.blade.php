@@ -208,10 +208,10 @@
                                         <span>Add School</span>
                                     </a>
                                 </div>
-                                <div class="col-6">
-                                    <a href="{{ route('superadmin.schools.create-user', $school) }}" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                        <i class="fas fa-user-plus fa-2x mb-2"></i>
-                                        <span>Create User</span>
+                               <div class="col-6">
+                                    <a href="{{ route('superadmin.users.index') }}" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
+                                        <i class="fas fa-users-cog fa-2x mb-2"></i>
+                                        <span>Manage Users</span>
                                     </a>
                                 </div>
                                 <div class="col-6">
