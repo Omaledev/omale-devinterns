@@ -46,11 +46,11 @@
                                 <i class="fas fa-book-open me-2"></i>
                                 Study Materials
                                 <span class="badge bg-info float-end">{{ $stats['new_books'] ?? 0 }}</span>
-                            </a>
+                            
                         </li> -->
 
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('student.results') }}">
+                            <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-chart-bar me-2"></i>
                                 Results
                                 <span class="badge bg-info float-end">{{ $stats['average_grade'] ?? 'N/A' }}</span>
@@ -65,7 +65,7 @@
                             </a>
                         </li> 
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="{{ route('student.fees') }}">
+                            <a class="nav-link text-white-50" href="#">
                                 <i class="fas fa-money-bill-wave me-2"></i>
                                 Fees
                                 @if(($stats['fee_balance'] ?? 0) > 0)
@@ -331,7 +331,7 @@
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{ route('student.results') }}"
+                                        <a href="#"
                                             class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-chart-bar fa-2x mb-2"></i>
                                             <span>Results</span>
@@ -345,7 +345,7 @@
                                         </a>
                                     </div>
                                     <div class="col-6">
-                                        <a href="{{ route('student.fees') }}"
+                                        <a href="#"
                                             class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column align-items-center">
                                             <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
                                             <span>Pay Fees</span>

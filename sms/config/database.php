@@ -16,8 +16,8 @@ return [
     |
     */
 
-    // 'default' => env('DB_CONNECTION', 'sqlite'),
-     'default' => 'pgsql',
+    'default' => env('DB_CONNECTION', 'sqlite'),
+    //  'default' => 'pgsql',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,8 +85,8 @@ return [
         ],
 
         'pgsql' => [
-            'driver' => 'pgsql',
-            // 'url' => env('DB_URL'),
+            // 'driver' => 'pgsql',
+            'url' => env('DB_URL'),
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),

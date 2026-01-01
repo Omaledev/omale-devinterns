@@ -81,9 +81,15 @@
                                         @forelse($students as $student)
                                             <tr>
                                                 <td>
-                                                    <strong>{{ $student->admission_number ?? 'N/A' }}</strong>
+                                                    @if($student->admission_number)
+                                                        <strong>{{ $student->admission_number }}</strong>
+                                                    @else
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-exclamation-circle me-1"></i>Pending ID
+                                                        </span>
+                                                    @endif
                                                 </td>
-                                               <td>
+                                                <td>
                                                       <div class="d-flex align-items-center">
                                                         <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
                                                             style="width: 35px; height: 35px;">

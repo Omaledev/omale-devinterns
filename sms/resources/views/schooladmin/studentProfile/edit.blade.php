@@ -1,5 +1,20 @@
 @extends('layouts.app')
 
+@php
+    // Get School Name
+    $schoolName = $student->school->name ?? 'STD';
+    
+    // Extract first letter of each word (e.g., "High School" -> "HS")
+    $schoolPrefix = '';
+    $words = explode(' ', $schoolName);
+    foreach($words as $word) {
+        $schoolPrefix .= strtoupper(substr($word, 0, 1));
+    }
+    
+    // Keep it reasonable (max 4 chars)
+    $schoolPrefix = substr($schoolPrefix, 0, 4);
+@endphp
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -92,11 +107,32 @@
                                         <h6 class="text-primary mb-3">Academic Information</h6>
 
                                         <div class="mb-3">
-                                            <label for="admission_number" class="form-label">Admission Number <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('admission_number') is-invalid @enderror"
-                                                   id="admission_number" name="admission_number" 
-                                                   value="{{ old('admission_number', $student->admission_number) }}"
-                                                   placeholder="e.g., ADM2024001" required>
+                                            <label for="admission_number" class="form-label">
+                                                Admission Number <span class="text-danger">*</span>
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="text" 
+                                                    class="form-control @error('admission_number') is-invalid @enderror"
+                                                    id="admission_number" 
+                                                    name="admission_number" 
+                                                    value="{{ old('admission_number', $student->admission_number) }}"
+                                                    placeholder="Enter or Generate ID" 
+                                                    required>
+                                                    
+                                                <button class="btn btn-outline-secondary" 
+                                                        type="button" 
+                                                        id="generateIdBtn"
+                                                        data-prefix="{{ $schoolPrefix }}">
+                                                    <i class="fas fa-magic me-1"></i>Generate
+                                                </button>
+                                            </div>
+                                            
+                                            @if(!$student->admission_number)
+                                                <div class="form-text text-warning">
+                                                    <i class="fas fa-info-circle"></i> This student registered online. Please assign an ID now.
+                                                </div>
+                                            @endif
+
                                             @error('admission_number')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -208,3 +244,23 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('generateIdBtn').addEventListener('click', function() {
+        // Get the School Prefix from the button
+        const prefix = this.getAttribute('data-prefix'); 
+        
+        // Get current year (e.g., 2026)
+        const year = new Date().getFullYear();
+       
+        // Generate Random 4 digits
+        const random = Math.floor(1000 + Math.random() * 9000);
+        
+        // Combine them: GVA + 2024 + 5892
+        const generatedId = prefix + year + random;
+        
+        document.getElementById('admission_number').value = generatedId;
+    });
+</script>
+@endpush

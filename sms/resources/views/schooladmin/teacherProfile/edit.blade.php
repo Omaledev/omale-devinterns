@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@php
+    $schoolName = $teacher->school->name ?? 'EMP';
+    $schoolPrefix = '';
+    $words = explode(' ', $schoolName);
+    foreach($words as $word) {
+        $schoolPrefix .= strtoupper(substr($word, 0, 1));
+    }
+    $schoolPrefix = substr($schoolPrefix, 0, 4);
+@endphp
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -83,9 +93,29 @@
 
                                         <div class="mb-3">
                                             <label for="employee_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
-                                                   id="employee_id" name="employee_id" value="{{ old('employee_id', $teacher->employee_id) }}"
-                                                   placeholder="e.g., EMP2024001" required>
+                                            <div class="input-group">
+                                                <input type="text" 
+                                                    class="form-control @error('employee_id') is-invalid @enderror"
+                                                    id="employee_id" 
+                                                    name="employee_id" 
+                                                    value="{{ old('employee_id', $teacher->employee_id) }}"
+                                                    placeholder="Enter or Generate ID" 
+                                                    required>
+                                                    
+                                                <button class="btn btn-outline-secondary" 
+                                                        type="button" 
+                                                        id="generateIdBtn"
+                                                        data-prefix="{{ $schoolPrefix }}">
+                                                    <i class="fas fa-magic me-1"></i>Generate
+                                                </button>
+                                            </div>
+
+                                            @if(!$teacher->employee_id)
+                                                <div class="form-text text-warning">
+                                                    <i class="fas fa-info-circle"></i> This teacher registered online. Please assign an ID now.
+                                                </div>
+                                            @endif
+
                                             @error('employee_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -154,3 +184,18 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.getElementById('generateIdBtn').addEventListener('click', function() {
+        const prefix = this.getAttribute('data-prefix'); 
+        const year = new Date().getFullYear();
+        const random = Math.floor(1000 + Math.random() * 9000);
+        
+        // Result: SCH20248831
+        const generatedId = prefix + year + random;
+        
+        document.getElementById('employee_id').value = generatedId;
+    });
+</script>
+@endpush

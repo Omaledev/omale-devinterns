@@ -62,7 +62,13 @@
                                         @forelse($teachers as $teacher)
                                             <tr>
                                                 <td>
-                                                    <strong>{{ $teacher->employee_id ?? 'N/A' }}</strong>
+                                                    @if($teacher->employee_id)
+                                                        <strong>{{ $teacher->employee_id }}</strong>
+                                                    @else
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-exclamation-circle me-1"></i>Pending ID
+                                                        </span>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
