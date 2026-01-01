@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\AcademicSession;
 use App\Models\Term;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        if($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
         // This is to override the default auth routes
         $this->configureAuthRoutes();
         
