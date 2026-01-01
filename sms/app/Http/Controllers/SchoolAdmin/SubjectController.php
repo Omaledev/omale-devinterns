@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SchoolAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Subject;
+use Illuminate\Validation\Rule;
 
 class SubjectController extends Controller
 {
@@ -13,7 +14,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::all();
+        // Shows subjects for the logged-in user's school
+        $subjects = Subject::where('school_id', session('active_school'))->get();
         return view('schooladmin.subjects.index', compact('subjects'));
 
     }
@@ -31,45 +33,32 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|string|max:20',
-            'description' => 'nullable|string',
-        ]);
+       // Get the current school ID
+    $schoolId = session('active_school');
 
-        $schoolId = session('active_school');
+    // Validate using Rules 
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'code' => ['required','string','max:20',
 
-        // Check if subject with same name already exists in the same school
-        $existingSubjectByName = Subject::where('name', $request->name)
-            ->where('school_id', $schoolId)
-            ->first();
+            // Rule: Code must be unique, BUT only inside this specific school
+            Rule::unique('subjects')->where(function ($query) use ($schoolId) {
+                return $query->where('school_id', $schoolId);
+            })
+        ],
+    ]);
 
-        if ($existingSubjectByName) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'A subject with this name already exists in your school.');
-        }
+    // Create the subject
+    Subject::create([
+        'school_id' => $schoolId,
+        'name' => $request->name,
+        'code' => strtoupper($request->code),
+        'description' => $request->description,
+    ]);
 
-        // Check if subject with same code already exists in the same school
-        $existingSubjectByCode = Subject::where('code', strtoupper($request->code))
-            ->where('school_id', $schoolId)
-            ->first();
-
-        if ($existingSubjectByCode) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'A subject with this code already exists in your school.');
-        }
-
-        Subject::create([
-            'school_id' => $schoolId,
-            'name' => $request->name,
-            'code' => strtoupper($request->code),
-            'description' => $request->description,
-        ]);
-
-        return redirect()->route('schooladmin.subjects.index')
-            ->with('success', 'Subject created successfully.');
+    return redirect()->route('schooladmin.subjects.index')
+        ->with('success', 'Subject created successfully.');
     }
 
     /**
@@ -94,25 +83,24 @@ class SubjectController extends Controller
      */
     public function update(Request $request, Subject $subject)
     {
+        $schoolId = session('active_school');
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:20|unique:subjects,code,' . $subject->id,
             'description' => 'nullable|string',
             'is_active' => 'required|boolean',
+            'code' => ['required','string','max:20',
+            
+                // Rule: Check unique in 'subjects' table...
+                // ...IGNORE the subject we are currently editing...
+                // ...and ONLY check rows belonging to this school.
+                Rule::unique('subjects')->ignore($subject->id)->where(function ($query) use ($schoolId) {
+                    return $query->where('school_id', $schoolId);
+                })
+            ],
         ]);
 
-        // Checking if the subject with same name already exists in the same school (excluding current subject)
-        $existingSubject = Subject::where('name', $request->name)
-            ->where('school_id', session('active_school'))
-            ->where('id', '!=', $subject->id)
-            ->first();
-
-        if ($existingSubject) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'A subject with this name already exists.');
-        }
-
+        // Update the subject
         $subject->update([
             'name' => $request->name,
             'code' => strtoupper($request->code),
@@ -123,21 +111,21 @@ class SubjectController extends Controller
         return redirect()->route('schooladmin.subjects.index')
             ->with('success', 'Subject updated successfully.');
 
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Subject $subject)
-    {
-        // Checking if the subject has classroom assignments
-        if ($subject->classroomAssignments()->count() > 0) {
-            return redirect()->route('schooladmin.subjects.index')
-                ->with('error', 'Cannot delete subject. There are teachers assigned to this subject.');
         }
 
-        $subject->delete();
-        return redirect()->route('schooladmin.subjects.index')
-            ->with('success', 'Subject deleted successfully.');
+        /**
+         * Remove the specified resource from storage.
+         */
+        public function destroy(Subject $subject)
+        {
+            // Checking if the subject has classroom assignments
+            if ($subject->classroomAssignments()->count() > 0) {
+                return redirect()->route('schooladmin.subjects.index')
+                    ->with('error', 'Cannot delete subject. There are teachers assigned to this subject.');
+            }
+
+            $subject->delete();
+            return redirect()->route('schooladmin.subjects.index')
+                ->with('success', 'Subject deleted successfully.');
     }
 }

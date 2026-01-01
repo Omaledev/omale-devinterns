@@ -9,7 +9,6 @@ use App\Http\Controllers\HomeController;
 // SuperAdmin routes
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
-use App\Http\Controllers\SuperAdmin\UsersController ;
 use App\Http\Controllers\SuperAdmin\UsersController as SuperAdminUsersController;
 
 // SchoolAdmin routes
@@ -50,17 +49,7 @@ use App\Http\Controllers\Parent\DashboardController as ParentDashboardController
 use App\Http\Controllers\Parent\ParentController;
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\BursarController;
-use App\Http\Controllers\ClassLevel\ClassLevelController;
-use App\Http\Controllers\Section\SectionController;
-use App\Http\Controllers\Subject\SubjectController;
-use App\Http\Controllers\Class\ClassController;
-use App\Http\Controllers\Approval\ApprovalController;
-use App\Http\Controllers\Timetable\TimetableController;
-use App\Http\Controllers\Assessment\AssessmentController;
-use App\Http\Controllers\Grade\GradeController;
-use App\Http\Controllers\FeeStructure\FeeStructureController;
-use App\Http\Controllers\Invoice\InvoiceController;
-use App\Http\Controllers\Payment\PaymentController;
+
 
 
 Route::get('/', function () {
@@ -73,26 +62,21 @@ Route::get('/', function () {
  */
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    
-    if ($user->hasRole('SuperAdmin')) {
-        return redirect()->route('superadmin.dashboard');
-    } elseif ($user->hasRole('SchoolAdmin')) {
-        return redirect()->route('schooladmin.dashboard'); 
-    } elseif ($user->hasRole('Teacher')) {
-        return redirect()->route('teacher.dashboard');
-    } elseif ($user->hasRole('Student')) {
-        return redirect()->route('student.dashboard');
-    } elseif ($user->hasRole('Parent')) {
-        return redirect()->route('parent.dashboard');
-    } elseif ($user->hasRole('Bursar')) {
-        return redirect()->route('bursar.dashboard');
-    }
-    
-    return redirect('/home');
-})->name('dashboard')->middleware('auth'); 
+
+    $routeName = match (true) {
+        $user->hasRole('SuperAdmin')  => 'superadmin.dashboard',
+        $user->hasRole('SchoolAdmin') => 'schooladmin.dashboard',
+        $user->hasRole('Teacher')     => 'teacher.dashboard',
+        $user->hasRole('Student')     => 'student.dashboard',
+        $user->hasRole('Parent')      => 'parent.dashboard',
+        $user->hasRole('Bursar')      => 'bursar.dashboard',
+        default                       => 'home', 
+    };
+
+    return redirect()->route($routeName);
+})->name('dashboard')->middleware('auth');
 
 // Auth::routes();
-
 Route::get('/login', function () {
     return redirect()->route('sign-in');
 })->name('login'); 
@@ -120,9 +104,9 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // SuperAdmin Routes
 Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('dashboard');
-    // Route::get('/users/index', [UsersController::class, 'index'])->name('superadmin.users.index');
+
     Route::resource('users', SuperAdminUsersController::class);
-    
+
     Route::resource('schools', SchoolController::class)->names([
         'index' => 'schools.index',
         'create' => 'schools.create',
@@ -206,22 +190,22 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
 });
 
 // Student Routes
-Route::middleware(['auth', 'role:Student'])->prefix('student')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('student.dashboard');
-    Route::get('/timetable', [StudentController::class, 'timetable'])->name('student.timetable');
+Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/timetable', [StudentController::class, 'timetable'])->name('timetable');
     Route::get('/results', [StudentController::class, 'results'])->name('student.results');
-    Route::get('/attendance', [StudentController::class, 'attendance'])->name('student.attendance');
+    Route::get('/attendance', [StudentController::class, 'attendance'])->name('attendance');
     Route::get('/fees', [StudentController::class, 'fees'])->name('student.fees');
-    Route::get('/assignments', [StudentController::class, 'assignment'])->name('student.assignments');
-    Route::get('/subjects', [StudentController::class, 'subjects'])->name('student.subjects');
-    Route::get('/teachers', [StudentController::class, 'teachers'])->name('student.teachers');
-    Route::get('/messages', [StudentController::class, 'messages'])->name('student.messages');
-    Route::get('/announcements', [StudentController::class, 'announcements'])->name('student.announcements');
+    Route::get('/assignments', [StudentController::class, 'assignment'])->name('assignments');
+    Route::get('/subjects', [StudentController::class, 'subjects'])->name('subjects');
+    Route::get('/teachers', [StudentController::class, 'teachers'])->name('teachers');
+    Route::get('/messages', [StudentController::class, 'messages'])->name('messages');
+    Route::get('/announcements', [StudentController::class, 'announcements'])->name('announcements');
     Route::get('/reports', [StudentController::class, 'index'])->name('reports.index');
     Route::get('/reports/download/{student}', [StudentController::class,'download'])
     ->name('reports.download');
-    Route::get('/books', [StudentController::class, 'books'])->name('student.books');
-    Route::get('/books/{book}/download', [StudentController::class, 'downloadBook'])->name('student.books.download');
+    Route::get('/books', [StudentController::class, 'books'])->name('books');
+    Route::get('/books/{book}/download', [StudentController::class, 'downloadBook'])->name('books.download');
 });
 
 // Parent Routes
