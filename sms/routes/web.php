@@ -244,9 +244,3 @@ Route::middleware(['auth', 'role:SuperAdmin|SchoolAdmin|Bursar'])
 });
 
 
-Route::get('/run-seeder', function () {
-    // This runs "php artisan db:seed --force"
-    Artisan::call('db:seed', ['--force' => true]);
-    
-    return 'Seeder run successfully! <br><pre>' . Artisan::output() . '</pre>';
-});
