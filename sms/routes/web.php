@@ -50,7 +50,6 @@ use App\Http\Controllers\Parent\ParentController;
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\BursarController;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
