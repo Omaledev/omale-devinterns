@@ -49,7 +49,8 @@ use App\Http\Controllers\Parent\DashboardController as ParentDashboardController
 use App\Http\Controllers\Parent\ParentController;
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\BursarController;
-
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
@@ -243,3 +244,10 @@ Route::middleware(['auth', 'role:SuperAdmin|SchoolAdmin|Bursar'])
         Route::resource('invoices', SchoolAdminInvoiceController::class);
 });
 
+
+Route::get('/run-seeder', function () {
+    // This runs "php artisan db:seed --force"
+    Artisan::call('db:seed', ['--force' => true]);
+    
+    return 'Seeder run successfully! <br><pre>' . Artisan::output() . '</pre>';
+});
