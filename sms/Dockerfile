@@ -49,7 +49,7 @@ ENV PUSHER_APP_CLUSTER mt1
 
 # Installing PHP Dependencies
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Build Frontend Assets
 RUN npm install
@@ -67,4 +67,4 @@ ENV LOG_CHANNEL stderr
 
 
 # Start Apache with migration...The artisan migrate "--force" is crucial for production
-CMD ["/bin/sh", "-c", "php artisan migrate --force && php artisan config:clear && php artisan route:clear && php artisan view:clear && apache2-foreground"]
+CMD ["/bin/sh", "-c", "php artisan package:discover --ansi && php artisan optimize:clear && php artisan migrate --force && apache2-foreground"]
