@@ -41,12 +41,22 @@
                             </span>
                         </td>
                         <td>
-                            {{-- BUTTON GROUP FOR VIEW AND DELETE --}}
+                            {{-- BUTTON GROUP --}}
                             <div class="d-flex gap-1">
+                                
+                                {{-- (Only show if not fully paid) --}}
+                                @if($inv->status !== 'PAID')
+                                    <a href="{{ route('bursar.payments.create', $inv->id) }}" class="btn btn-sm btn-success text-white" title="Record Payment">
+                                        <i class="fas fa-credit-card"></i> Pay
+                                    </a>
+                                @endif
+
+                                {{-- View Button --}}
                                 <a href="{{ route('finance.invoices.show', $inv->id) }}" class="btn btn-sm btn-info text-white" title="View">
-                                    <i class="fas fa-eye"></i> View
+                                    <i class="fas fa-eye"></i>
                                 </a>
 
+                                {{-- Delete Button --}}
                                 <form action="{{ route('finance.invoices.destroy', $inv->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this invoice?');">
                                     @csrf
                                     @method('DELETE')

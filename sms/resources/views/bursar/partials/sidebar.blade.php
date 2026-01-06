@@ -30,7 +30,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
+                            <a class="nav-link text-white-50" href="{{route('finance.invoices.index')}}">
                                 <i class="fas fa-credit-card me-2"></i>
                                 Payments
                                 <span class="badge bg-success float-end">{{ $stats['recent_payments'] ?? 0 }}</span>

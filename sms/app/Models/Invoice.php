@@ -33,4 +33,16 @@ class Invoice extends Model
     {
         return $this->belongsTo(AcademicSession::class);
     }
+
+    /**
+     * Get the payments for the invoice.
+     */
+    public function payment() {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function getBalanceAttribute()
+    {
+        return $this->total_amount - $this->paid_amount;
+    }  
 }

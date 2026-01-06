@@ -47,9 +47,10 @@ use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\ParentController;
+
+// Bursar Controller
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
-use App\Http\Controllers\Bursar\BursarController;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Bursar\PaymentController as BursarPaymentController;
 
 
 Route::get('/', function () {
@@ -226,8 +227,11 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
 });
 
 // Bursar Routes
-Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->group(function () {
-    Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('bursar.dashboard');
+Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->name('bursar.')->group(function () {
+    Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/payments/create/{invoice_id}', [BursarPaymentController::class, 'create'])->name('payments.create');
+     Route::post('/payments/store', [BursarPaymentController::class, 'store'])->name('payments.store');
+     Route::get('/payments/receipt/{id}', [BursarPaymentController::class, 'show'])->name('payments.receipt');
 });
 
 //  Fees routes for schoolAdmin and Bursar (Allow BOTH roles)

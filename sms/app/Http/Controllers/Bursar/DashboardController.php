@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bursar;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Payment;
 
 class DashboardController extends Controller
 {
@@ -25,9 +26,13 @@ public function index()
             'collection_rate' => 0,
         ];
 
-        // Recent Payments (Empty for now - Day 16 Feature)
-        // I pass an empty array [] so that  the loop in the view doesn't crash
-        $recentPayments = []; 
+        $recentPayments = Payment::with('invoice.student')
+            ->whereHas('invoice', function($q) use ($school) {
+                $q->where('school_id', $school->id);
+            })
+            ->latest('payment_date')
+            ->take(5)
+            ->get();
 
         // Outstanding Fees-fetching this from the Invoices
         $outstandingFees = \App\Models\Invoice::where('school_id', $school->id)

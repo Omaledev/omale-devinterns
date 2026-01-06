@@ -162,6 +162,7 @@
                                                 <th>Method</th>
                                                 <th>Date</th>
                                                 <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -171,18 +172,25 @@
                                                     <div class="d-flex align-items-center">
                                                         <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
                                                             style="width: 30px; height: 30px;">
-                                                            <span class="text-white fw-bold small">{{ substr($payment->student->user->name, 0, 1) }}</span>
+                                                            <span class="text-white fw-bold small">
+                                                                {{ substr($payment->invoice->student?->name ?? 'U', 0, 1) }}
+                                                            </span>
                                                         </div>
-                                                        {{ $payment->student->user->name }}
+                                                        {{ $payment->invoice->student?->name ?? 'Unknown' }}
                                                     </div>
                                                 </td>
-                                                <td class="fw-bold text-success">${{ number_format($payment->amount, 2) }}</td>
+                                                <td class="fw-bold text-success">₦{{ number_format($payment->amount, 2) }}</td>
                                                 <td>
                                                     <span class="badge bg-secondary">{{ ucfirst($payment->payment_method) }}</span>
                                                 </td>
-                                                <td>{{ $payment->payment_date->format('M j, Y') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($payment->payment_date)->format('M j, Y') }}</td>
                                                 <td>
-                                                    <span class="badge bg-success">Verified</span>
+                                                    {{-- PRINT BUTTON --}}
+                                                    <a href="{{ route('bursar.payments.receipt', $payment->id) }}" 
+                                                    class="btn btn-sm btn-outline-primary" 
+                                                    target="_blank">
+                                                        <i class="fas fa-print"></i> Print
+                                                    </a>
                                                 </td>
                                             </tr>
                                             @endforeach
