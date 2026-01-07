@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-
-
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -17,30 +15,30 @@
                     <div class="btn-group me-2">
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-download me-1"></i>Export
+                                Export
                             </button>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="{{ route('schooladmin.students.export') }}">
-                                        <i class="fas fa-user-graduate me-2"></i>Students (Excel)
+                                        Students (Excel)
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('schooladmin.timetables.export') }}">
-                                        <i class="fas fa-calendar-alt me-2"></i>Timetable (PDF)
+                                        Timetable (PDF)
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.print()">
-                            <i class="fas fa-print me-1"></i>Print
+                            Print
                         </button>
                     </div>
 
                     <div class="dropdown">
                         <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="quickAddDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-plus me-1"></i>Quick Add
+                            Quick Add
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quickAddDropdown">
                             <li><h6 class="dropdown-header">Academic</h6></li>
@@ -55,7 +53,7 @@
                         </ul>
                     </div>
                 </div>
-                            </div>
+            </div>
 
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">
@@ -65,9 +63,8 @@
                                 <div class="col mr-2">
                                     <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">Total Students</div>
                                     <div class="h2 mb-0 fw-bold">{{ $stats['total_students'] ?? 0 }}</div>
-                                    <div class="mt-2 small"><i class="fas fa-arrow-up me-1"></i><span>5.2% since last month</span></div>
+                                    <div class="mt-2 small"><span>5.2% since last month</span></div>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-user-graduate fa-2x text-white-50"></i></div>
                             </div>
                         </div>
                     </div>
@@ -79,9 +76,8 @@
                                 <div class="col mr-2">
                                     <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">Total Teachers</div>
                                     <div class="h2 mb-0 fw-bold">{{ $stats['total_teachers'] ?? 0 }}</div>
-                                    <div class="mt-2 small"><i class="fas fa-arrow-up me-1"></i><span>2.1% since last month</span></div>
+                                    <div class="mt-2 small"><span>2.1% since last month</span></div>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-chalkboard-teacher fa-2x text-white-50"></i></div>
                             </div>
                         </div>
                     </div>
@@ -93,9 +89,8 @@
                                 <div class="col mr-2">
                                     <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">Total Parents</div>
                                     <div class="h2 mb-0 fw-bold">{{ $stats['total_parents'] ?? 0 }}</div>
-                                    <div class="mt-2 small"><i class="fas fa-arrow-up me-1"></i><span>8.7% since last month</span></div>
+                                    <div class="mt-2 small"><span>8.7% since last month</span></div>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-users fa-2x text-white-50"></i></div>
                             </div>
                         </div>
                     </div>
@@ -107,9 +102,8 @@
                                 <div class="col mr-2">
                                     <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">Pending Approvals</div>
                                     <div class="h2 mb-0 fw-bold">{{ $stats['pending_approvals'] ?? 0 }}</div>
-                                    <div class="mt-2 small"><i class="fas fa-clock me-1"></i><span>Requires attention</span></div>
+                                    <div class="mt-2 small"><span>Requires attention</span></div>
                                 </div>
-                                <div class="col-auto"><i class="fas fa-clock fa-2x text-white-50"></i></div>
                             </div>
                         </div>
                     </div>
@@ -122,7 +116,7 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-primary"><i class="fas fa-chart-line me-2"></i>School Performance</h6>
+                            <h6 class="m-0 fw-bold text-primary">School Performance</h6>
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">This Month</button>
                                 <ul class="dropdown-menu">
@@ -145,7 +139,6 @@
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
-                                    <i class="fas fa-graduation-cap fa-2x text-primary mb-3"></i>
                                     <h4 class="fw-bold h5">Academic Excellence</h4>
                                     <p class="text-muted small">Track performance</p>
                                     <div class="progress mb-2" style="height: 6px;">
@@ -158,7 +151,6 @@
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
-                                    <i class="fas fa-chart-pie fa-2x text-info mb-3"></i>
                                     <h4 class="fw-bold h5">Attendance Rate</h4>
                                     <p class="text-muted small">Daily patterns</p>
                                     <div class="progress mb-2" style="height: 6px;">
@@ -171,7 +163,6 @@
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
-                                    <i class="fas fa-tasks fa-2x text-warning mb-3"></i>
                                     <h4 class="fw-bold h5">Task Completion</h4>
                                     <p class="text-muted small">Admin tasks</p>
                                     <div class="progress mb-2" style="height: 6px;">
@@ -184,60 +175,76 @@
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-5">
-
                     <div class="card shadow mb-4">
                         <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary"><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+                            <h6 class="m-0 fw-bold text-primary">Quick Actions</h6>
                         </div>
                         <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <a href="{{ route('schooladmin.students.create') }}" class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                        <i class="fas fa-user-plus fa-2x mb-2"></i><span>Add Student</span>
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                        <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i><span>Add Teacher</span>
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                        <i class="fas fa-door-open fa-2x mb-2"></i><span>Create Class</span>
-                                    </a>
-                                </div>
-
-                                <div class="col-6">
-                                    <a href="{{ route('schooladmin.timetables.index') }}" class="btn btn-outline-dark w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                        <i class="fas fa-calendar-alt fa-2x mb-2"></i><span>Timetable</span>
-                                    </a>
-                                </div>
+                            <div class="d-grid gap-2">
+                                <a href="{{ route('schooladmin.students.create') }}" class="btn btn-outline-primary btn-lg">
+                                    Add Student
+                                </a>
+                                <a href="{{ route('schooladmin.teachers.create') }}" class="btn btn-outline-success btn-lg">
+                                    Add Teacher
+                                </a>
+                                <a href="{{ route('schooladmin.class-levels.create') }}" class="btn btn-outline-warning btn-lg">
+                                    Create Class
+                                </a>
+                                <a href="{{ route('schooladmin.timetables.index') }}" class="btn btn-outline-dark btn-lg">
+                                    Timetable
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <div class="card shadow mb-4">
                         <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary"><i class="fas fa-history me-2"></i>Recent Activity</h6>
+                            <h6 class="m-0 fw-bold text-primary">Recent Activity</h6>
                         </div>
                         <div class="card-body">
                             <div class="list-group list-group-flush">
                                 <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="bg-success rounded p-2 me-3"><i class="fas fa-user text-white"></i></div>
                                     <div class="flex-grow-1">
                                         <div class="small fw-bold">New student registered</div>
                                         <div class="text-muted small">2 minutes ago</div>
                                     </div>
                                 </div>
                                 <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="bg-info rounded p-2 me-3"><i class="fas fa-chalkboard-teacher text-white"></i></div>
                                     <div class="flex-grow-1">
                                         <div class="small fw-bold">Teacher assignment updated</div>
                                         <div class="text-muted small">1 hour ago</div>
                                     </div>
                                 </div>
                                 <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="bg-warning rounded p-2 me-3"><i class="fas fa-exclamation-triangle text-white"></i></div>
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">Pending approvals waiting</div>
+                                        <div class="text-muted small">5 hours ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="m-0 fw-bold text-primary">Recent Activity</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">New student registered</div>
+                                        <div class="text-muted small">2 minutes ago</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">Teacher assignment updated</div>
+                                        <div class="text-muted small">1 hour ago</div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
                                     <div class="flex-grow-1">
                                         <div class="small fw-bold">Pending approvals waiting</div>
                                         <div class="text-muted small">5 hours ago</div>
@@ -281,11 +288,6 @@
     .sidebar .nav-link.active {
         color: #fff;
         background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .sidebar .nav-link i {
-        width: 20px;
-        text-align: center;
     }
 
     .card {

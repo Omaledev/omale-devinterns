@@ -12,64 +12,54 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active text-white" href="{{ route('bursar.dashboard') }}">
-                                <i class="fas fa-tachometer-alt me-2"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('finance.fee-structures.index') }}">
-                                <i class="fas fa-money-bill-wave me-2"></i>
                                 Fee Structures
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('finance.invoices.index') }}">
-                                <i class="fas fa-file-invoice me-2"></i>
                                 Invoices
                                 <span class="badge bg-primary float-end">{{ $stats['pending_invoices'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{route('finance.invoices.index')}}">
-                                <i class="fas fa-credit-card me-2"></i>
                                 Payments
                                 <span class="badge bg-success float-end">{{ $stats['recent_payments'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-user-graduate me-2"></i>
                                 Students
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{route('bursar.reports.index')}}">
-                                <i class="fas fa-chart-pie me-2"></i>
                                 Financial Reports
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-chart-bar me-2"></i>
                                 Collection Reports
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
                                 Outstanding Fees
                                 <span class="badge bg-danger float-end">{{ $stats['students_with_balance'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-receipt me-2"></i>
                                 Receipts
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-bullhorn me-2"></i>
                                 Fee Announcements
                             </a>
                         </li>

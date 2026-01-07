@@ -3,14 +3,11 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <!-- Teacher Sidebar -->
             @include('teacher.partials.sidebar')
-            <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div>
-                        <h1 class="h2"> <i class="fas fa-chalkboard-teacher text-primary me-2"></i>Teacher Dashboard at <span class="text-primary fw-bold">{{ auth()->user()->school->name }}</span></h1>
+                        <h1 class="h2">Teacher Dashboard at <span class="text-primary fw-bold">{{ auth()->user()->school->name }}</span></h1>
                         <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }}</p>
                         <small class="text-muted">
                             Subjects: {{ implode(', ', $stats['subjects'] ?? []) }}
@@ -19,19 +16,18 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <a href="{{ route('teacher.reports.index') }}" class="btn btn-sm btn-outline-success">
-                                <i class="fas fa-download me-1"></i>Reports
+                                Reports
                             </a>
                             <button type="button" class="btn btn-sm btn-outline-success">
-                                <i class="fas fa-print me-1"></i>Print
+                                Print
                             </button>
                         </div>
                         <button type="button" class="btn btn-sm btn-success">
-                            <i class="fas fa-plus me-1"></i>New Assessment
+                            New Assessment
                         </button>
                     </div>
                 </div>
 
-                <!-- Stats Cards -->
                 <div class="row mb-4">
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card bg-primary text-white shadow h-100 border-0">
@@ -42,12 +38,8 @@
                                             Total Students</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['total_students'] ?? 0 }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-user-graduate me-1"></i>
                                             <span>Across all classes</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-users fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -63,12 +55,8 @@
                                             Pending Assessments</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['pending_assessments'] ?? 0 }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-tasks me-1"></i>
                                             <span>To be graded</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-check fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -84,12 +72,8 @@
                                             Today's Classes</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['todays_classes'] ?? 0 }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-calendar-day me-1"></i>
                                             <span>Scheduled</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-door-open fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -105,12 +89,8 @@
                                             Unread Messages</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['unread_messages'] ?? 0 }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-comments me-1"></i>
                                             <span>From parents</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-envelope fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -118,14 +98,12 @@
                     </div>
                 </div>
 
-                <!-- Today's Schedule & Quick Actions -->
                 <div class="row">
-                    <!-- Today's Schedule -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-calendar-day me-2"></i>Today's Schedule
+                                    Today's Schedule
                                 </h6>
                                 <span class="badge bg-success">{{ now()->format('l, F j, Y') }}</span>
                             </div>
@@ -134,9 +112,6 @@
                                     <div class="list-group list-group-flush">
                                         @foreach($todaysSchedule as $schedule)
                                         <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                            <div class="bg-primary rounded p-2 me-3">
-                                                <i class="fas fa-book text-white"></i>
-                                            </div>
                                             <div class="flex-grow-1">
                                                 <div class="fw-bold">{{ $schedule->subject->name }}</div>
                                                 <div class="text-muted small">
@@ -157,18 +132,16 @@
                                     </div>
                                 @else
                                     <div class="text-center py-4">
-                                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
                                         <p class="text-muted">No classes scheduled for today</p>
                                     </div>
                                 @endif
                             </div>
                         </div>
 
-                        <!-- Pending Assessments -->
                         <div class="card shadow">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-tasks me-2"></i>Pending Assessments
+                                    Pending Assessments
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -176,9 +149,6 @@
                                     <div class="list-group list-group-flush">
                                         @foreach($pendingAssessments as $assessment)
                                         <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                            <div class="bg-warning rounded p-2 me-3">
-                                                <i class="fas fa-clipboard-list text-white"></i>
-                                            </div>
                                             <div class="flex-grow-1">
                                                 <div class="fw-bold">{{ $assessment->title }}</div>
                                                 <div class="text-muted small">
@@ -199,7 +169,6 @@
                                     </div>
                                 @else
                                     <div class="text-center py-4">
-                                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
                                         <p class="text-muted">No pending assessments</p>
                                     </div>
                                 @endif
@@ -207,56 +176,35 @@
                         </div>
                     </div>
 
-                    <!-- Quick Actions & Recent Messages -->
                     <div class="col-xl-4 col-lg-5">
-                        <!-- Quick Actions -->
                         <div class="card shadow mb-4">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                                    Quick Actions
                                 </h6>
                             </div>
                             <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <a href=""
-                                            class="btn btn-outline-primary w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                            <i class="fas fa-calendar-check fa-2x mb-2"></i>
-                                            <span>Attendance</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href=""
-                                            <div class="col-6">
-                                        <a href=""
-                                            class="btn btn-outline-success w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                            <i class="fas fa-tasks fa-2x mb-2"></i>
-                                            <span>Assessment</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href=""
-                                            class="btn btn-outline-info w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                            <i class="fas fa-chart-bar fa-2x mb-2"></i>
-                                            <span>Grades</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href=""
-                                            class="btn btn-outline-warning w-100 h-100 p-3 d-flex flex-column align-items-center">
-                                            <i class="fas fa-comments fa-2x mb-2"></i>
-                                            <span>Message</span>
-                                        </a>
-                                    </div>
+                                <div class="d-grid gap-2">
+                                    <a href="#" class="btn btn-outline-primary btn-lg">
+                                        Mark Attendance
+                                    </a>
+                                    <a href="#" class="btn btn-outline-success btn-lg">
+                                        Create Assessment
+                                    </a>
+                                    <a href="#" class="btn btn-outline-info btn-lg">
+                                        View Grades
+                                    </a>
+                                    <a href="#" class="btn btn-outline-warning btn-lg">
+                                        Messages
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Recent Messages -->
                         <div class="card shadow">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-comments me-2"></i>Recent Messages
+                                    Recent Messages
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -285,7 +233,6 @@
                                     </div>
                                 @else
                                     <div class="text-center py-3">
-                                        <i class="fas fa-comments fa-2x text-muted mb-2"></i>
                                         <p class="text-muted small">No recent messages</p>
                                     </div>
                                 @endif
@@ -296,4 +243,4 @@
             </main>
         </div>
     </div>
-@endsection 
+@endsection
