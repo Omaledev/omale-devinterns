@@ -43,7 +43,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
+                            <a class="nav-link text-white-50" href="{{route('bursar.reports.index')}}">
                                 <i class="fas fa-chart-pie me-2"></i>
                                 Financial Reports
                             </a>

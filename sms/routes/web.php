@@ -51,6 +51,7 @@ use App\Http\Controllers\Parent\ParentController;
 // Bursar Controller
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\PaymentController as BursarPaymentController;
+use App\Http\Controllers\Bursar\ReportController as BursarReportController;
 
 
 Route::get('/', function () {
@@ -230,8 +231,10 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
 Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->name('bursar.')->group(function () {
     Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('dashboard');
     Route::get('/payments/create/{invoice_id}', [BursarPaymentController::class, 'create'])->name('payments.create');
-     Route::post('/payments/store', [BursarPaymentController::class, 'store'])->name('payments.store');
-     Route::get('/payments/receipt/{id}', [BursarPaymentController::class, 'show'])->name('payments.receipt');
+    Route::post('/payments/store', [BursarPaymentController::class, 'store'])->name('payments.store');
+    Route::get('/payments/receipt/{id}', [BursarPaymentController::class, 'show'])->name('payments.receipt');
+    Route::get('/reports', [BursarReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export-debtors', [BursarReportController::class, 'exportDebtors'])->name('reports.export_debtors');
 });
 
 //  Fees routes for schoolAdmin and Bursar (Allow BOTH roles)

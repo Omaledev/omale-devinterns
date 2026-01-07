@@ -5,9 +5,7 @@
         <div class="row">
             @include('bursar.partials.sidebar')
 
-            <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div>
                         <h1 class="h2">Bursar Dashboard</h1>
@@ -16,19 +14,18 @@
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-download me-1"></i>Export
+                                Export
                             </button>
                             <button type="button" class="btn btn-sm btn-outline-warning">
-                                <i class="fas fa-print me-1"></i>Print
+                                Print
                             </button>
                         </div>
                         <button type="button" class="btn btn-sm btn-warning">
-                            <i class="fas fa-plus me-1"></i>Generate Invoices
+                            Generate Invoices
                         </button>
                     </div>
                 </div>
 
-                <!-- Financial Overview Cards -->
                 <div class="row mb-4">
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card bg-success text-white shadow h-100 border-0">
@@ -39,12 +36,8 @@
                                             Total Collection</div>
                                         <div class="h2 mb-0 fw-bold">${{ number_format($stats['total_collection'] ?? 0, 2) }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-calendar me-1"></i>
                                             <span>This month</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-money-bill-wave fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -60,12 +53,8 @@
                                             Pending Invoices</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['pending_invoices'] ?? 0 }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-file-invoice me-1"></i>
                                             <span>To be processed</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-file-invoice-dollar fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -81,12 +70,8 @@
                                             Outstanding Balance</div>
                                         <div class="h2 mb-0 fw-bold">${{ number_format($stats['outstanding_balance'] ?? 0, 2) }}</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-exclamation-triangle me-1"></i>
                                             <span>Total due</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-credit-card fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -102,12 +87,8 @@
                                             Collection Rate</div>
                                         <div class="h2 mb-0 fw-bold">{{ $stats['collection_rate'] ?? 0 }}%</div>
                                         <div class="mt-2 small">
-                                            <i class="fas fa-chart-line me-1"></i>
                                             <span>This term</span>
                                         </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-percentage fa-2x text-white-50"></i>
                                     </div>
                                 </div>
                             </div>
@@ -115,14 +96,12 @@
                     </div>
                 </div>
 
-                <!-- Financial Charts & Recent Activity -->
                 <div class="row">
-                    <!-- Collection Chart -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
                             <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-chart-line me-2"></i>Fee Collection Trend
+                                    Fee Collection Trend
                                 </h6>
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
@@ -145,11 +124,10 @@
                             </div>
                         </div>
 
-                        <!-- Recent Payments -->
                         <div class="card shadow">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-history me-2"></i>Recent Payments
+                                    Recent Payments
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -189,7 +167,7 @@
                                                     <a href="{{ route('bursar.payments.receipt', $payment->id) }}" 
                                                     class="btn btn-sm btn-outline-primary" 
                                                     target="_blank">
-                                                        <i class="fas fa-print"></i> Print
+                                                        Print
                                                     </a>
                                                 </td>
                                             </tr>
@@ -201,38 +179,35 @@
                         </div>
                     </div>
 
-                    <!-- Quick Actions & Outstanding Fees -->
                     <div class="col-xl-4 col-lg-5">
-                        <!-- Quick Actions -->
                         <div class="card shadow mb-4">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                                    Quick Actions
                                 </h6>
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="" class="btn btn-outline-primary btn-lg">
-                                        <i class="fas fa-file-invoice me-2"></i>Create Invoice
+                                    <a href="{{route('finance.invoices.generate')}}" class="btn btn-outline-primary btn-lg">
+                                        Create Invoice
                                     </a>
-                                    <a href="" class="btn btn-outline-success btn-lg">
-                                        <i class="fas fa-credit-card me-2"></i>Record Payment
+                                    <a href="{{route('finance.invoices.index')}}" class="btn btn-outline-success btn-lg">
+                                        Record Payment
                                     </a>
-                                    <a href="" class="btn btn-outline-info btn-lg">
-                                        <i class="fas fa-money-bill-wave me-2"></i>Set Fee Structure
+                                    <a href="{{ route('finance.fee-structures.index') }}" class="btn btn-outline-info btn-lg">
+                                        Set Fee Structure
                                     </a>
-                                    <a href="" class="btn btn-outline-warning btn-lg">
-                                        <i class="fas fa-chart-pie me-2"></i>Generate Report
+                                    <a href="{{ route('bursar.reports.index') }}" class="btn btn-outline-warning btn-lg">
+                                        Generate Report
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Top Outstanding Fees -->
                         <div class="card shadow">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>Top Outstanding Fees
+                                    Top Outstanding Fees
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -242,16 +217,12 @@
                                         <div class="list-group-item d-flex align-items-center px-0 border-0">
                                             <div class="bg-danger rounded-circle d-flex align-items-center justify-content-center me-3"
                                                 style="width: 40px; height: 40px;">
-                                                {{-- FIXED: Use safe navigation and remove extra ->user --}}
                                                 <span class="text-white fw-bold small">
                                                     {{ substr($fee->student?->name ?? 'U', 0, 1) }}
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1">
-                                                {{-- FIXED: Direct access to student name --}}
                                                 <div class="small fw-bold">{{ $fee->student?->name ?? 'Unknown Student' }}</div>
-                                                
-                                                {{-- FIXED: Correct path to Class Level --}}
                                                 <div class="text-muted small">
                                                     {{ $fee->student?->studentProfile?->classLevel?->name ?? 'N/A' }}
                                                 </div>
@@ -270,7 +241,6 @@
                                     </div>
                                 @else
                                     <div class="text-center py-3">
-                                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
                                         <p class="text-muted small">No outstanding fees</p>
                                     </div>
                                 @endif
@@ -279,13 +249,12 @@
                     </div>
                 </div>
 
-                <!-- Fee Summary by Class -->
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card shadow">
                             <div class="card-header bg-white py-3">
                                 <h6 class="m-0 fw-bold text-primary">
-                                    <i class="fas fa-chart-pie me-2"></i>Fee Collection Summary by Class
+                                    Fee Collection Summary by Class
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -378,4 +347,4 @@
             }
         });
     </script>
-@endpush  
+@endpush

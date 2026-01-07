@@ -67,4 +67,9 @@ class ClassLevel extends Model
     {
         return $this->hasMany(FeeStructure::class);
     }
+
+    public function studentProfiles()
+    {
+        return $this->hasMany(StudentProfile::class);
+    }
 }
