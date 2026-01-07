@@ -229,7 +229,7 @@
     </section>
 
     <!-- Final CTA Section -->
-    <section class="py-5 bg-primary text-white">
+    {{-- <section class="py-5 bg-primary text-white">
         <div class="container py-5">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8">
@@ -252,7 +252,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
 
     <footer class="bg-dark text-white pt-5">
