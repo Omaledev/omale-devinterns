@@ -12,55 +12,65 @@
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link active text-white" href="{{ route('schooladmin.dashboard') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
                                 Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.students.index') }}">
+                                <i class="fas fa-user-graduate me-2"></i>
                                 Students
                                 <span class="badge bg-primary float-end">{{ $stats['total_students'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>
                                 Teachers
                                 <span class="badge bg-success float-end">{{ $stats['total_teachers'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.parents.index')}}">
+                                <i class="fas fa-users me-2"></i>
                                 Parents
                                 <span class="badge bg-info float-end">{{ $stats['total_parents'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.bursars.index') }}">
+                                <i class="fas fa-money-check me-2"></i>
                                 Bursars
                                 <span class="badge bg-warning float-end">{{ $stats['total_bursars'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.class-levels.index')}}">
+                                <i class="fas fa-door-open me-2"></i>
                                 Class Levels
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.sections.index') }}">
+                                <i class="fas fa-layer-group me-2"></i>
                                 Sections
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{route('schooladmin.subjects.index') }}">
+                                <i class="fas fa-book me-2"></i>
                                 Subjects
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="#">
+                                <i class="fas fa-calendar-check me-2"></i>
                                 Attendance
                             </a>
                         </li>
                        <li class="nav-item">
                             <a class="nav-link text-white-50 collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#feesSubmenu" aria-expanded="false">
+                                <i class="fas fa-money-bill-wave me-2"></i>
                                 Fees
                                 <i class="fas fa-chevron-down ms-auto" style="font-size: 0.8em;"></i>
                             </a>
@@ -68,12 +78,12 @@
                                 <ul class="nav flex-column ms-3">
                                     <li class="nav-item">
                                         <a class="nav-link text-white-50" href="{{ route('finance.fee-structures.index') }}">
-                                            Structure Setup
+                                            <i class="fas fa-list-alt me-2"></i> Structure Setup
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-white-50" href="{{ route('finance.invoices.index') }}">
-                                          Student Invoices
+                                            <i class="fas fa-file-invoice-dollar me-2"></i> Student Invoices
                                         </a>
                                     </li>
                                 </ul>
@@ -81,26 +91,31 @@
                         </li>
                                                 <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.academic-sessions.index') }}">
+                                <i class="fas fa-calendar-alt me-2"></i>
                                 Academic Sessions
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="{{ route('schooladmin.terms.index') }}">
+                                <i class="fas fa-calendar-week me-2"></i>
                                 Terms
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="#">
+                                <i class="fas fa-bullhorn me-2"></i>
                                 Notice
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="#">
+                                <i class="fas fa-bus me-2"></i>
                                 Transport
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="#">
+                                <i class="fas fa-bed me-2"></i>
                                 Hostel
                             </a>
                         </li>

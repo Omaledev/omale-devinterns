@@ -18,18 +18,21 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.dashboard') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.dashboard') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.timetable') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.timetable') }}">
+                    <i class="fas fa-calendar-alt me-2"></i>
                     Timetable
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.attendance') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.attendance') }}">
+                    <i class="fas fa-calendar-check me-2"></i>
                     Attendance
                     <span class="badge bg-success float-end">{{ $stats['attendance_rate'] ?? '0' }}%</span>
                 </a>
@@ -37,6 +40,7 @@
 
             <li class="nav-item">
                 <a class="nav-link text-white-50" href="">
+                    <i class="fas fa-chart-bar me-2"></i>
                     Results
                     <span class="badge bg-info float-end">{{ $stats['average_grade'] ?? 'N/A' }}</span>
                 </a>
@@ -45,12 +49,14 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.books') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.books') }}">
+                    <i class="fas fa-book-open me-2"></i>
                     Study Books
                     <span class="badge bg-info float-end">{{ $stats['new_books'] ?? 0 }}</span>
                 </a>
             </li> 
             <li class="nav-item">
                 <a class="nav-link text-white-50" href="#">
+                    <i class="fas fa-money-bill-wave me-2"></i>
                     Fees
                     @if(($stats['fee_balance'] ?? 0) > 0)
                     <span class="badge bg-danger float-end">Due</span>
@@ -62,6 +68,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.assignments') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.assignments') }}">
+                    <i class="fas fa-tasks me-2"></i>
                     Assignments
                     <span class="badge bg-warning float-end">{{ $stats['pending_assignments'] ?? 0 }}</span>
                 </a>
@@ -69,18 +76,21 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.subjects') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.subjects') }}">
+                    <i class="fas fa-book me-2"></i>
                     Subjects
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.teachers') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.teachers') }}">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>
                     Teachers
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.messages') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.messages') }}">
+                    <i class="fas fa-comments me-2"></i>
                     Messages
                     <span class="badge bg-primary float-end">{{ $stats['unread_messages'] ?? 0 }}</span>
                 </a>
@@ -88,6 +98,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.announcements') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('student.announcements') }}">
+                    <i class="fas fa-bullhorn me-2"></i>
                     Announcements
                 </a>
             </li>

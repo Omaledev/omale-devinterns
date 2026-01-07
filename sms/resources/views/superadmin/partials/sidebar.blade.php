@@ -11,54 +11,64 @@
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active text-white" href="{{ route('superadmin.dashboard') }}">
+                            <i class="fas fa-tachometer-alt me-2"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index') }}">
+                            <i class="fas fa-school me-2"></i>
                             Schools
                             <span class="badge bg-primary float-end">{{ $stats['total_schools'] ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="{{route('superadmin.users.index')}}">
+                            <i class="fas fa-users me-2"></i>
                             All Users
                             <span class="badge bg-info float-end">{{ $stats['total_users'] ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                          <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index')}}">
+                        <i class="fas fa-user-shield me-2"></i>
                         Roles & Permissions
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-chart-bar me-2"></i>
                             System Analytics
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-cog me-2"></i>
                             System Settings
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-file-invoice me-2"></i>
                             Billing
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-bell me-2"></i>
                             Notifications
                             <span class="badge bg-danger float-end">{{ $stats['system_alerts'] ?? 0 }}</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-database me-2"></i>
                             Backup & Restore
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
+                            <i class="fas fa-life-ring me-2"></i>
                             Support
                         </a>
                     </li>
