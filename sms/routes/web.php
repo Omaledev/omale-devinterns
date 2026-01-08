@@ -36,8 +36,9 @@ use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceContro
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardController;
 
+// Announcement routes
+use App\Http\Controllers\AnnouncementController;
 
-use App\Http\Controllers\Teacher\AnnouncementController as TeacherAnnouncementController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
 use App\Http\Controllers\Teacher\MessageController as TeacherMessageController;
 use App\Http\Controllers\Teacher\ReportController as TeacherReportController;
@@ -186,7 +187,6 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
 
     Route::resource('assessments', TeacherAssessmentController::class);
     Route::resource('messages', TeacherMessageController::class);
-    Route::resource('announcements', TeacherAnnouncementController::class);
     Route::resource('books', TeacherBookController::class);
    
 });
@@ -202,7 +202,6 @@ Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')
     Route::get('/subjects', [StudentController::class, 'subjects'])->name('subjects');
     Route::get('/teachers', [StudentController::class, 'teachers'])->name('teachers');
     Route::get('/messages', [StudentController::class, 'messages'])->name('messages');
-    Route::get('/announcements', [StudentController::class, 'announcements'])->name('announcements');
     Route::get('/reports', [StudentController::class, 'index'])->name('reports.index');
     Route::get('/reports/download/{student}', [StudentController::class,'download'])
     ->name('reports.download');
@@ -223,7 +222,6 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
     Route::get('/timetable', [ParentController::class, 'timetable'])->name('parent.timetable');
     Route::get('/teachers', [ParentController::class, 'teachers'])->name('parent.teachers');
     Route::get('/messages', [ParentController::class, 'messages'])->name('parent.messages');
-    Route::get('/announcements', [ParentController::class, 'announcements'])->name('parent.announcements');
     Route::get('/meetings', [ParentController::class, 'meetings'])->name('parent.meetings');
 });
 
@@ -248,6 +246,14 @@ Route::middleware(['auth', 'role:SuperAdmin|SchoolAdmin|Bursar'])
         Route::get('invoices/generate', [SchoolAdminInvoiceController::class, 'create'])->name('invoices.generate');
         Route::post('invoices/generate', [SchoolAdminInvoiceController::class, 'store'])->name('invoices.store');
         Route::resource('invoices', SchoolAdminInvoiceController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Announcement CRUD Routes
+    Route::resource('announcements', AnnouncementController::class)->only(['index', 'store', 'update', 'destroy']);
+
+    // Notification Route (Mark as Read)
+    Route::get('/notifications/{id}/read', [AnnouncementController::class, 'markAsRead'])->name('notifications.read');
 });
 
 

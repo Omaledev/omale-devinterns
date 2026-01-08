@@ -67,10 +67,10 @@
                                 <span class="badge bg-primary float-end">{{ $stats['unread_messages'] ?? 0 }}</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-bullhorn me-2"></i>
-                                Announcements
+                        <li class="nav-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('announcements.index') }}">
+                                <i class="fas fa-fw fa-bullhorn"></i>
+                                <span>Notification</span>
                             </a>
                         </li>
                         <li class="nav-item">

@@ -53,13 +53,12 @@
                             Billing
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bell me-2"></i>
-                            Notifications
-                            <span class="badge bg-danger float-end">{{ $stats['system_alerts'] ?? 0 }}</span>
-                        </a>
-                    </li>
+                    <li class="nav-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('announcements.index') }}">
+                                <i class="fas fa-fw fa-bullhorn"></i>
+                                <span>Notification</span>
+                            </a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50" href="#">
                             <i class="fas fa-database me-2"></i>

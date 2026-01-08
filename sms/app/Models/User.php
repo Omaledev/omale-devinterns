@@ -105,12 +105,6 @@ class User extends Authenticatable
     }
     
 
-    public function announcements()
-    {
-        return $this->hasMany(Announcement::class);
-    }
-
-
     public function uploadedBooks()
     {
         return $this->hasMany(Book::class, 'teacher_id');
@@ -156,6 +150,11 @@ class User extends Authenticatable
     public function invoices()
     {
         return $this->hasMany(Invoice::class, 'student_id');
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class, 'created_by');
     }
 
 }

@@ -67,10 +67,10 @@
                                 Receipts
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" href="">
-                                <i class="fas fa-bullhorn me-2"></i>
-                                Fee Announcements
+                        <li class="nav-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('announcements.index') }}">
+                                <i class="fas fa-fw fa-bullhorn"></i>
+                                <span>Announcement</span>
                             </a>
                         </li>
                     </ul>

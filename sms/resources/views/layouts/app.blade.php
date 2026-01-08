@@ -63,6 +63,19 @@
                     <span class="fw-bold fs-4">Axia SMS</span>
                 </a>
 
+                {{-- MOBILE NOTIFICATION BELL --}}
+                @auth
+                <a class="d-lg-none m-auto me-4 position-relative text-secondary" href="{{ route('announcements.index') }}">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.5rem;">
+                            {{ auth()->user()->unreadNotifications->count() }}
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    @endif
+                </a>
+                @endauth
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -90,6 +103,52 @@
                                 </li>
                             @endif
                         @else
+                            {{-- NOTIFICATION BELL --}}
+                            <li class="nav-item dropdown me-3 d-none d-lg-block">
+                                <a id="alertsDropdown" class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell fa-lg text-secondary"></i>
+                                    {{-- Red Counter Badge --}}
+                                    @if(auth()->user()->unreadNotifications->count() > 0)
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 0.35em 0.5em;">
+                                            {{ auth()->user()->unreadNotifications->count() }}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    @endif
+                                </a>
+                                {{-- Dropdown Menu --}}
+                                <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in py-0" aria-labelledby="alertsDropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+                                    <div class="card border-0">
+                                        <div class="card-header bg-primary text-white small fw-bold">
+                                            Notification Center
+                                        </div>
+                                        <div class="list-group list-group-flush">
+                                            @forelse(auth()->user()->unreadNotifications as $notification)
+                                                <a href="{{ route('notifications.read', $notification->id) }}" class="list-group-item list-group-item-action d-flex align-items-center p-3">
+                                                    <div class="me-3">
+                                                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                            <i class="fas fa-bullhorn"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <div class="small text-muted mb-1">{{ $notification->created_at->diffForHumans() }}</div>
+                                                        <span class="d-block text-dark text-wrap small fw-bold" style="line-height: 1.4;">
+                                                            {{ $notification->data['message'] ?? 'New Notification' }}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            @empty
+                                                <div class="text-center py-4">
+                                                    <i class="fas fa-bell-slash text-muted mb-2"></i>
+                                                    <p class="text-muted small mb-0">No new notification</p>
+                                                </div>
+                                            @endforelse
+                                        </div>
+                                        <a class="card-footer text-center small text-primary bg-white d-block py-2 text-decoration-none fw-bold" href="{{ route('announcements.index') }}">
+                                            Show All Notification
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     {{ Auth::user()->name }}
