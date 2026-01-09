@@ -59,8 +59,23 @@ use App\Http\Controllers\Parent\DashboardController as ParentDashboardController
 use App\Http\Controllers\Parent\ParentController;
 
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    // 1. Drop the table
+    Illuminate\Support\Facades\Schema::dropIfExists('announcements');
+
+    // 2. Delete the migration record
+    Illuminate\Support\Facades\DB::table('migrations')
+        ->where('migration', 'like', '%create_announcements_table%')
+        ->delete();
+
+    // 3. Re-run migration
+    Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+
+    return "FIX COMPLETE: Announcements table reset. NOW UNDO THIS CHANGE in routes/web.php.";
 });
 
 /**
@@ -262,18 +277,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// --- TEMPORARY FIX ROUTE ---
-Route::get('/fix-announcements-db', function () {
-    // 1. Drop the table completely (DATA LOSS WARNING)
-    Schema::dropIfExists('announcements');
-
-    // 2. Delete the migration record so Laravel thinks it never ran
-    DB::table('migrations')
-        ->where('migration', 'like', '%create_announcements_table%')
-        ->delete();
-
-    // 3. Run migrations again (This recreates the table with your NEW code)
-    Artisan::call('migrate', ['--force' => true]);
-
-    return 'Announcements table has been reset and re-migrated. You can now use the feature.';
-});
