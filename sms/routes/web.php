@@ -6,10 +6,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Artisan;
-
 // SuperAdmin routes
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
@@ -59,23 +55,8 @@ use App\Http\Controllers\Parent\DashboardController as ParentDashboardController
 use App\Http\Controllers\Parent\ParentController;
 
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
-    // 1. Drop the table
-    Illuminate\Support\Facades\Schema::dropIfExists('announcements');
-
-    // 2. Delete the migration record
-    Illuminate\Support\Facades\DB::table('migrations')
-        ->where('migration', 'like', '%create_announcements_table%')
-        ->delete();
-
-    // 3. Re-run migration
-    Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-
-    return "FIX COMPLETE: Announcements table reset. NOW UNDO THIS CHANGE in routes/web.php.";
+    return view('welcome');
 });
 
 /**
@@ -275,5 +256,3 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('messages', MessageController::class)
         ->except(['edit', 'update']); 
 });
-
-
