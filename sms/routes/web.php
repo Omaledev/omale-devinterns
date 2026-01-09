@@ -36,23 +36,23 @@ use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceContro
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardController;
 
-// Announcement routes
+// Announcement controller
 use App\Http\Controllers\AnnouncementController;
 
-use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
-use App\Http\Controllers\Teacher\MessageController as TeacherMessageController;
-use App\Http\Controllers\Teacher\ReportController as TeacherReportController;
-use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
-use App\Http\Controllers\Teacher\BookController as TeacherBookController;
-use App\Http\Controllers\Student\DashboardController;
-use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
-use App\Http\Controllers\Parent\ParentController;
+// Message controller
+use App\Http\Controllers\MessageController;
 
 // Bursar Controller
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\PaymentController as BursarPaymentController;
 use App\Http\Controllers\Bursar\ReportController as BursarReportController;
+
+
+
+use App\Http\Controllers\Student\DashboardController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
+use App\Http\Controllers\Parent\ParentController;
 
 
 Route::get('/', function () {
@@ -183,11 +183,6 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/reports', [TeacherReportCardController::class, 'index'])->name('reports.index');
     Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
     ->name('reports.download');
-
-
-    Route::resource('assessments', TeacherAssessmentController::class);
-    Route::resource('messages', TeacherMessageController::class);
-    Route::resource('books', TeacherBookController::class);
    
 });
 
@@ -256,4 +251,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/{id}/read', [AnnouncementController::class, 'markAsRead'])->name('notifications.read');
 });
 
-
+// Messaging routes
+Route::middleware(['auth'])->group(function () {
+    Route::resource('messages', MessageController::class)
+        ->except(['edit', 'update']); 
+});

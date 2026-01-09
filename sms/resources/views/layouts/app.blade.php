@@ -63,9 +63,31 @@
                     <span class="fw-bold fs-4">Axia SMS</span>
                 </a>
 
+                {{-- MOBILE MESSAGE ICON (Visible on Phone, Hidden on Desktop) --}}
+                @auth
+                    @if(auth()->user()->hasRole(['SuperAdmin', 'SchoolAdmin', 'Teacher', 'Parent']))
+                        <a class="d-lg-none ms-auto me-3 position-relative text-secondary" href="{{ route('messages.index') }}">
+                            <i class="fas fa-envelope fa-lg"></i>
+                            @php
+                                $msgCount = \App\Models\Message::whereHas('thread.participants', function($q) {
+                                    $q->where('user_id', auth()->id());
+                                })->where('user_id', '!=', auth()->id())->whereNull('read_at')->count();
+                            @endphp
+                            
+                            @if($msgCount > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.5rem;">
+                                    {{ $msgCount }}
+                                </span>
+                            @endif
+                        </a>
+                    @endif
+                @endauth
+
+                
+
                 {{-- MOBILE NOTIFICATION BELL --}}
                 @auth
-                <a class="d-lg-none m-auto me-4 position-relative text-secondary" href="{{ route('announcements.index') }}">
+                <a class="d-lg-none me-4 position-relative text-secondary" href="{{ route('announcements.index') }}">
                     <i class="fas fa-bell fa-lg"></i>
                     @if(auth()->user()->unreadNotifications->count() > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.5rem;">
@@ -103,6 +125,27 @@
                                 </li>
                             @endif
                         @else
+                        {{-- DESKTOP MESSAGE ICON --}}
+                            @if(auth()->user()->hasRole(['SuperAdmin', 'SchoolAdmin', 'Teacher', 'Parent']))
+                            <li class="nav-item me-3 d-none d-lg-block">
+                                <a class="nav-link position-relative" href="{{ route('messages.index') }}">
+                                    <i class="fas fa-envelope fa-lg text-secondary"></i>
+                                    @php
+                                        // Re-run count for desktop scope
+                                        $msgCountDesk = \App\Models\Message::whereHas('thread.participants', function($q) {
+                                            $q->where('user_id', auth()->id());
+                                        })->where('user_id', '!=', auth()->id())->whereNull('read_at')->count();
+                                    @endphp
+
+                                    @if($msgCountDesk > 0)
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 0.35em 0.5em;">
+                                            {{ $msgCountDesk }}
+                                            <span class="visually-hidden">unread messages</span>
+                                        </span>
+                                    @endif
+                                </a>
+                            </li>
+                            @endif
                             {{-- NOTIFICATION BELL --}}
                             <li class="nav-item dropdown me-3 d-none d-lg-block">
                                 <a id="alertsDropdown" class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

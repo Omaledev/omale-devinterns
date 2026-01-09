@@ -157,4 +157,18 @@ class User extends Authenticatable
         return $this->hasMany(Announcement::class, 'created_by');
     }
 
+    public function messages() 
+    {
+         return $this->hasMany(Message::class);
+    }
+
+    
+
+    public function threads()
+    {
+        return $this->belongsToMany(Thread::class, 'thread_user')
+                    ->withPivot('last_read_at') 
+                    ->withTimestamps();
+    }
+
 }
