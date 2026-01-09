@@ -6,6 +6,10 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
+
 // SuperAdmin routes
 use App\Http\Controllers\SuperAdmin\SchoolController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
@@ -255,4 +259,21 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::resource('messages', MessageController::class)
         ->except(['edit', 'update']); 
+});
+
+
+// --- TEMPORARY FIX ROUTE ---
+Route::get('/fix-announcements-db', function () {
+    // 1. Drop the table completely (DATA LOSS WARNING)
+    Schema::dropIfExists('announcements');
+
+    // 2. Delete the migration record so Laravel thinks it never ran
+    DB::table('migrations')
+        ->where('migration', 'like', '%create_announcements_table%')
+        ->delete();
+
+    // 3. Run migrations again (This recreates the table with your NEW code)
+    Artisan::call('migrate', ['--force' => true]);
+
+    return 'Announcements table has been reset and re-migrated. You can now use the feature.';
 });
