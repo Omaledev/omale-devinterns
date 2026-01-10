@@ -3,88 +3,13 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-            <div class="position-sticky pt-3">
-                <div class="text-center mb-4">
-                    <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
-                        <i class="fas fa-crown text-dark fa-xl"></i>
-                    </div>
-                    <h6 class="text-white mb-1">SuperAdmin</h6>
-                    <small class="text-white-50">System Administrator</small>
-                </div>
+        
+        {{-- Sidebar --}}
+        @include('superadmin.partials.sidebar')
 
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('superadmin.dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('superadmin.schools.index') }}">
-                            <i class="fas fa-school me-2"></i>
-                            Schools
-                            <span class="badge bg-primary float-end">{{ $stats['total_schools'] ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{route('superadmin.users.index')}}">
-                            <i class="fas fa-users me-2"></i>
-                            All Users
-                            <span class="badge bg-info float-end">{{ $stats['total_users'] ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                         <a class="nav-link text-white-50" href="{{ route('superadmin.schools.index')}}">
-                        <i class="fas fa-user-shield me-2"></i>
-                        Roles & Permissions
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-chart-bar me-2"></i>
-                            System Analytics
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-cog me-2"></i>
-                            System Settings
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-file-invoice me-2"></i>
-                            Billing
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-bell me-2"></i>
-                            Notifications
-                            <span class="badge bg-danger float-end">{{ $stats['system_alerts'] ?? 0 }}</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-database me-2"></i>
-                            Backup & Restore
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="#">
-                            <i class="fas fa-life-ring me-2"></i>
-                            Support
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
+        {{-- Content --}}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Create User for {{ $school->name }}</h1>
@@ -104,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- User Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -197,7 +121,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Form Actions -->
                                 <div class="row mt-4">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">
@@ -219,55 +142,3 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-    .sidebar {
-        min-height: calc(100vh - 56px);
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-    }
-
-    .sidebar .nav-link {
-        color: #adb5bd;
-        padding: 0.75rem 1rem;
-        border-radius: 0.375rem;
-        margin: 0.125rem 0.5rem;
-        transition: all 0.15s ease;
-    }
-
-    .sidebar .nav-link:hover {
-        color: #fff;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .sidebar .nav-link.active {
-        color: #fff;
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .sidebar .nav-link i {
-        width: 20px;
-        text-align: center;
-    }
-
-    .card {
-        border: none;
-        border-radius: 0.5rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .form-label {
-        font-weight: 500;
-        color: #495057;
-    }
-
-    .breadcrumb {
-        margin-bottom: 0;
-    }
-</style>
-@endpush

@@ -8,7 +8,10 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">System Overview</h1>
+                    <h6 class="text-dark mb-0">{{ now()->format('l, F j, Y') }}</h6>
+                    <small class="text-muted">System Status: <span class="text-success fw-bold">● Online</span></small>
                     <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }} - Full System Control</p>
+                    
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group me-2">
@@ -20,7 +23,7 @@
                         </button>
                     </div>
                     <a href="{{ route('superadmin.schools.create') }}" class="btn btn-sm btn-warning">
-                        Add School
+                        <i class="fas fa-plus me-1"></i> Add School
                     </a>
                 </div>
             </div>
