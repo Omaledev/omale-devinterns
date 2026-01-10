@@ -57,8 +57,8 @@
 
             <div class="row mb-4">
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card bg-primary text-white shadow h-100 border-0">
-                        <div class="card-body">
+                    <div class="card bg-primary text-white shadow h-100 border-0 ">
+                        <div class="card-body" >
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs fw-bold text-white-50 text-uppercase mb-1">Total Students</div>
@@ -226,33 +226,7 @@
                     </div>
                 </div>
 
-                    <div class="card shadow mb-4">
-                        <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary">Recent Activity</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">New student registered</div>
-                                        <div class="text-muted small">2 minutes ago</div>
-                                    </div>
-                                </div>
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">Teacher assignment updated</div>
-                                        <div class="text-muted small">1 hour ago</div>
-                                    </div>
-                                </div>
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">Pending approvals waiting</div>
-                                        <div class="text-muted small">5 hours ago</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  
                 </div>
             </div>
         </main>

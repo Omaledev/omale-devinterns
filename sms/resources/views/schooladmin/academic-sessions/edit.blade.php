@@ -24,7 +24,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-calendar-edit me-2"></i>Edit Academic Session
+                                Edit Academic Session
                             </h6>
                         </div>
                         <div class="card-body">
@@ -79,7 +79,7 @@
                                         <i class="fas fa-arrow-left me-1"></i>Back
                                     </a>
                                     <button type="submit" class="btn btn-primary" @if($session->is_active) disabled @endif>
-                                        <i class="fas fa-save me-1"></i>Update Session
+                                        Update Session
                                     </button>
                                 </div>
                             </form>

@@ -24,13 +24,13 @@
                         <i class="fas fa-arrow-left me-1"></i>Back
                     </a>
                     <a href="{{ route('schooladmin.teacher-assignments.edit', $teacherAssignment) }}" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-edit me-1"></i>Edit
+                        Edit
                     </a>
                     <form action="{{ route('schooladmin.teacher-assignments.destroy', $teacherAssignment) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this assignment?')">
-                            <i class="fas fa-trash me-1"></i>Delete
+                            Delete
                         </button>
                     </form>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-info-circle me-2"></i>Assignment Information
+                                Assignment Information
                             </h6>
                         </div>
                         <div class="card-body">

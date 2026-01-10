@@ -2,91 +2,101 @@
 
 @section('content')
 <div class="container-fluid">
-    {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">My Messages</h1>
+    <div class="row">
         
-        {{-- "New Message" Button (Triggers Modal) --}}
-        <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#newMessageModal">
-            <i class="fas fa-pen me-1"></i> New Message
-        </button>
-    </div>
+        {{-- Sidebar --}}
+        @include('schooladmin.partials.sidebar')
 
-    {{-- Inbox List --}}
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Inbox</h6>
-        </div>
-        <div class="list-group list-group-flush">
-            @forelse($threads as $thread)
-                @php
-                    // Find the "Other Person" in the chat
-                    $otherUser = $thread->participants->where('id', '!=', auth()->id())->first();
-                    
-                    // Check if the latest message is unread (and sent by them, not me)
-                    $isUnread = $thread->latestMessage && 
-                                $thread->latestMessage->user_id != auth()->id() && 
-                                $thread->latestMessage->read_at == null;
-                @endphp
+        {{-- Main Content Area --}}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 
-                <a href="{{ route('messages.show', $thread->id) }}" class="list-group-item list-group-item-action p-3 {{ $isUnread ? 'bg-light border-start border-primary border-4' : '' }}">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            {{-- Avatar / Icon --}}
-                            <div class="rounded-circle bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
-                                <i class="fas fa-user {{ $isUnread ? 'text-primary' : 'text-secondary' }}"></i>
-                            </div>
-                            
-                            {{-- Name & Subject --}}
-                            <div>
-                                <h6 class="mb-0 fw-bold text-dark">
-                                    {{ $otherUser ? $otherUser->name : 'Unknown User' }}
-                                    <span class="small text-muted fw-normal">({{ $otherUser->role ?? 'N/A' }})</span>
-                                </h6>
-                                <small class="text-muted">{{ $thread->subject ?? 'Conversation' }}</small>
-                            </div>
-                        </div>
+            {{-- Header --}}
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">My Messages</h1>
+                
+                {{-- "New Message" Button (Triggers Modal) --}}
+                <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                    New Message
+                </button>
+            </div>
 
-                      {{-- Date & Action Button --}}
-                        <div class="d-flex flex-column align-items-end">
-                            <small class="mb-1 {{ $isUnread ? 'text-primary fw-bold' : 'text-muted' }}">
-                                {{ $thread->updated_at->diffForHumans() }}
-                            </small>
-                            
-                            {{-- Button <a> tag --}}
-                            <span class="badge rounded-pill {{ $isUnread ? 'bg-primary' : 'bg-light text-secondary border' }}">
-                                Reply <i class="fas fa-arrow-right ms-1"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    {{-- Message Preview --}}
-                    <div class="d-flex justify-content-between align-items-center mt-2 ps-5">
-                        <p class="mb-0 text-muted small text-truncate" style="max-width: 80%;">
-                            @if($thread->latestMessage->user_id == auth()->id())
-                                {{-- <i class="fas fa-reply me-1 text-xs"></i>  --}}
-                            @endif
-                            {{ $thread->latestMessage->body ?? 'No messages yet' }}
-                        </p>
-                        
-                        @if($isUnread)
-                            <span class="badge bg-primary rounded-pill">New</span>
-                        @endif
-                    </div>
-                </a>
-            @empty
-                <div class="text-center py-5">
-                    <div class="mb-3">
-                        <i class="fas fa-inbox fa-3x text-gray-300"></i>
-                    </div>
-                    <p class="text-muted">You have no messages yet.</p>
+            {{-- Inbox List --}}
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Inbox</h6>
                 </div>
-            @endforelse
-        </div>
+                <div class="list-group list-group-flush">
+                    @forelse($threads as $thread)
+                        @php
+                            // Finding the "Other Person" in the chat
+                            $otherUser = $thread->participants->where('id', '!=', auth()->id())->first();
+                            
+                            // Checking if the latest message is unread (and sent by them, not me)
+                            $isUnread = $thread->latestMessage && 
+                                        $thread->latestMessage->user_id != auth()->id() && 
+                                        $thread->latestMessage->read_at == null;
+                        @endphp
+
+                        <a href="{{ route('messages.show', $thread->id) }}" class="list-group-item list-group-item-action p-3 {{ $isUnread ? 'bg-light border-start border-primary border-4' : '' }}">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    {{-- Avatar / Icon --}}
+                                    <div class="rounded-circle bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                        <i class="fas fa-user {{ $isUnread ? 'text-primary' : 'text-secondary' }}"></i>
+                                    </div>
+                                    
+                                    {{-- Name & Subject --}}
+                                    <div>
+                                        <h6 class="mb-0 fw-bold text-dark">
+                                            {{ $otherUser ? $otherUser->name : 'Unknown User' }}
+                                            <span class="small text-muted fw-normal">({{ $otherUser->role ?? 'N/A' }})</span>
+                                        </h6>
+                                        <small class="text-muted">{{ $thread->subject ?? 'Conversation' }}</small>
+                                    </div>
+                                </div>
+
+                                {{-- Date & Action Button --}}
+                                <div class="d-flex flex-column align-items-end">
+                                    <small class="mb-1 {{ $isUnread ? 'text-primary fw-bold' : 'text-muted' }}">
+                                        {{ $thread->updated_at->diffForHumans() }}
+                                    </small>
+                                    
+                                    <span class="badge rounded-pill {{ $isUnread ? 'bg-primary' : 'bg-light text-secondary border' }}">
+                                        Reply <i class="fas fa-arrow-right ms-1"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- Message Preview --}}
+                            <div class="d-flex justify-content-between align-items-center mt-2 ps-5">
+                                <p class="mb-0 text-muted small text-truncate" style="max-width: 80%;">
+                                    @if($thread->latestMessage && $thread->latestMessage->user_id == auth()->id())
+                                        <i class="fas fa-reply me-1 text-xs"></i> 
+                                    @endif
+                                    {{ $thread->latestMessage->body ?? 'No messages yet' }}
+                                </p>
+                                
+                                @if($isUnread)
+                                    <span class="badge bg-primary rounded-pill">New</span>
+                                @endif
+                            </div>
+                        </a>
+                    @empty
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="fas fa-inbox fa-3x text-gray-300"></i>
+                            </div>
+                            <p class="text-muted">You have no messages yet.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+        </main>
     </div>
 </div>
 
-{{-- NEW MESSAGE MODAL --}}
+{{-- MESSAGE MODAL --}}
 <div class="modal fade" id="newMessageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -98,7 +108,7 @@
                 @csrf
                 <div class="modal-body">
                     
-                    {{-- RECIPIENT DROPDOWN (Filtered) --}}
+                    {{-- RECIPIENT DROPDOWN --}}
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Recipient</label>
                         <select name="recipient_id" class="form-select" required>

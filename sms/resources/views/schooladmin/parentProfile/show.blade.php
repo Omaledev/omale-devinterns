@@ -3,51 +3,13 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-            <div class="position-sticky pt-3">
-                <div class="text-center mb-4">
-                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
-                        style="width: 60px; height: 60px;">
-                        <span class="text-white fw-bold fs-4">A</span>
-                    </div>
-                    <h6 class="text-white mb-1">{{ auth()->user()->school->name }}</h6>
-                    <small class="text-white-50">School Admin</small>
-                </div>
+        
+        {{-- Sidebar --}}
+        @include('schooladmin.partials.sidebar')
 
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.dashboard') }}">
-                            <i class="fas fa-tachometer-alt me-2"></i>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.students.index') }}">
-                            <i class="fas fa-user-graduate me-2"></i>
-                            Students
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white-50" href="{{ route('schooladmin.teachers.index') }}">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>
-                            Teachers
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" href="{{ route('schooladmin.parents.index') }}">
-                            <i class="fas fa-users me-2"></i>
-                            Parents
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Parent Details</h1>
                     <nav aria-label="breadcrumb">
@@ -63,88 +25,93 @@
                         <i class="fas fa-arrow-left me-1"></i>Back to Parents
                     </a>
                     <a href="{{ route('schooladmin.parents.edit', $parent) }}" class="btn btn-warning me-2">
-                        <i class="fas fa-edit me-1"></i>Edit
+                        Edit
                     </a>
                 </div>
             </div>
 
-            <!-- Parent Details -->
             <div class="row">
                 <div class="col-12">
-                    <div class="card shadow">
+                    <div class="card shadow-sm">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-user me-2"></i>Parent Information
+                                Parent Information
                             </h6>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <!-- Parent Profile -->
-                                <div class="col-md-4 text-center mb-4">
-                                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                <div class="col-md-4 text-center mb-4 border-end-md">
+                                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3 mt-3 shadow-sm"
                                          style="width: 100px; height: 100px;">
-                                        <span class="text-white fw-bold fs-2">
-                                            {{ substr($parent->name, 0, 1) }}
+                                        <span class="text-white fw-bold display-4">
+                                            {{ strtoupper(substr($parent->name, 0, 1)) }}
                                         </span>
                                     </div>
-                                    <h4>{{ $parent->name }}</h4>
-                                    <p class="text-muted">Parent</p>
-                                    <div class="mb-2">
+                                    <h4 class="fw-bold">{{ $parent->name }}</h4>
+                                    <p class="text-muted mb-2">Parent / Guardian</p>
+                                    <div class="mb-3">
                                         @if($parent->is_approved)
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge bg-success px-3 py-2 rounded-pill">Active Account</span>
                                         @else
-                                            <span class="badge bg-warning">Pending</span>
+                                            <span class="badge bg-warning px-3 py-2 rounded-pill">Pending Approval</span>
                                         @endif
                                     </div>
                                     <small class="text-muted">
-                                        Member since {{ $parent->created_at->format('M d, Y') }}
+                                        Joined {{ $parent->created_at->format('M d, Y') }}
                                     </small>
                                 </div>
 
-                                <!-- Contact Information -->
-                                <div class="col-md-8">
+                                <div class="col-md-8 ps-md-4">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <h6 class="text-primary mb-3">Contact Information</h6>
+                                        <div class="col-md-6 mb-4">
+                                            <h6 class="text-primary fw-bold text-uppercase small mb-3 border-bottom pb-2">Contact Information</h6>
                                             <div class="mb-3">
-                                                <strong>Email:</strong><br>
-                                                <a href="mailto:{{ $parent->email }}">{{ $parent->email }}</a>
+                                                <label class="text-muted small fw-bold">Email Address</label>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-envelope text-secondary me-2"></i>
+                                                    <a href="mailto:{{ $parent->email }}" class="text-decoration-none">{{ $parent->email }}</a>
+                                                </div>
                                             </div>
                                             <div class="mb-3">
-                                                <strong>Phone:</strong><br>
-                                                {{ $parent->phone ?? 'N/A' }}
+                                                <label class="text-muted small fw-bold">Phone Number</label>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-phone text-secondary me-2"></i>
+                                                    <span>{{ $parent->phone ?? 'N/A' }}</span>
+                                                </div>
                                             </div>
                                             <div class="mb-3">
-                                                <strong>Address:</strong><br>
-                                                {{ $parent->address ?? 'N/A' }}
+                                                <label class="text-muted small fw-bold">Residential Address</label>
+                                                <div class="d-flex align-items-start">
+                                                    <i class="fas fa-map-marker-alt text-secondary me-2 mt-1"></i>
+                                                    <span>{{ $parent->address ?? 'N/A' }}</span>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <!-- Children Information -->
                                         <div class="col-md-6">
-                                            <h6 class="text-primary mb-3">Children Information</h6>
+                                            <h6 class="text-primary fw-bold text-uppercase small mb-3 border-bottom pb-2">Children / Wards</h6>
                                             @if($parent->children && $parent->children->count() > 0)
-                                                <div class="list-group">
+                                                <div class="list-group list-group-flush">
                                                     @foreach($parent->children as $child)
-                                                        <div class="list-group-item">
-                                                            <div class="d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <strong>{{ $child->name }}</strong>
-                                                                    <br>
-                                                                    <small class="text-muted">
-                                                                        {{ $child->admission_number }} | 
-                                                                        {{ $child->class ?? 'No Class' }}
-                                                                    </small>
-                                                                </div>
-                                                                <span class="badge bg-info">{{ $child->section ?? 'No Section' }}</span>
+                                                        <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <div class="fw-bold text-dark">{{ $child->name }}</div>
+                                                                <small class="text-muted">
+                                                                    ID: {{ $child->admission_number }}
+                                                                </small>
+                                                            </div>
+                                                            <div class="text-end">
+                                                                <span class="badge bg-info text-dark mb-1">{{ $child->class ?? 'No Class' }}</span>
+                                                                <br>
+                                                                <small class="text-muted">{{ $child->section ?? '' }}</small>
                                                             </div>
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <div class="alert alert-info">
-                                                    <i class="fas fa-info-circle me-2"></i>
-                                                    No children assigned to this parent.
+                                                <div class="alert alert-light border text-center text-muted">
+                                                    <i class="fas fa-child fa-2x mb-2 d-block"></i>
+                                                    No children linked yet.
                                                 </div>
                                             @endif
                                         </div>
@@ -158,4 +125,14 @@
         </main>
     </div>
 </div>
+@endsection
+
+@section('styles')
+<style>
+    @media (min-width: 768px) {
+        .border-end-md {
+            border-right: 1px solid #dee2e6;
+        }
+    }
+</style>
 @endsection

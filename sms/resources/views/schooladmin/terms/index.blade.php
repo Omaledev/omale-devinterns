@@ -50,7 +50,7 @@
             <div class="card shadow">
                 <div class="card-header bg-white py-3">
                     <h6 class="m-0 fw-bold text-primary">
-                        <i class="fas fa-calendar-week me-2"></i>All Academic Terms
+                        All Academic Terms
                     </h6>
                 </div>
                 <div class="card-body">

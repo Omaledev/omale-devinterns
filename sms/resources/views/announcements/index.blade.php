@@ -5,7 +5,8 @@
     <div class="row">
         
         {{-- Sidebar --}}
-        @include('superadmin.partials.sidebar')
+        
+        @include('schooladmin.partials.sidebar')
 
         {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
@@ -17,9 +18,9 @@
 
             {{-- FORM (Only for SuperAdmin, SchoolAdmin, and Teacher) --}}
             @if(auth()->user()->hasRole(['SuperAdmin', 'SchoolAdmin', 'Teacher']))
-            <div class="card shadow mb-4 border-left-primary">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Post New Announcement</h6>
+            <div class="card shadow mb-4 border-start ">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 fw-bold text-primary">Post New Announcement</h6>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('announcements.store') }}" method="POST">
@@ -27,7 +28,7 @@
                         
                         <div class="row">
                             <div class="col-md-8 mb-3">
-                                <label class="small fw-bold">Title</label>
+                                <label class="small fw-bold">Title <span class="text-danger">*</span></label>
                                 <input type="text" name="title" class="form-control" placeholder="e.g. Assignment Due Date" required>
                             </div>
                             <div class="col-md-4 mb-3">
@@ -42,7 +43,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="small fw-bold">Message</label>
+                            <label class="small fw-bold">Message <span class="text-danger">*</span></label>
                             <textarea name="message" class="form-control" rows="3" placeholder="Type your message here..." required></textarea>
                         </div>
 
@@ -53,7 +54,7 @@
                                 <label class="form-check-label small" for="scheduleCheck">Schedule for later?</label>
                             </div>
                             <button type="submit" class="btn btn-primary px-4">
-                                Post Announcement
+                                Post
                             </button>
                         </div>
 
@@ -67,39 +68,39 @@
             </div>
             @endif
 
-            {{-- ANNOUNCEMENT --}}
+            {{-- ANNOUNCEMENT LIST --}}
             <h5 class="mb-3 text-gray-800">Recent Updates</h5>
             
             <div class="row">
                 @forelse($announcements as $announcement)
                 <div class="col-lg-6 mb-4">
-                    <div class="card shadow h-100 {{ $announcement->target_role ? 'border-left-info' : 'border-left-warning' }}">
+                    <div class="card shadow h-100 {{ $announcement->target_role ? 'border-start border-info border-4' : 'border-start' }}">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
                                     {{-- Badge showing who it is for --}}
-                                    <div class="text-xs font-weight-bold text-uppercase mb-1 {{ $announcement->target_role ? 'text-info' : 'text-warning' }}">
+                                    <div class="text-xs fw-bold text-uppercase mb-1 {{ $announcement->target_role ? 'text-info' : 'text-warning' }}">
                                         <i class="fas {{ $announcement->target_role ? 'fa-user-tag' : 'fa-broadcast-tower' }} me-1"></i>
                                         {{ $announcement->target_role ? $announcement->target_role . 's' : 'General Announcement' }}
                                     </div>
-                                    <h5 class="font-weight-bold text-gray-800 mb-1">{{ $announcement->title }}</h5>
+                                    <h5 class="fw-bold text-gray-800 mb-1">{{ $announcement->title }}</h5>
                                 </div>
 
-                                {{-- DROPDOWN ACTIONS (Only for Creator or SuperAdmin) --}}
+                                {{-- DROPDOWN ACTIONS --}}
                                 @if(auth()->id() == $announcement->created_by || auth()->user()->hasRole('SuperAdmin'))
                                 <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ $announcement->id }}" data-bs-toggle="dropdown">
+                                    <a class="dropdown-toggle text-muted" href="#" role="button" id="dropdownMenuLink{{ $announcement->id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end shadow animated--fade-in">
-                                        {{-- EDIT LINK (Triggers Modal) --}}
+                                        {{-- EDIT LINK --}}
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editModal{{ $announcement->id }}">
                                             <i class="fas fa-edit fa-sm fa-fw text-gray-400 me-2"></i> Edit
                                         </a>
                                         {{-- DELETE FORM --}}
-                                        <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST">
+                                        <form action="{{ route('announcements.destroy', $announcement->id) }}" method="POST" class="d-inline">
                                             @csrf 
                                             @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger">
+                                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure?')">
                                                 <i class="fas fa-trash fa-sm fa-fw text-danger me-2"></i> Delete
                                             </button>
                                         </form>
@@ -108,9 +109,9 @@
                                 @endif
                             </div>
                             
-                            <p class="mb-3">{{ $announcement->message }}</p>
+                            <p class="mb-3 text-dark">{{ $announcement->message }}</p>
                             
-                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div class="d-flex justify-content-between align-items-center mt-auto pt-2 border-top">
                                 <small class="text-muted">
                                     <i class="fas fa-user-circle me-1"></i> {{ $announcement->author->name ?? 'Unknown' }}
                                 </small>
@@ -135,13 +136,10 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="modal-body">
-                                    {{-- Title --}}
                                     <div class="mb-3">
                                         <label class="fw-bold small">Title</label>
                                         <input type="text" name="title" class="form-control" value="{{ $announcement->title }}" required>
                                     </div>
-
-                                    {{-- Target Role --}}
                                     <div class="mb-3">
                                         <label class="fw-bold small">Target Audience</label>
                                         <select name="target_role" class="form-select">
@@ -151,8 +149,6 @@
                                             <option value="Teacher" {{ $announcement->target_role == 'Teacher' ? 'selected' : '' }}>Staff Only</option>
                                         </select>
                                     </div>
-
-                                    {{-- Message --}}
                                     <div class="mb-3">
                                         <label class="fw-bold small">Message</label>
                                         <textarea name="message" class="form-control" rows="4" required>{{ $announcement->message }}</textarea>
@@ -174,7 +170,6 @@
                         <i class="fas fa-bullhorn fa-3x text-gray-300"></i>
                     </div>
                     <h5 class="text-muted">No announcements yet.</h5>
-                    <p class="text-muted small">Important updates will appear here.</p>
                 </div>
                 @endforelse
             </div>

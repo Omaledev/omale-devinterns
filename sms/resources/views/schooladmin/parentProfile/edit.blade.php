@@ -33,7 +33,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-edit me-2"></i>Edit Parent Information
+                                Edit Parent Information
                             </h6>
                         </div>
                         <div class="card-body">
@@ -91,7 +91,7 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Student Selection - UPDATED to match create view -->
+                                        <!-- Student Selection  -->
                                         <div class="mb-3">
                                             <label class="form-label">Assign Children</label>
                                             
@@ -171,7 +171,7 @@
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
                                             <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Update Parent
+                                                Update Parent
                                             </button>
                                         </div>
                                     </div>

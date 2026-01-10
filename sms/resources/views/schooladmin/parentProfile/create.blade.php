@@ -33,7 +33,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-user-plus me-2"></i>Parent Information
+                                Parent Information
                             </h6>
                         </div>
                         <div class="card-body">
@@ -179,7 +179,7 @@
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
                                             <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Create Parent
+                                                Create Parent
                                             </button>
                                         </div>
                                     </div>

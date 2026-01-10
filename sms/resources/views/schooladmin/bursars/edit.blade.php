@@ -33,7 +33,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-edit me-2"></i>Edit Bursar Information
+                                Edit Bursar Information
                             </h6>
                         </div>
                         <div class="card-body">
@@ -119,7 +119,7 @@
                                         <i class="fas fa-arrow-left me-1"></i>Cancel
                                     </a>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-1"></i>Update Bursar
+                                        Update Bursar
                                     </button>
                                 </div>
                             </form>

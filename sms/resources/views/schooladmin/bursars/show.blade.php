@@ -23,7 +23,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group">
                         <a href="{{ route('schooladmin.bursars.edit', $bursar) }}" class="btn btn-warning">
-                            <i class="fas fa-edit me-1"></i>Edit
+                          Edit
                         </a>
                         <a href="{{ route('schooladmin.bursars.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Back
@@ -38,7 +38,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-money-check me-2"></i>Bursar Information
+                                Bursar Information
                             </h6>
                         </div>
                         <div class="card-body">

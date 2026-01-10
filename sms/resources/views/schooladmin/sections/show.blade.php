@@ -23,7 +23,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group">
                         <a href="{{ route('schooladmin.sections.edit', $section) }}" class="btn btn-outline-warning">
-                            <i class="fas fa-edit me-1"></i>Edit
+                            Edit
                         </a>
                         <a href="{{ route('schooladmin.sections.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Back to Sections
@@ -38,7 +38,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-layer-group me-2"></i>Section Information
+                                Section Information
                             </h6>
                         </div>
                         <div class="card-body">

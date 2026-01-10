@@ -48,7 +48,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-edit me-2"></i>Edit Student Information
+                                Edit Student Information
                             </h6>
                         </div>
                         <div class="card-body">
@@ -230,7 +230,7 @@
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
                                             <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Update Student
+                                                Update Student
                                             </button>
                                         </div>
                                     </div>

@@ -9,7 +9,7 @@
                 <div>
                     <h1 class="h2">System Overview</h1>
                     <h6 class="text-dark mb-0">{{ now()->format('l, F j, Y') }}</h6>
-                    <small class="text-muted">System Status: <span class="text-success fw-bold">● Online</span></small>
+                    <small class="text-muted">Status: <span class="text-success fw-bold">● Online</span></small>
                     <p class="text-muted mb-0">Welcome back, {{ auth()->user()->name }} - Full System Control</p>
                     
                 </div>

@@ -20,7 +20,7 @@
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <a href="{{ route('schooladmin.teacher-assignments.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus me-1"></i>New Assignment
+                        New Assignment
                     </a>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                             <h5>No Teacher Assignments Found</h5>
                             <p class="text-muted">Start by creating your first teacher assignment.</p>
                             <a href="{{ route('schooladmin.teacher-assignments.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Create First Assignment
+                                Create First Assignment
                             </a>
                         </div>
                     @endif

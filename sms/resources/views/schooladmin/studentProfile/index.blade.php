@@ -56,7 +56,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-user-graduate me-2"></i>All Students
+                                All Students
                             </h6>
                             <div class="d-flex gap-2">
                                 <input type="text" class="form-control form-control-sm" placeholder="Search students..." id="searchInput">

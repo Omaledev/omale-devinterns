@@ -24,7 +24,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-calendar-plus me-2"></i>New Academic Term
+                                New Academic Term
                             </h6>
                         </div>
                         <div class="card-body">
@@ -85,7 +85,7 @@
                                         <i class="fas fa-arrow-left me-1"></i>Back
                                     </a>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-save me-1"></i>Create Term
+                                        Create Term
                                     </button>
                                 </div>
                             </form>
@@ -97,7 +97,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-info-circle me-2"></i>Term Guidelines
+                                Term Guidelines
                             </h6>
                         </div>
                         <div class="card-body">

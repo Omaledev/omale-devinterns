@@ -47,7 +47,7 @@
             <div class="card shadow">
                 <div class="card-header bg-white py-3">
                     <h6 class="m-0 fw-bold text-primary">
-                        <i class="fas fa-calendar-alt me-2"></i>All Academic Sessions
+                        All Academic Sessions
                     </h6>
                 </div>
                 <div class="card-body">

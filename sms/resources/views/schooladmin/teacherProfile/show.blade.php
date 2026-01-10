@@ -23,7 +23,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group">
                         <a href="{{ route('schooladmin.teachers.edit', $teacher) }}" class="btn btn-outline-warning">
-                            <i class="fas fa-edit me-1"></i>Edit
+                            Edit
                         </a>
                         <a href="{{ route('schooladmin.teachers.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-arrow-left me-1"></i>Back to Teachers
@@ -38,7 +38,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-user-tie me-2"></i>Teacher Information
+                                Teacher Information
                             </h6>
                         </div>
                         <div class="card-body">
