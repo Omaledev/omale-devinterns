@@ -4,8 +4,14 @@
 <div class="container-fluid">
     <div class="row">
         
-        @include('schooladmin.partials.sidebar')
-
+        {{-- Sidebar --}}
+        <div class="d-print-none">
+            @if(auth()->user()->hasRole('Bursar'))
+                @include('bursar.partials.sidebar')
+            @else
+                @include('schooladmin.partials.sidebar')
+            @endif
+        </div>
         {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 

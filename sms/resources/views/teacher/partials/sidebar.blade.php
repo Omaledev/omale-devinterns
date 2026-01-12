@@ -57,14 +57,12 @@
                             <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-user-graduate me-2"></i>
                                 Students
-                                <span class="badge bg-info float-end">{{ $stats['total_students'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white-50" href="">
                                 <i class="fas fa-comments me-2"></i>
                                 Messages
-                                <span class="badge bg-primary float-end">{{ $stats['unread_messages'] ?? 0 }}</span>
                             </a>
                         </li>
                         <li class="nav-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">

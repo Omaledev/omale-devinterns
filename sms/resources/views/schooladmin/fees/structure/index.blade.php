@@ -5,7 +5,11 @@
     <div class="row">
         
         {{-- Sidebar --}}
-        @include('schooladmin.partials.sidebar')
+        @if(auth()->user()->hasRole('Bursar'))
+            @include('bursar.partials.sidebar')
+        @else
+            @include('schooladmin.partials.sidebar')
+        @endif
 
         {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
@@ -19,9 +23,15 @@
                     <a href="{{ route('finance.fee-structures.create') }}" class="btn btn-primary btn-sm shadow-sm text-nowrap">
                         <i class="fas fa-plus me-1"></i> Add Fee
                     </a>
-                    <a href="{{ route('schooladmin.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
+                    @if(auth()->user()->hasRole('SchoolAdmin'))
+                         <a href="{{ route('schooladmin.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
                         <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
+                    @else
+                         <a href="{{ route('bursar.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    @endif
                 </div>
             </div>
 

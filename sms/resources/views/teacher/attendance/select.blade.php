@@ -14,7 +14,7 @@
             <div class="row justify-content-center"> <div class="col-md-8">
                     <div class="card shadow-sm">
                         <div class="card-header bg-primary text-white">
-                            <i class="fas fa-calendar-check me-1"></i> Take Attendance
+                            Take Attendance
                         </div>
                         <div class="card-body">
                             @if(session('success'))

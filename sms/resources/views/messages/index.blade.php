@@ -5,7 +5,25 @@
     <div class="row">
         
         {{-- Sidebar --}}
-        @include('schooladmin.partials.sidebar')
+        @if(auth()->user()->hasRole('SuperAdmin'))
+            @include('superadmin.partials.sidebar') 
+
+        @elseif(auth()->user()->hasRole('SchoolAdmin'))
+            @include('schooladmin.partials.sidebar')
+
+        @elseif(auth()->user()->hasRole('Teacher'))
+            @include('teacher.partials.sidebar')
+
+        @elseif(auth()->user()->hasRole('Student'))
+            @include('student.partials.sidebar')
+
+        @elseif(auth()->user()->hasRole('Parent'))
+            @include('parent.partials.sidebar')
+
+        @elseif(auth()->user()->hasRole('Bursar'))
+            @include('bursar.partials.sidebar')
+
+        @endif
 
         {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">

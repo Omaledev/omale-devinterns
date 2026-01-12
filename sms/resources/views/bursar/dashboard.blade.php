@@ -20,8 +20,8 @@
                                 Print
                             </button>
                         </div>
-                        <button type="button" class="btn btn-sm btn-warning">
-                            Generate Invoices
+                        <button type="button" class="btn btn-sm btn-warning ">
+                           <a href="{{ route('finance.invoices.index') }}" class="text-decoration-none"> Generate Invoices</a>
                         </button>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                                         @endforeach
                                     </div>
                                     <div class="text-center mt-3">
-                                        <a href="{{ route('finance.invoices.index') }}" class="btn btn-sm btn-outline-danger">
+                                        <a href="{{ route('bursar.reports.outstanding') }}" class="btn btn-sm btn-outline-danger">
                                             View All Outstanding
                                         </a>
                                     </div>
@@ -312,33 +312,72 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Collection Chart
             const collectionCtx = document.getElementById('collectionChart');
+            
+            // Get data from Laravel
+            const labels = {!! json_encode($chartLabels) !!};
+            const data = {!! json_encode($chartData) !!};
+
             if (collectionCtx) {
                 new Chart(collectionCtx, {
-                    type: 'bar',
+                    type: 'bar', 
                     data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        labels: labels,
                         datasets: [{
-                            label: 'Fee Collection ($)',
-                            data: [12000, 19000, 15000, 25000, 22000, 30000],
-                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
+                            label: 'Fee Collection (₦)',
+                            data: data,
+                            backgroundColor: '#4e73df',  // Primary Blue
+                            borderColor: '#4e73df',      // Border 
+                            hoverBackgroundColor: '#2e59d9', // Darker blue on hover
+                            borderRadius: 4, // Rounded top corners for bars
+                            maxBarThickness: 50
                         }]
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                display: false
+                                display: false // Hides the label box
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        // Naira sign formatting
+                                        if (context.parsed.y !== null) {
+                                            label += '₦' + context.parsed.y.toLocaleString();
+                                        }
+                                        return label;
+                                    }
+                                }
                             }
                         },
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                grid: {
+                                    borderDash: [2],
+                                    drawBorder: false,
+                                    color: "rgb(234, 236, 244)",
+                                    zeroLineColor: "rgb(234, 236, 244)"
+                                },
                                 ticks: {
                                     callback: function(value) {
-                                        return '$' + value.toLocaleString();
-                                    }
+                                        return '₦' + value.toLocaleString();
+                                    },
+                                    padding: 10
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                ticks: {
+                                    maxTicksLimit: 6
                                 }
                             }
                         }

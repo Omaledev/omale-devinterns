@@ -80,4 +80,51 @@ class ReportController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
+    public function outstanding()
+    {
+        $schoolId = auth()->user()->school_id;
+
+        // Should get invoices where paid < total
+        $debtors = Invoice::where('school_id', $schoolId)
+            ->whereColumn('paid_amount', '<', 'total_amount')
+            ->with(['student.studentProfile.classLevel'])
+            ->orderByRaw('(total_amount - paid_amount) DESC') // Highest debt first
+            ->paginate(20);
+
+        return view('bursar.reports.outstanding', compact('debtors'));
+    }
+
+    public function collections(Request $request)
+    {
+        $schoolId = auth()->user()->school_id;
+        $filter = $request->get('filter', 'this_year'); // default filter
+
+        $query = Payment::whereHas('invoice', fn($q) => $q->where('school_id', $schoolId));
+
+        // Simple date filtering logic
+        if ($filter == 'this_month') {
+            $query->whereMonth('payment_date', now()->month)
+                ->whereYear('payment_date', now()->year);
+        } elseif ($filter == 'last_month') {
+            $query->whereMonth('payment_date', now()->subMonth()->month)
+                ->whereYear('payment_date', now()->subMonth()->year);
+        } elseif ($filter == 'this_year') {
+            $query->whereYear('payment_date', now()->year);
+        }
+
+        $payments = $query->orderBy('payment_date')->get();
+
+        // Preparing Chart Data (Group by Month for Yearly view, or Day for Monthly view)
+        $chartData = $payments->groupBy(function($val) use ($filter) {
+            return $filter == 'this_year' 
+                ? Carbon::parse($val->payment_date)->format('M Y') 
+                : Carbon::parse($val->payment_date)->format('d M');
+        })->map(fn($row) => $row->sum('amount'));
+
+        $totalCollected = $payments->sum('amount');
+        $transactionCount = $payments->count();
+
+        return view('bursar.reports.collections', compact('chartData', 'totalCollected', 'transactionCount', 'filter'));
+    }
 }

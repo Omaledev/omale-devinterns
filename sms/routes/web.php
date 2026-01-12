@@ -223,11 +223,16 @@ Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () 
 // Bursar Routes
 Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->name('bursar.')->group(function () {
     Route::get('/dashboard', [BursarDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/payments', [BursarPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/create/{invoice_id}', [BursarPaymentController::class, 'create'])->name('payments.create');
+    Route::get('/payments', [BursarPaymentController::class, 'index'])->name('payments.index'); 
     Route::post('/payments/store', [BursarPaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/receipt/{id}', [BursarPaymentController::class, 'show'])->name('payments.receipt');
     Route::get('/reports', [BursarReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export-debtors', [BursarReportController::class, 'exportDebtors'])->name('reports.export_debtors');
+    Route::get('/reports/outstanding', [BursarReportController::class, 'outstanding'])->name('reports.outstanding');
+    Route::get('/reports/collections', [BursarReportController::class, 'collections'])->name('reports.collections');
+    Route::get('/students', [BursarDashboardController::class, 'students'])->name('students.index');
 });
 
 //  Fees routes for schoolAdmin and Bursar (Allow BOTH roles)

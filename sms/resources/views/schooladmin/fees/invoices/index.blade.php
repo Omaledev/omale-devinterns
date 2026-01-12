@@ -4,10 +4,14 @@
 <div class="container-fluid">
     <div class="row">
         
-        {{-- 1. Include the Sidebar --}}
-        @include('schooladmin.partials.sidebar')
+        {{-- sidebar --}}
+        @if(auth()->user()->hasRole('Bursar'))
+            @include('bursar.partials.sidebar')
+        @else
+            @include('schooladmin.partials.sidebar')
+        @endif
 
-        {{-- 2. Main Content Area --}}
+        {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 
             {{-- Header --}}
@@ -18,9 +22,15 @@
                     <a href="{{ route('finance.invoices.generate') }}" class="btn btn-success btn-sm shadow-sm text-nowrap">
                         <i class="fas fa-cogs me-1"></i> Generate
                     </a>
-                    <a href="{{ route('schooladmin.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
+                    @if(auth()->user()->hasRole('SchoolAdmin'))
+                         <a href="{{ route('schooladmin.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
                         <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
+                    @else
+                         <a href="{{ route('bursar.dashboard') }}" class="btn btn-secondary btn-sm shadow-sm text-nowrap">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+                    @endif
                 </div>
             </div>
 

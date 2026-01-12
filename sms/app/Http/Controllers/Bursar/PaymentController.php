@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
+    public function index()
+    {
+        $schoolId = auth()->user()->school_id;
+
+        // Fetch payments, latest first, with pagination
+        $payments = Payment::with('invoice.student')
+            ->whereHas('invoice', fn($q) => $q->where('school_id', $schoolId))
+            ->latest('payment_date')
+            ->paginate(15);
+
+        return view('bursar.payments.index', compact('payments'));
+    }
 
     /* Show the form to record a payment.
      */
