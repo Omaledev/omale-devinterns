@@ -4,14 +4,12 @@
 <div class="container-fluid">
     <div class="row">
         
-        {{-- Sidebar --}}
-        <div class="d-print-none">
-            @if(auth()->user()->hasRole('Bursar'))
-                @include('bursar.partials.sidebar')
-            @else
-                @include('schooladmin.partials.sidebar')
-            @endif
-        </div>
+        @if(auth()->user()->hasRole('Bursar'))
+            @include('bursar.partials.sidebar')
+        @else
+            @include('schooladmin.partials.sidebar')
+        @endif
+
         {{-- Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
 
@@ -22,7 +20,9 @@
                     <button onclick="window.print()" class="btn btn-secondary me-1 shadow-sm">
                         <i class="fas fa-print me-1"></i> Print
                     </button>
-                    <a href="{{ route('finance.invoices.index') }}" class="btn btn-primary shadow-sm">
+                    {{-- Dynamic Back Button based on Role --}}
+                    <a href="{{ auth()->user()->hasRole('Bursar') ? route('finance.invoices.index') : route('finance.invoices.index') }}" 
+                       class="btn btn-primary shadow-sm">
                         <i class="fas fa-arrow-left me-1"></i> Back
                     </a>
                 </div>
@@ -44,15 +44,15 @@
                             <div class="row mb-5">
                                 <div class="col-6">
                                     <h6 class="text-uppercase text-secondary fw-bold small mb-2">From:</h6>
-                                    <div class="h5 fw-bold text-dark mb-0">{{ auth()->user()->school->name }}</div>
+                                    <div class="h5 fw-bold text-dark mb-0">{{ auth()->user()->school->name ?? 'School Name' }}</div>
                                     <div class="text-muted">Admin/Bursary Office</div>
                                     <div class="text-muted">{{ now()->format('d M, Y') }}</div>
                                 </div>
                                 <div class="col-6 text-end">
                                     <h6 class="text-uppercase text-secondary fw-bold small mb-2">Bill To:</h6>
-                                    <div class="h5 fw-bold text-dark mb-0">{{ $invoice->student->name }}</div>
-                                    <div class="text-muted">Class: {{ $invoice->student->studentProfile->classLevel->name ?? 'N/A' }}</div>
-                                    <div class="small text-muted">ID: {{ $invoice->student->admission_number }}</div>
+                                    <div class="h5 fw-bold text-dark mb-0">{{ $invoice->student?->name ?? 'Unknown Student' }}</div>
+                                    <div class="text-muted">Class: {{ $invoice->student?->studentProfile?->classLevel?->name ?? 'N/A' }}</div>
+                                    <div class="small text-muted">ID: {{ $invoice->student?->studentProfile?->admission_number ?? 'N/A' }}</div>
                                 </div>
                             </div>
 
@@ -66,12 +66,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($invoice->items as $item)
+                                        @forelse($invoice->items as $item)
                                         <tr>
                                             <td>{{ $item->description }}</td>
                                             <td class="text-end">₦{{ number_format($item->amount, 2) }}</td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">No items found for this invoice.</td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -108,17 +112,17 @@
 @push('styles')
 <style>
     @media print {
-        /* Hiden Sidebar  */
+        /* 1. Hide Sidebar using ID or Class */
         .sidebar, #sidebarMenu {
             display: none !important;
         }
 
-        /* 2. Hiden Buttons/Links with d-print-none class */
+        /* 2. Hide Buttons/Links with d-print-none class */
         .d-print-none {
             display: none !important;
         }
 
-
+        /* 3. Force Main Content to Full Width */
         main {
             flex: 0 0 100% !important;
             max-width: 100% !important;
