@@ -1,8 +1,9 @@
 <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
     <div class="position-sticky pt-3">
         <div class="text-center mb-4">
-            <div class="bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
-              <i class="fas fa-user-shield text-dark fa-xl"></i>
+            <div class="bg-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-2"
+                style="width: 60px; height: 60px; border: 1px solid rgba(255,255,255,0.1);">
+                <span class="text-white fw-bold fs-4">{{ substr(auth()->user()->name, 0, 1) }}</span>
             </div>
             <h6 class="text-white mb-1">SuperAdmin</h6>
             <small class="text-white-50">System Administrator</small>

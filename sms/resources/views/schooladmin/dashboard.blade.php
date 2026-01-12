@@ -116,7 +116,7 @@
 
                     <div class="card shadow mb-4">
                         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                            <h6 class="m-0 fw-bold text-primary">School Performance</h6>
+                            <h6 class="m-0 fw-bold text-primary">School Performance Chat</h6>
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">This Month</button>
                                 <ul class="dropdown-menu">
@@ -136,39 +136,44 @@
                     </div>
 
                     <div class="row">
+                        {{-- Academic Excellence --}}
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
                                     <h4 class="fw-bold h5">Academic Excellence</h4>
-                                    <p class="text-muted small">Track performance</p>
+                                    <p class="text-muted small">Average Grade Score</p>
                                     <div class="progress mb-2" style="height: 6px;">
-                                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                                        <div class="progress-bar bg-success" style="width: {{ $performance['academic'] }}%"></div>
                                     </div>
-                                    <small class="text-muted">85% Avg</small>
+                                    <small class="text-muted fw-bold">{{ $performance['academic'] }} / 100 Avg</small>
                                 </div>
                             </div>
                         </div>
+
+                        {{-- Attendance Rate --}}
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
                                     <h4 class="fw-bold h5">Attendance Rate</h4>
-                                    <p class="text-muted small">Daily patterns</p>
+                                    <p class="text-muted small">Daily Presence</p>
                                     <div class="progress mb-2" style="height: 6px;">
-                                        <div class="progress-bar bg-info" style="width: 92%"></div>
+                                        <div class="progress-bar bg-info" style="width: {{ $performance['attendance'] }}%"></div>
                                     </div>
-                                    <small class="text-muted">92% Avg</small>
+                                    <small class="text-muted fw-bold">{{ $performance['attendance'] }}% Avg</small>
                                 </div>
                             </div>
                         </div>
+
+                        {{-- Fee Collection  --}}
                         <div class="col-md-4 mb-4">
                             <div class="card shadow h-100">
                                 <div class="card-body text-center">
-                                    <h4 class="fw-bold h5">Task Completion</h4>
-                                    <p class="text-muted small">Admin tasks</p>
+                                    <h4 class="fw-bold h5">Fee Collection</h4>
+                                    <p class="text-muted small">Revenue Collected</p>
                                     <div class="progress mb-2" style="height: 6px;">
-                                        <div class="progress-bar bg-warning" style="width: 78%"></div>
+                                        <div class="progress-bar bg-warning" style="width: {{ $performance['fees'] }}%"></div>
                                     </div>
-                                    <small class="text-muted">78% Done</small>
+                                    <small class="text-muted fw-bold">{{ $performance['fees'] }}% Collected</small>
                                 </div>
                             </div>
                         </div>
@@ -197,30 +202,33 @@
                         </div>
                     </div>
 
-                    <div class="card shadow mb-4">
+                   <div class="card shadow mb-4">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">Recent Activity</h6>
                         </div>
                         <div class="card-body">
                             <div class="list-group list-group-flush">
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">New student registered</div>
-                                        <div class="text-muted small">2 minutes ago</div>
+                                @forelse($recentActivities as $activity)
+                                    <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                        {{-- Icon --}}
+                                        <div class="me-3">
+                                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                                <i class="{{ $activity['icon'] }}"></i>
+                                            </div>
+                                        </div>
+                                        {{-- Message --}}
+                                        <div class="flex-grow-1">
+                                            <div class="small text-dark">{!! $activity['message'] !!}</div>
+                                            <div class="text-muted small" style="font-size: 0.75rem;">
+                                                {{ \Carbon\Carbon::parse($activity['time'])->diffForHumans() }}
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">Teacher assignment updated</div>
-                                        <div class="text-muted small">1 hour ago</div>
+                                @empty
+                                    <div class="text-center py-4 text-muted small">
+                                        No recent activity found.
                                     </div>
-                                </div>
-                                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                                    <div class="flex-grow-1">
-                                        <div class="small fw-bold">Pending approvals waiting</div>
-                                        <div class="text-muted small">5 hours ago</div>
-                                    </div>
-                                </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -309,45 +317,81 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('performanceChart');
+        
+        // DATA FROM LARAVEL
+        const labels = {!! json_encode($chartLabels) !!};
+        const data = {!! json_encode($studentGrowthData) !!};
+
         if (ctx) {
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    labels: labels, // Dynamic Months
                     datasets: [{
-                        label: 'Student Performance',
-                        data: [65, 59, 80, 81, 56, 55],
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        tension: 0.4,
+                        label: 'New Student Enrollments', // Updated Label
+                        data: data, // Real Data
+                        borderColor: '#4e73df', // Bootstrap Primary Blue
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)', // Very light blue fill
+                        pointRadius: 3,
+                        pointBackgroundColor: '#4e73df',
+                        pointBorderColor: '#4e73df',
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: '#4e73df',
+                        pointHoverBorderColor: '#4e73df',
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        tension: 0.3, // Smooth curve
                         fill: true
                     }]
                 },
                 options: {
-                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 25,
+                            top: 25,
+                            bottom: 0
+                        }
+                    },
                     plugins: {
                         legend: {
-                            labels: {
-                                color: '#333' // dark color
-                            }
+                            display: false // Hide legend for cleaner look
+                        },
+                        tooltip: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyColor: "#858796",
+                            titleColor: '#6e707e',
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
                         }
                     },
                     scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)' // light gray
-                            },
-                            ticks: {
-                                color: '#333' // dark color
-                            }
-                        },
                         x: {
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                display: false,
+                                drawBorder: false
                             },
                             ticks: {
-                                color: '#333'
+                                maxTicksLimit: 7
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                maxTicksLimit: 5,
+                                padding: 10,
+                                stepSize: 1 // Ensuring whole numbers (no 1.5 students)
+                            },
+                            grid: {
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)",
+                                drawBorder: false,
+                                borderDash: [2],
+                                zeroLineBorderDash: [2]
                             }
                         }
                     }

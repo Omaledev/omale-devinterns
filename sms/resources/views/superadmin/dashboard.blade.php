@@ -196,121 +196,195 @@
                     </div>
                 </div>
 
-    <div class="card shadow mb-4">
-        <div class="card-header bg-white py-3">
-            <h6 class="m-0 fw-bold text-danger">
-                System Alerts
-            </h6>
-        </div>
-        <div class="card-body">
-            <div class="list-group list-group-flush">
-                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                    <div class="flex-grow-1">
-                        <div class="small fw-bold">Backup Required</div>
-                        <div class="text-muted small">Last backup: 2 days ago</div>
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="m-0 fw-bold text-danger">
+                            System Alerts
+                        </h6>
                     </div>
                 </div>
-                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                    <div class="flex-grow-1">
-                        <div class="small fw-bold">System Update Available</div>
-                        <div class="text-muted small">Version 2.1.0 ready</div>
-                    </div>
-                </div>
-                <div class="list-group-item d-flex align-items-center px-0 border-0">
-                    <div class="flex-grow-1">
-                        <div class="small fw-bold">Security Scan Clean</div>
-                        <div class="text-muted small">No threats detected</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card shadow">
-        <div class="card-header bg-white py-3">
-            <h6 class="m-0 fw-bold text-primary">
-                System Status
-            </h6>
-        </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <div class="d-flex justify-content-between mb-1">
-                    <span>CPU Usage</span>
-                    <span class="fw-bold">42%</span>
+                <div class="card shadow mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="m-0 fw-bold text-danger">
+                                Critical Insights
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                
+                                {{-- Inactive Schools --}}
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                    <div class="me-3">
+                                        <div class="rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-school"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">Inactive Schools</div>
+                                        <div class="text-muted small">
+                                            {{ $platformHealth['inactive_schools'] }} schools have 0 users.
+                                        </div>
+                                    </div>
+                                    @if($platformHealth['inactive_schools'] > 0)
+                                        <button class="btn btn-sm btn-outline-danger">View</button>
+                                    @endif
+                                </div>
+
+                                {{-- New Signups --}}
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                    <div class="me-3">
+                                        <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">New Schools Today</div>
+                                        <div class="text-muted small">
+                                            {{ $platformHealth['new_today'] }} registered in last 24h.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Server Storage --}}
+                                <div class="list-group-item d-flex align-items-center px-0 border-0">
+                                    <div class="me-3">
+                                        <div class="rounded-circle bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <i class="fas fa-hdd"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="small fw-bold">Server Storage</div>
+                                        <div class="text-muted small">
+                                            {{ $platformHealth['disk_usage'] }}% used.
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="m-0 fw-bold text-primary">
+                                Platform Targets
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            
+                            {{-- User Growth --}}
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="small fw-bold text-gray-800">User Goal (1,000)</span>
+                                    <span class="small fw-bold text-primary">{{ $platformHealth['user_progress'] }}%</span>
+                                </div>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" 
+                                        style="width: {{ $platformHealth['user_progress'] }}%">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Current: {{ number_format($stats['total_users']) }} users</small>
+                            </div>
+
+                            {{-- School Growth --}}
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="small fw-bold text-gray-800">School Goal (50)</span>
+                                    <span class="small fw-bold text-success">{{ $platformHealth['school_progress'] }}%</span>
+                                </div>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                        style="width: {{ $platformHealth['school_progress'] }}%">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Current: {{ $stats['total_schools'] }} schools</small>
+                            </div>
+
+                            {{-- Disk Space (Visualizing the storage alert) --}}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="small fw-bold text-gray-800">Server Capacity</span>
+                                    <span class="small fw-bold text-info">{{ $platformHealth['disk_usage'] }}%</span>
+                                </div>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-info" role="progressbar" 
+                                        style="width: {{ $platformHealth['disk_usage'] }}%">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-3 border-top pt-3">
+                                <small class="text-muted">Last updated: {{ now()->format('M d, Y H:i') }}</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress" style="height: 8px;">
-                    <div class="progress-bar bg-success" style="width: 42%"></div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Memory Usage</span>
-                    <span class="fw-bold">68%</span>
-                </div>
-                <div class="progress" style="height: 8px;">
-                    <div class="progress-bar bg-warning" style="width: 68%"></div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="d-flex justify-content-between mb-1">
-                    <span>Storage</span>
-                    <span class="fw-bold">35%</span>
-                </div>
-                <div class="progress" style="height: 8px;">
-                    <div class="progress-bar bg-info" style="width: 35%"></div>
-                </div>
-            </div>
-            <div class="text-center mt-3">
-                <small class="text-muted">Last updated: {{ now()->format('M d, Y H:i') }}</small>
-            </div>
-        </div>
-    </div>
-</div>
                 
             </div>
 
             <div class="row mt-4">
+                {{-- Students --}}
                 <div class="col-md-3">
-                    <div class="card shadow">
+                    <div class="card shadow h-100 border-bottom-primary">
                         <div class="card-body text-center">
-                            <h4 class="fw-bold">{{ $stats['total_students'] ?? 0 }}</h4>
-                            <p class="text-muted mb-1">Total Students</p>
-                            <small class="text-success">
-                                12% increase
+                            <h4 class="fw-bold text-gray-800">{{ number_format($stats['total_students']) }}</h4>
+                            <p class="text-muted mb-1 small text-uppercase">Total Students</p>
+                            
+                            {{-- Dynamic Growth Badge --}}
+                            <small class="{{ $stats['student_growth'] >= 0 ? 'text-success' : 'text-danger' }} fw-bold">
+                                <i class="fas fa-arrow-{{ $stats['student_growth'] >= 0 ? 'up' : 'down' }}"></i> 
+                                {{ abs($stats['student_growth']) }}%
                             </small>
+                            <span class="text-muted small">vs last month</span>
                         </div>
                     </div>
                 </div>
+
+                {{-- Teachers --}}
                 <div class="col-md-3">
-                    <div class="card shadow">
+                    <div class="card shadow h-100 border-bottom-success">
                         <div class="card-body text-center">
-                            <h4 class="fw-bold">{{ $stats['total_teachers'] ?? 0 }}</h4>
-                            <p class="text-muted mb-1">Total Teachers</p>
-                            <small class="text-success">
-                                5% increase
+                            <h4 class="fw-bold text-gray-800">{{ number_format($stats['total_teachers']) }}</h4>
+                            <p class="text-muted mb-1 small text-uppercase">Total Teachers</p>
+
+                            <small class="{{ $stats['teacher_growth'] >= 0 ? 'text-success' : 'text-danger' }} fw-bold">
+                                <i class="fas fa-arrow-{{ $stats['teacher_growth'] >= 0 ? 'up' : 'down' }}"></i> 
+                                {{ abs($stats['teacher_growth']) }}%
                             </small>
+                            <span class="text-muted small">vs last month</span>
                         </div>
                     </div>
                 </div>
+
+                {{-- Parents --}}
                 <div class="col-md-3">
-                    <div class="card shadow">
+                    <div class="card shadow h-100 border-bottom-info">
                         <div class="card-body text-center">
-                            <h4 class="fw-bold">{{ $stats['total_parents'] ?? 0 }}</h4>
-                            <p class="text-muted mb-1">Total Parents</p>
-                            <small class="text-success">
-                                8% increase
+                            <h4 class="fw-bold text-gray-800">{{ number_format($stats['total_parents']) }}</h4>
+                            <p class="text-muted mb-1 small text-uppercase">Total Parents</p>
+
+                            <small class="{{ $stats['parent_growth'] >= 0 ? 'text-success' : 'text-danger' }} fw-bold">
+                                <i class="fas fa-arrow-{{ $stats['parent_growth'] >= 0 ? 'up' : 'down' }}"></i> 
+                                {{ abs($stats['parent_growth']) }}%
                             </small>
+                            <span class="text-muted small">vs last month</span>
                         </div>
                     </div>
                 </div>
+
+                {{-- Revenue --}}
                 <div class="col-md-3">
-                    <div class="card shadow">
+                    <div class="card shadow h-100 border-bottom-warning">
                         <div class="card-body text-center">
-                            <h4 class="fw-bold">₦{{ number_format($stats['revenue'] ?? 0) }}</h4>
-                            <p class="text-muted mb-1">Monthly Revenue</p>
-                            <small class="text-success">
-                                15% increase
+                            <h4 class="fw-bold text-gray-800">₦{{ number_format($stats['revenue']) }}</h4>
+                            <p class="text-muted mb-1 small text-uppercase">Total Revenue</p>
+
+                            <small class="{{ $stats['revenue_growth'] >= 0 ? 'text-success' : 'text-danger' }} fw-bold">
+                                <i class="fas fa-arrow-{{ $stats['revenue_growth'] >= 0 ? 'up' : 'down' }}"></i> 
+                                {{ abs($stats['revenue_growth']) }}%
                             </small>
+                            <span class="text-muted small">vs last month</span>
                         </div>
                     </div>
                 </div>
@@ -385,55 +459,76 @@
     document.addEventListener('DOMContentLoaded', function() {
         // System Performance Chart
         const systemCtx = document.getElementById('systemPerformanceChart');
+        
+        // DATA FROM LARAVEL CONTROLLER
+        const labels = {!! json_encode($chartLabels) !!};
+        const schoolData = {!! json_encode($schoolGrowthData) !!};
+        const userData = {!! json_encode($userGrowthData) !!};
+
         if (systemCtx) {
             new Chart(systemCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: labels, // Dynamic Months
                     datasets: [
                         {
                             label: 'New Schools',
-                            data: [12, 19, 15, 25, 22, 30, 28],
-                            borderColor: 'rgba(54, 162, 235, 1)',
+                            data: schoolData, // Dynamic Data
+                            borderColor: 'rgba(54, 162, 235, 1)', // Blue
                             backgroundColor: 'rgba(54, 162, 235, 0.1)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 2
                         },
                         {
                             label: 'New Users',
-                            data: [8, 12, 18, 22, 28, 35, 40],
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            data: userData, // Dynamic Data
+                            borderColor: 'rgba(28, 200, 138, 1)', // Green (Changed to distinct color)
+                            backgroundColor: 'rgba(28, 200, 138, 0.1)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 2
                         }
                     ]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false, // Ensuring it fits the container height
                     plugins: {
                         legend: {
+                            position: 'top',
                             labels: {
-                                color: '#333'
+                                usePointStyle: true,
+                                padding: 20
                             }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
                         }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                borderDash: [2],
+                                drawBorder: false,
+                                color: "rgb(234, 236, 244)",
+                                zeroLineColor: "rgb(234, 236, 244)"
                             },
                             ticks: {
-                                color: '#333'
+                                stepSize: 1 // No decimals for counts (e.g. can't have 1.5 schools)
                             }
                         },
                         x: {
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            ticks: {
-                                color: '#333'
+                                display: false,
+                                drawBorder: false
                             }
                         }
                     }
