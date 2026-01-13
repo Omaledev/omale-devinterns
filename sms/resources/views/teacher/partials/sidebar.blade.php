@@ -46,11 +46,15 @@
 
             {{-- Assessments --}}
             <li class="nav-item">
+                {{-- Updated Route --}}
                 <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="#">
+                   href="{{ route('teacher.assessments.index') }}">
                     <i class="fas fa-tasks me-2"></i>
                     Assessments
-                    <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] ?? 0 }}</span>
+                    {{-- Assuming $stats is passed globally, otherwise remove this badge to avoid errors --}}
+                    @if(isset($stats['pending_assessments']))
+                        <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] }}</span>
+                    @endif
                 </a>
             </li>
 
@@ -66,12 +70,11 @@
             {{-- Timetable --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.timetable.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="#">
+                   href="{{ route('teacher.timetable.index') }}">
                     <i class="fas fa-calendar-alt me-2"></i>
                     Timetable
                 </a>
             </li>
-
             {{-- Students --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.students.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 

@@ -36,7 +36,8 @@ use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceContro
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardController;
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
-
+use App\Http\Controllers\Teacher\TimetableController as TeacherTimetableController;
+use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
 // Announcement controller
 use App\Http\Controllers\AnnouncementController;
 
@@ -166,14 +167,14 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
 // Teacher Routes
 Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
-    // Attendance Routes
+    Route::get('/timetable', [TeacherTimetableController::class, 'index'])
+        ->name('timetable.index');
+    Route::get('/assessments', [TeacherAssessmentController::class, 'index'])
+        ->name('assessments.index');
     Route::get('/attendance/select', [TeacherAttendanceController::class, 'select'])->name('attendance.select');
     Route::get('/attendance/create', [TeacherAttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance/store', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/summary', [TeacherAttendanceController::class, 'summary'])->name('attendance.summary');
-
-    
-
     Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('my-classes');
      Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('my-students');
      Route::get('students', [TeacherStudentController::class, 'index'])->name('students.index');
