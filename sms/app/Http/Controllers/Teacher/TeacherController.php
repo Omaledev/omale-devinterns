@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TeacherProfile;
 use App\Models\ClassLevel;
 use App\Models\User; 
+use App\Models\ClassroomAssignment;
 
 class TeacherController extends Controller
 {
@@ -53,5 +54,24 @@ class TeacherController extends Controller
             ->get();
         
         return view('teacher.attendance.class-students', compact('class', 'students'));
+    }
+
+    public function mySubjects()
+    {
+        $user = auth()->user();
+
+        // Ensuring Teacher Profile exists
+        if (!$user->teacherProfile) {
+            return redirect()->route('teacher.dashboard')
+                ->with('error', 'Profile not found. Please contact admin.');
+        }
+
+        // Fetching Assignments
+        $assignments = ClassroomAssignment::where('teacher_id', $user->teacherProfile->id)
+            ->where('is_active', true)
+            ->with(['classLevel', 'section', 'subject']) // Load relationships
+            ->get();
+
+        return view('teacher.subjects.index', compact('assignments'));
     }
 }

@@ -178,4 +178,9 @@ class User extends Authenticatable
         return $this->hasMany(Book::class, 'teacher_id');
     }
 
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
 }

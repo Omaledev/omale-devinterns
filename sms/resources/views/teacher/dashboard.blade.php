@@ -185,16 +185,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="#" class="btn btn-outline-primary btn-lg">
+                                    <a href="{{ route('teacher.attendance.select') }}" class="btn btn-outline-primary btn-lg">
                                         Mark Attendance
                                     </a>
-                                    <a href="#" class="btn btn-outline-success btn-lg">
-                                        Create Assessment
+                                    <a href="{{ route('teacher.assignments.create') }}" class="btn btn-outline-success btn-lg">
+                                        Create Assignment
                                     </a>
-                                    <a href="#" class="btn btn-outline-info btn-lg">
+                                    <a href="{{ route('teacher.grades.index') }}" class="btn btn-outline-info btn-lg">
                                         View Grades
                                     </a>
-                                    <a href="#" class="btn btn-outline-warning btn-lg">
+                                    <a href="{{ route('messages.index') }}"" class="btn btn-outline-warning btn-lg">
                                         Messages
                                     </a>
                                 </div>

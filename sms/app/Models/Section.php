@@ -56,4 +56,9 @@ class Section extends Model
         return $this->hasMany(Attendance::class);
     }
 
+    
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
 }

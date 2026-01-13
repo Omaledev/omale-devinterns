@@ -34,6 +34,15 @@
                     My Classes
                 </a>
             </li>
+            
+            {{-- my-subject --}}
+           <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.my-subjects') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                href="{{ route('teacher.my-subjects') }}">
+                    <i class="fas fa-chalkboard-teacher me-2"></i>
+                    My Subjects
+                </a>
+            </li>
 
             {{-- Attendance --}}
             <li class="nav-item">
@@ -44,15 +53,13 @@
                 </a>
             </li>
 
-            {{-- Assessments --}}
+
+             {{-- Assignments --}}
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.assessments.index') }}">
-                    <i class="fas fa-tasks me-2"></i>
-                    Assessments
-                    {{-- @if(isset($stats['pending_assessments']))
-                        <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] }}</span>
-                    @endif --}}
+                <a class="nav-link {{ request()->routeIs('teacher.assignments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                href="{{ route('teacher.assignments.index') }}">
+                    <i class="fas fa-pen-square me-2"></i>
+                    Assignments
                 </a>
             </li>
 
@@ -62,6 +69,19 @@
                    href="{{ route('teacher.grades.index') }}">
                     <i class="fas fa-chart-bar me-2"></i>
                     Grades
+                </a>
+            </li>
+
+
+            {{-- Assessments --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                   href="{{ route('teacher.assessments.index') }}">
+                    <i class="fas fa-tasks me-2"></i>
+                    Assessments
+                    {{-- @if(isset($stats['pending_assessments']))
+                        <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] }}</span>
+                    @endif --}}
                 </a>
             </li>
 
