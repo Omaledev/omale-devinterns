@@ -44,7 +44,7 @@
                 </a>
             </li>
 
-            {{-- Assessments (Add route when ready) --}}
+            {{-- Assessments --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
                    href="#">
@@ -75,7 +75,7 @@
             {{-- Students --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.students.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="#">
+                   href="{{ route('teacher.students.index') }}">
                     <i class="fas fa-user-graduate me-2"></i>
                     Students
                 </a>
@@ -83,8 +83,8 @@
 
             {{-- Messages --}}
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="#">
+               <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                href="{{ route('messages.index') }}"> 
                     <i class="fas fa-comments me-2"></i>
                     Messages
                 </a>

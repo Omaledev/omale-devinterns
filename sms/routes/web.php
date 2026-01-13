@@ -35,6 +35,7 @@ use App\Http\Controllers\Teacher\TeacherController as TeacherTeacherController;
 use App\Http\Controllers\Teacher\AttendanceController as TeacherAttendanceController;
 use App\Http\Controllers\Teacher\GradeController as TeacherGradeController;
 use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardController;
+use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 
 // Announcement controller
 use App\Http\Controllers\AnnouncementController;
@@ -171,8 +172,14 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/attendance/store', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/summary', [TeacherAttendanceController::class, 'summary'])->name('attendance.summary');
 
+    
+
     Route::get('/my-classes', [TeacherTeacherController::class, 'myClasses'])->name('my-classes');
      Route::get('/my-students', [TeacherTeacherController::class, 'myStudents'])->name('my-students');
+     Route::get('students', [TeacherStudentController::class, 'index'])->name('students.index');
+     Route::get('students/{student}/performance', [TeacherStudentController::class, 'performance'])
+        ->name('students.performance');
+    Route::get('students/list', [TeacherStudentController::class, 'list'])->name('students.list');
     Route::get('/students/{class}', [TeacherTeacherController::class, 'classStudents'])->name('class-students');
 
     Route::get('/grades', [TeacherGradeController::class, 'index'])->name('grades.index');
@@ -183,6 +190,8 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/reports', [TeacherReportCardController::class, 'index'])->name('reports.index');
     Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
     ->name('reports.download');
+
+    
    
 });
 
