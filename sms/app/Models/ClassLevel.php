@@ -67,4 +67,6 @@ class ClassLevel extends Model
     {
         return $this->hasMany(StudentProfile::class);
     }
+
+  
 }

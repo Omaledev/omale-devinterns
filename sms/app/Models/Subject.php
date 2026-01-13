@@ -54,4 +54,9 @@ class Subject extends Model
     {
         return $this->hasMany(Grade::class);
     }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
 }

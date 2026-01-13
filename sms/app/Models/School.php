@@ -79,5 +79,10 @@ class School extends Model
         return $this->hasMany(Announcement::class);
     }
 
+    public function books()
+    {
+        return $this->hasMany(Book::class);
+    }
+
 
 }

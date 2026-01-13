@@ -46,15 +46,13 @@
 
             {{-- Assessments --}}
             <li class="nav-item">
-                {{-- Updated Route --}}
                 <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
                    href="{{ route('teacher.assessments.index') }}">
                     <i class="fas fa-tasks me-2"></i>
                     Assessments
-                    {{-- Assuming $stats is passed globally, otherwise remove this badge to avoid errors --}}
-                    @if(isset($stats['pending_assessments']))
+                    {{-- @if(isset($stats['pending_assessments']))
                         <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] }}</span>
-                    @endif
+                    @endif --}}
                 </a>
             </li>
 
@@ -108,6 +106,15 @@
                    href="{{ route('teacher.reports.index') }}">
                     <i class="fas fa-chart-pie me-2"></i>
                     Reports
+                </a>
+            </li>
+
+            {{-- library --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('teacher.books.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                href="{{ route('teacher.books.index') }}">
+                    <i class="fas fa-book-reader me-2"></i>
+                    Library
                 </a>
             </li>
         </ul>

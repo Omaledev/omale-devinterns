@@ -173,4 +173,9 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'teacher_id');
+    }
+
 }

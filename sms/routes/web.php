@@ -38,6 +38,8 @@ use App\Http\Controllers\Teacher\ReportCardController as TeacherReportCardContro
 use App\Http\Controllers\Teacher\StudentController as TeacherStudentController;
 use App\Http\Controllers\Teacher\TimetableController as TeacherTimetableController;
 use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentController;
+use App\Http\Controllers\Teacher\BookController as TeacherBookController;
+
 // Announcement controller
 use App\Http\Controllers\AnnouncementController;
 
@@ -189,8 +191,10 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/grades/lock', [TeacherGradeController::class, 'lock'])->name('grades.lock');
 
     Route::get('/reports', [TeacherReportCardController::class, 'index'])->name('reports.index');
-    Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
-    ->name('reports.download');
+
+    Route::resource('books', TeacherBookController::class);
+    // Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
+    // ->name('reports.download');
 
     
    
