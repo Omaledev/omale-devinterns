@@ -3,11 +3,8 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-     @include('schooladmin.partials.sidebar')
-        <!-- Main Content -->
+        @include('schooladmin.partials.sidebar')
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Teacher Management</h1>
@@ -30,7 +27,6 @@
                 </div>
             </div>
 
-            <!-- Teachers Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -39,8 +35,11 @@
                                 All Teachers
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search teachers..." id="searchInput">
-                                <span class="badge bg-success align-self-center">{{ $teachers->count() }} teachers</span>
+                                <form action="{{ route('schooladmin.teachers.index') }}" method="GET" class="d-flex gap-2">
+                                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search teachers..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                                </form>
+                                <span class="badge bg-success align-self-center">{{ $teachers->total() }} teachers</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -52,7 +51,6 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
-                                            <!-- <th>Subjects</th> -->
                                             <th>Assigned Subjects/Classes</th>
                                             <th>Status</th>
                                             <th>Actions</th>
@@ -99,10 +97,13 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($teacher->is_approved)
+                                                    {{-- Active Logic: Must be Approved AND Assigned to at least 1 class --}}
+                                                    @if($teacher->is_approved && $teacher->taughtClasses->count() > 0)
                                                         <span class="badge bg-success">Active</span>
+                                                    @elseif($teacher->is_approved)
+                                                        <span class="badge bg-warning text-dark">Not Assigned</span>
                                                     @else
-                                                        <span class="badge bg-warning">Pending</span>
+                                                        <span class="badge bg-secondary">Pending</span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -151,6 +152,10 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                            </div>
+                            
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $teachers->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>
@@ -225,20 +230,6 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-
-        // Simple search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const rows = document.querySelectorAll('tbody tr');
-
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            });
-        }
     });
 </script>
 @endpush

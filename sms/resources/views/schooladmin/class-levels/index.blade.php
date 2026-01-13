@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Class Levels Management</h1>
@@ -26,7 +23,6 @@
                 </div>
             </div>
 
-            <!-- Class Levels Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -35,7 +31,10 @@
                                 All Class Levels
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search class levels..." id="searchInput">
+                                <form action="{{ route('schooladmin.class-levels.index') }}" method="GET" class="d-flex gap-2">
+                                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search class levels..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                                </form>
                                 <span class="badge bg-warning align-self-center">{{ $classLevels->count() }} classes</span>
                             </div>
                         </div>
@@ -80,7 +79,7 @@
                                                     <span class="badge bg-info">{{ $classLevel->sections_count ?? 0 }}</span>
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-primary">{{ $classLevel->students_count ?? 0 }}</span>
+                                                    <span class="badge bg-primary">{{ $classLevel->student_profiles_count ?? 0 }}</span>
                                                 </td>
                                                 <td>
                                                     @if($classLevel->is_active)

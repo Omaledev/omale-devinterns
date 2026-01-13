@@ -52,6 +52,6 @@ class TeacherController extends Controller
             ->with('studentProfile') 
             ->get();
         
-        return view('teacher.class-students', compact('class', 'students'));
+        return view('teacher.attendance.class-students', compact('class', 'students'));
     }
 }

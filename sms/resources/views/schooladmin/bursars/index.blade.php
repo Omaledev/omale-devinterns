@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Bursar Management</h1>
@@ -26,7 +23,6 @@
                 </div>
             </div>
 
-            <!-- Bursars Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -35,8 +31,11 @@
                                 All Bursars
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search bursars..." id="searchInput">
-                                <span class="badge bg-warning align-self-center">{{ $bursars->count() }} bursars</span>
+                                <form action="{{ route('schooladmin.bursars.index') }}" method="GET" class="d-flex gap-2">
+                                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search bursars..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                                </form>
+                                <span class="badge bg-warning align-self-center">{{ $bursars->total() }} bursars</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -82,7 +81,7 @@
                                                     @if($bursar->is_approved)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
-                                                        <span class="badge bg-warning">Pending</span>
+                                                        <span class="badge bg-secondary">Pending</span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -131,6 +130,10 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                            </div>
+                            
+                             <div class="d-flex justify-content-center mt-3">
+                                {{ $bursars->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>

@@ -318,7 +318,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('performanceChart');
         
-        // DATA FROM LARAVEL
+        // DATA FROM MY CONTROLLER
         const labels = {!! json_encode($chartLabels) !!};
         const data = {!! json_encode($studentGrowthData) !!};
 

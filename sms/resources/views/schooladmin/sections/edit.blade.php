@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-       @include('schooladmin.partials.sidebar')
+        @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Edit Section</h1>
@@ -21,96 +18,82 @@
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.sections.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('schooladmin.sections.index') }}" class="btn btn-outline-secondary me-2">
                         <i class="fas fa-arrow-left me-1"></i>Back to Sections
                     </a>
                 </div>
             </div>
 
-            <!-- Section Form -->
-            <div class="row">
-                <div class="col-12">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary">
-                                Edit Section Information
-                            </h6>
+                            <h6 class="m-0 fw-bold text-primary">Edit Section Details</h6>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('schooladmin.sections.update', $section) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="class_level_id" class="form-label">Class Level <span class="text-danger">*</span></label>
-                                            <select class="form-select @error('class_level_id') is-invalid @enderror"
-                                                    id="class_level_id" name="class_level_id" required>
-                                                <option value="">Select Class Level</option>
-                                                @foreach($classLevels as $classLevel)
-                                                    <option value="{{ $classLevel->id }}"
-                                                        {{ old('class_level_id', $section->class_level_id) == $classLevel->id ? 'selected' : '' }}>
-                                                        {{ $classLevel->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('class_level_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Section Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                   id="name" name="name" value="{{ old('name', $section->name) }}"
-                                                   placeholder="e.g., A, B, Science" required>
-                                            @error('name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label for="capacity" class="form-label">Capacity</label>
-                                            <input type="number" class="form-control @error('capacity') is-invalid @enderror"
-                                                   id="capacity" name="capacity" value="{{ old('capacity', $section->capacity) }}"
-                                                   placeholder="e.g., 30" min="1">
-                                            @error('capacity')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="class_level_id" class="form-label">Class Level <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('class_level_id') is-invalid @enderror" 
+                                            id="class_level_id" name="class_level_id" required>
+                                        <option value="">Select Class Level</option>
+                                        @foreach($classLevels as $class)
+                                            <option value="{{ $class->id }}" 
+                                                {{ (old('class_level_id', $section->class_level_id) == $class->id) ? 'selected' : '' }}>
+                                                {{ $class->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('class_level_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <div class="mb-3">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active"
-                                               value="1" {{ old('is_active', $section->is_active) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="is_active">
-                                            Active Section
-                                        </label>
-                                    </div>
-                                    <small class="form-text text-muted">Inactive sections won't be available for new student assignments</small>
+                                    <label for="name" class="form-label">Section Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" 
+                                           id="name" name="name" 
+                                           value="{{ old('name', $section->name) }}" 
+                                           placeholder="e.g., A, B, Red, Blue" required>
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                <!-- Form Actions -->
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="{{ route('schooladmin.sections.index') }}" class="btn btn-outline-secondary">
-                                                <i class="fas fa-times me-1"></i>Cancel
-                                            </a>
-                                            <button type="submit" class="btn btn-primary">
-                                                Update Section
-                                            </button>
+                                <div class="mb-3">
+                                    <label for="capacity" class="form-label">Capacity (Optional)</label>
+                                    <input type="number" class="form-control @error('capacity') is-invalid @enderror" 
+                                           id="capacity" name="capacity" 
+                                           value="{{ old('capacity', $section->capacity) }}" 
+                                           placeholder="Max students allowed" min="1">
+                                    <small class="text-muted">Leave blank for unlimited capacity.</small>
+                                    @error('capacity')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="card bg-light border-0 mb-4">
+                                    <div class="card-body">
+                                        <label class="form-label fw-bold">Section Status</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" 
+                                                {{ old('is_active', $section->is_active) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_active">
+                                                Active Section
+                                            </label>
                                         </div>
+                                        <small class="text-muted">
+                                            Inactive sections will not appear in student registration forms.
+                                        </small>
                                     </div>
+                                </div>
+
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ route('schooladmin.sections.index') }}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">Update Section</button>
                                 </div>
                             </form>
                         </div>

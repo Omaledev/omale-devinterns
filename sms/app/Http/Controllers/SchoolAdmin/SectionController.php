@@ -9,28 +9,34 @@ use App\Models\ClassLevel;
 
 class SectionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $sections = Section::with(['classLevel', 'studentProfiles'])->get();
+        $query = Section::where('school_id', auth()->user()->school_id)
+            ->with('classLevel'); // Load class name
+
+        // Calculate students
+        $query->withCount('studentProfiles');
+
+        // Search Logic
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $sections = $query->latest()->paginate(10);
+
         return view('schooladmin.sections.index', compact('sections'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $classLevels = ClassLevel::where('is_active', true)->get();
+        $classLevels = ClassLevel::where('school_id', auth()->user()->school_id)
+            ->where('is_active', true)
+            ->get();
+            
         return view('schooladmin.sections.create', compact('classLevels'));
-
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
          $request->validate([
@@ -39,92 +45,97 @@ class SectionController extends Controller
             'capacity' => 'nullable|integer|min:1',
         ]);
 
-        // Checking if the section with same name already exists in the same class level
         $existingSection = Section::where('class_level_id', $request->class_level_id)
             ->where('name', $request->name)
-            ->where('school_id', session('active_school'))
+            ->where('school_id', auth()->user()->school_id)
             ->first();
 
         if ($existingSection) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'A section with this name already exists in the selected class level.');
+                ->with('error', 'A section with this name already exists in this class.');
         }
 
         Section::create([
-            'school_id' => session('active_school'),
+            'school_id' => auth()->user()->school_id,
             'class_level_id' => $request->class_level_id,
             'name' => $request->name,
             'capacity' => $request->capacity,
+            'is_active' => true 
         ]);
 
         return redirect()->route('schooladmin.sections.index')
             ->with('success', 'Section created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Section $section)
     {
+        if ($section->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
         $section->load(['classLevel', 'studentProfiles.user']);
         return view('schooladmin.sections.show', compact('section'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Section $section)
     {
-        $classLevels = ClassLevel::where('is_active', true)->get();
+        if ($section->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
+
+        $classLevels = ClassLevel::where('school_id', auth()->user()->school_id)
+            ->where('is_active', true)
+            ->get();
+
         return view('schooladmin.sections.edit', compact('section', 'classLevels'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Section $section)
     {
+        if ($section->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
+
         $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
             'name' => 'required|string|max:255',
             'capacity' => 'nullable|integer|min:1',
-            'is_active' => 'required|boolean',
+            'is_active' => 'nullable|boolean', 
         ]);
 
-        // Checking if the section with same name already exists in the same class level (excluding the current section)
+        // Check for duplicates (excluding current section)
         $existingSection = Section::where('class_level_id', $request->class_level_id)
             ->where('name', $request->name)
-            ->where('school_id', session('active_school'))
+            ->where('school_id', auth()->user()->school_id)
             ->where('id', '!=', $section->id)
             ->first();
 
         if ($existingSection) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'A section with this name already exists in the selected class level.');
+                ->with('error', 'A section with this name already exists in this class.');
         }
 
         $section->update([
             'class_level_id' => $request->class_level_id,
             'name' => $request->name,
             'capacity' => $request->capacity,
-            'is_active' => $request->is_active,
+            'is_active' => $request->boolean('is_active'), 
         ]);
 
         return redirect()->route('schooladmin.sections.index')
             ->with('success', 'Section updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Section $section)
     {
-         // Checking if section has students assigned to it
+        if ($section->school_id !== auth()->user()->school_id) {
+            abort(403);
+        }
+
         if ($section->studentProfiles()->count() > 0) {
             return redirect()->route('schooladmin.sections.index')
-                ->with('error', 'Cannot delete section. There are students assigned to this section.');
+                ->with('error', 'Cannot delete section. There are students assigned to it.');
         }
 
         $section->delete();

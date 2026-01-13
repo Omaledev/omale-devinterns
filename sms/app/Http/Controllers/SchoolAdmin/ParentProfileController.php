@@ -13,13 +13,25 @@ class ParentProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $parents = User::role('Parent')
+        $query = User::role('Parent')
             ->where('school_id', auth()->user()->school_id)
              ->with('children') 
-            ->withCount('children')
-            ->get();
+            ->withCount('children');
+
+        // Search Functionality
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+        
+        // Pagination
+        $parents = $query->latest()->paginate(10);
         
         return view('schooladmin.parentProfile.index', compact('parents'));
     }
@@ -129,10 +141,17 @@ class ParentProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
             'children' => 'nullable|array',
-            'children.*' => 'exists:users,id'
+            'children.*' => 'exists:users,id',
+            'is_approved' => 'nullable|boolean',
         ]);
 
-        $parent->update($validated);
+        $parent->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'is_approved' => $request->boolean('is_approved'), 
+        ]);
 
         // Sync children
         if ($request->has('children')) {

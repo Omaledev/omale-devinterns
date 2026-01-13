@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-       @include('schooladmin.partials.sidebar')
+        @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Edit Parent</h1>
@@ -27,7 +24,6 @@
                 </div>
             </div>
 
-            <!-- Parent Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -42,7 +38,6 @@
                                 @method('PUT')
 
                                 <div class="row">
-                                    <!-- Personal Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Personal Information</h6>
 
@@ -77,7 +72,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Additional Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Additional Information</h6>
 
@@ -91,17 +85,30 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Student Selection  -->
+                                        <div class="card bg-light border-0 mb-4">
+                                            <div class="card-body">
+                                                <label class="form-label fw-bold">Account Status</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved" value="1" 
+                                                        {{ $parent->is_approved ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_approved">
+                                                        Approve Account (Active)
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted">
+                                                    Unchecking this will prevent the parent from logging in.
+                                                </small>
+                                            </div>
+                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label">Assign Children</label>
                                             
-                                            <!-- Search Box -->
                                             <div class="mb-3">
                                                 <input type="text" class="form-control" id="studentSearch" 
                                                        placeholder="Search students by name, admission number, or class...">
                                             </div>
                                             
-                                            <!-- Selected Students Display -->
                                             <div class="mb-3" id="selectedStudents" style="{{ $parent->children->count() > 0 ? '' : 'display: none;' }}">
                                                 <label class="form-label">Selected Students:</label>
                                                 <div id="selectedList" class="d-flex flex-wrap gap-2 p-3 border rounded bg-light">
@@ -115,7 +122,6 @@
                                                 </div>
                                             </div>
                                             
-                                            <!-- Students List -->
                                             <div class="border rounded" style="max-height: 300px; overflow-y: auto;">
                                                 <div class="p-3">
                                                     <div id="studentsList">
@@ -163,7 +169,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Form Actions -->
                                 <div class="row mt-4">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">

@@ -45,11 +45,6 @@ class ClassLevel extends Model
         return $this->hasMany(Book::class);
     }
 
-    public function students()
-    {
-        return $this->hasMany(StudentProfile::class);
-    }
-
     public function attendances()
     {
         return $this->hasMany(Attendance::class, 'class_level_id');

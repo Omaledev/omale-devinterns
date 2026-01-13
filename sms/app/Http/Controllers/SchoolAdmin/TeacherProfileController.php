@@ -17,16 +17,26 @@ class TeacherProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-      
-    $teachers = User::role('Teacher')
-        ->where('school_id', auth()->user()->school_id)
-        ->with(['taughtClasses.subject']) 
-        ->get();
-    
-    return view('schooladmin.teacherProfile.index', compact('teachers'));
+        $query = User::role('Teacher')
+            ->where('school_id', auth()->user()->school_id)
+            ->with(['taughtClasses.subject']);
 
+        // Search Logic
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+    
+        // Order by latest and paginate
+        $teachers = $query->latest()->paginate(10);
+    
+        return view('schooladmin.teacherProfile.index', compact('teachers'));
     }
 
     /**
@@ -100,10 +110,19 @@ class TeacherProfileController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $teacher->id,
-            'employee_id' => 'required|string|unique:users,employee_id,' . $teacher->id
+            'employee_id' => 'required|string|unique:users,employee_id,' . $teacher->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'is_approved' => 'nullable|boolean',
         ]);
 
-        $teacher->update($validated);
+        $teacher->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'employee_id' => $validated['employee_id'],
+            'phone' => $validated['phone'] ?? $teacher->phone,
+            'is_approved' => $request->boolean('is_approved'), 
+        ]);
 
         return redirect()->route('schooladmin.teachers.index')
             ->with('success', 'Teacher updated successfully!');
@@ -125,17 +144,9 @@ class TeacherProfileController extends Controller
     }
 
     
-    
     public function showAssignForm()
     {
-
-    
-    $teachers = User::role('Teacher')
-        ->where('school_id', auth()->user()->school_id)
-        ->where('is_approved', true)
-        ->get();
-         
-            $teachers = User::role('Teacher')
+        $teachers = User::role('Teacher')
             ->where('school_id', auth()->user()->school_id)
             ->where('is_approved', true)
             ->get();
@@ -152,10 +163,8 @@ class TeacherProfileController extends Controller
             ->where('is_active', true)
             ->get();
 
-        // Make sure this matches your view path exactly
         return view('schooladmin.teacherProfile.assign-teachers', compact('teachers', 'subjects', 'classLevels', 'sections'));
     }
-
     
 
     public function assignTeacher(Request $request)
@@ -194,6 +203,7 @@ class TeacherProfileController extends Controller
         return redirect()->route('schooladmin.teachers.index')
             ->with('success', 'Teacher assigned successfully!');
     }
+
 
     // public function assignments()
     // {

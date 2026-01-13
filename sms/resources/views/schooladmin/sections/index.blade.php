@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-       @include('schooladmin.partials.sidebar')
+        @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Sections Management</h1>
@@ -26,7 +23,6 @@
                 </div>
             </div>
 
-            <!-- Sections Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -35,8 +31,11 @@
                                 All Sections
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search sections..." id="searchInput">
-                                <span class="badge bg-primary align-self-center">{{ $sections->count() }} sections</span>
+                                <form action="{{ route('schooladmin.sections.index') }}" method="GET" class="d-flex gap-2">
+                                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search sections..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                                </form>
+                                <span class="badge bg-primary align-self-center">{{ $sections->total() }} sections</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -80,7 +79,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <span class="badge bg-success">{{ $section->studentProfiles_count ?? 0 }} enrolled</span>
+                                                    <span class="badge bg-success">{{ $section->student_profiles_count ?? 0 }} enrolled</span>
                                                 </td>
                                                 <td>
                                                     @if($section->is_active)
@@ -135,6 +134,9 @@
                                         @endforelse
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $sections->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>

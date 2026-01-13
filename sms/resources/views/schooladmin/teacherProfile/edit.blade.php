@@ -13,12 +13,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Edit Teacher</h1>
@@ -37,7 +34,6 @@
                 </div>
             </div>
 
-            <!-- Teacher Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -52,7 +48,6 @@
                                 @method('PUT')
 
                                 <div class="row">
-                                    <!-- Personal Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Personal Information</h6>
 
@@ -85,9 +80,18 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label">Address</label>
+                                            <textarea class="form-control @error('address') is-invalid @enderror"
+                                                      id="address" name="address" rows="3"
+                                                      placeholder="Enter teacher's address">{{ old('address', $teacher->teacherProfile->address ?? '') }}</textarea>
+                                            @error('address')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
 
-                                    <!-- Professional Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Professional Information</h6>
 
@@ -109,19 +113,29 @@
                                                     <i class="fas fa-magic me-1"></i>Generate
                                                 </button>
                                             </div>
-
-                                            @if(!$teacher->employee_id)
-                                                <div class="form-text text-warning">
-                                                    <i class="fas fa-info-circle"></i> This teacher registered online. Please assign an ID now.
-                                                </div>
-                                            @endif
-
                                             @error('employee_id')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
-                                        <!-- Password Fields (Optional for edit) -->
+                                        <div class="card bg-light border-0 mb-3">
+                                            <div class="card-body">
+                                                <label class="form-label fw-bold">Account Status</label>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="is_approved" name="is_approved" value="1" 
+                                                        {{ $teacher->is_approved ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_approved">
+                                                        Approve Account (Active)
+                                                    </label>
+                                                </div>
+                                                <small class="text-muted">
+                                                    Unchecking this will prevent the teacher from logging in.
+                                                    <br>
+                                                    <span class="text-danger"><i class="fas fa-info-circle"></i> Note: To see the green "Active" badge on the list, the teacher must be approved AND assigned to a subject.</span>
+                                                </small>
+                                            </div>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -146,23 +160,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Address Information -->
-                                <div class="row mt-3">
-                                    <div class="col-12">
-                                        <h6 class="text-primary mb-3">Address Information</h6>
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label">Address</label>
-                                            <textarea class="form-control @error('address') is-invalid @enderror"
-                                                      id="address" name="address" rows="3"
-                                                      placeholder="Enter teacher's address">{{ old('address', $teacher->teacherProfile->address ?? '') }}</textarea>
-                                            @error('address')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Form Actions -->
                                 <div class="row mt-4">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">

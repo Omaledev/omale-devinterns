@@ -167,7 +167,7 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
     // Attendance Routes
     Route::get('/attendance/select', [TeacherAttendanceController::class, 'select'])->name('attendance.select');
-    Route::post('/attendance/create', [TeacherAttendanceController::class, 'create'])->name('attendance.create');
+    Route::get('/attendance/create', [TeacherAttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance/store', [TeacherAttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/summary', [TeacherAttendanceController::class, 'summary'])->name('attendance.summary');
 

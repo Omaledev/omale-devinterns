@@ -12,11 +12,23 @@ class BursarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bursars = User::role('Bursar')
-            ->where('school_id', auth()->user()->school_id)
-            ->get();
+        $query = User::role('Bursar')
+            ->where('school_id', auth()->user()->school_id);
+
+        // Search Logic
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('employee_id', 'like', "%{$search}%");
+            });
+        }
+        
+        // Pagination
+        $bursars = $query->latest()->paginate(10);
         
         return view('schooladmin.bursars.index', compact('bursars'));
     }
@@ -99,9 +111,17 @@ class BursarController extends Controller
             'employee_id' => 'required|string|unique:users,employee_id,' . $bursar->id,
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',
+            'is_approved' => 'nullable|boolean',
         ]);
 
-        $bursar->update($validated);
+        $bursar->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'employee_id' => $validated['employee_id'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'is_approved' => $request->boolean('is_approved'), 
+        ]);
 
         return redirect()->route('schooladmin.bursars.index')
             ->with('success', 'Bursar updated successfully!');

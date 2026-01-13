@@ -12,9 +12,21 @@ class ClassLevelController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+  public function index(Request $request)
     {
-        $classLevels = ClassLevel::with('sections')->get();
+        $query = ClassLevel::where('school_id', auth()->user()->school_id);
+
+        // Calculating counts for 'sections' and 'studentProfiles'
+        // This will create 'sections_count' and 'student_profiles_count' variables
+        $query->withCount(['sections', 'studentProfiles']);
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $classLevels = $query->orderBy('order', 'asc')->get();
+
         return view('schooladmin.class-levels.index', compact('classLevels'));
     }
 
@@ -78,6 +90,13 @@ class ClassLevelController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'order' => 'required|integer',
+        ]);
+
+        $classLevel->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'order' => $request->order,
+            'is_active' => $request->boolean('is_active'), 
         ]);
 
         $classLevel->update($request->all());

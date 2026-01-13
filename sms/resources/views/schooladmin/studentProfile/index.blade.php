@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-       @include('schooladmin.partials.sidebar')
+        @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Student Management</h1>
@@ -20,7 +17,6 @@
                     </nav>
                 </div>
                 <div class="row g-2 mb-2 mb-md-0">
-                    <!-- Export Button -->
                     <div class="col-6 col-sm-4 col-md-auto">
                         <a href="{{ route('schooladmin.students.export') }}" class="btn btn-success btn-sm w-100 text-nowrap">
                             <i class="fas fa-download me-1"></i>
@@ -29,7 +25,6 @@
                         </a>
                     </div>
                     
-                    <!-- Import Button -->
                     <div class="col-6 col-sm-4 col-md-auto">
                         <button type="button" class="btn btn-info btn-sm w-100 text-nowrap" data-bs-toggle="modal" data-bs-target="#importModal">
                             <i class="fas fa-upload me-1"></i>
@@ -38,7 +33,6 @@
                         </button>
                     </div>
                     
-                    <!-- Add Student Button -->
                     <div class="col-12 col-sm-4 col-md-auto">
                         <a href="{{ route('schooladmin.students.create') }}" class="btn btn-primary btn-sm w-100 text-nowrap">
                             <i class="fas fa-user-plus me-1"></i>
@@ -50,7 +44,6 @@
             </div>
             
 
-            <!-- Students Table -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -59,8 +52,11 @@
                                 All Students
                             </h6>
                             <div class="d-flex gap-2">
-                                <input type="text" class="form-control form-control-sm" placeholder="Search students..." id="searchInput">
-                                <span class="badge bg-primary align-self-center">{{ $students->count() }} students</span>
+                                <form action="{{ route('schooladmin.students.index') }}" method="GET" class="d-flex gap-2">
+                                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search students..." value="{{ request('search') }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></button>
+                                </form>
+                                <span class="badge bg-primary align-self-center">{{ $students->total() }} students</span>
                             </div>
                         </div>
                         <div class="card-body">
@@ -109,12 +105,14 @@
                                                         <span class="badge bg-info">
                                                             {{ $student->studentProfile->classLevel->name }}
                                                         </span>
-
-                                                        {{-- Check if section exists --}}
+                                                        <br>
+                                                        {{-- Section --}}
                                                         @if($student->studentProfile->section)
-                                                            <small class="text-muted">
-                                                                ({{ $student->studentProfile->section->name }})
+                                                            <small class="text-dark fw-bold">
+                                                                {{ $student->studentProfile->section->name }}
                                                             </small>
+                                                        @else
+                                                            <small class="text-muted">(No Section)</small>
                                                         @endif
 
                                                     @else
@@ -124,10 +122,12 @@
                                                 <td>{{ $student->email }}</td>
                                                 <td>{{ $student->phone ?? 'N/A' }}</td>
                                                 <td>
-                                                    @if($student->is_active)
+                                                    @if(!$student->is_approved)
+                                                        <span class="badge bg-secondary">Inactive</span>
+                                                    @elseif($student->studentProfile && $student->studentProfile->class_level_id)
                                                         <span class="badge bg-success">Active</span>
                                                     @else
-                                                        <span class="badge bg-secondary">Inactive</span>
+                                                        <span class="badge bg-warning text-dark">No Class</span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -178,22 +178,14 @@
                                 </table>
                             </div>
 
-                            <!-- Pagination -->
-                            {{-- @if($students->hasPages())
-                                <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <div class="text-muted">
-                                        Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} entries
-                                    </div>
-                                    <nav>
-                                        {{ $students->links() }}
-                                    </nav>
-                                </div>
-                            @endif --}}
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $students->withQueryString()->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Import Students Modal -->
+
             <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -206,7 +198,6 @@
                         <form action="{{ route('schooladmin.students.import') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="modal-body">
-                                <!-- Success Message -->
                                 @if(session('success'))
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <i class="fas fa-check-circle me-2"></i>
@@ -215,7 +206,6 @@
                                     </div>
                                 @endif
 
-                                <!-- Error Message -->
                                 @if(session('error'))
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         <i class="fas fa-exclamation-triangle me-2"></i>
@@ -232,7 +222,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Download Template -->
                                 <div class="mb-3">
                                     <a href="{{ route('schooladmin.students.download-template') }}" class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-file-download me-1"></i>Download Template
@@ -240,7 +229,6 @@
                                     <small class="text-muted ms-2">Use our template for correct formatting</small>
                                 </div>
 
-                                <!-- Required Columns Info -->
                                 <div class="alert alert-info">
                                     <h6 class="alert-heading">Required Columns:</h6>
                                     <ul class="mb-0 small">
@@ -269,6 +257,7 @@
 
 @push('styles')
 <style>
+    /* ... existing styles ... */
     .sidebar {
         min-height: calc(100vh - 56px);
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
@@ -331,20 +320,6 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-
-        // Simple search functionality
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const rows = document.querySelectorAll('tbody tr');
-
-                rows.forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    row.style.display = text.includes(searchTerm) ? '' : 'none';
-                });
-            });
-        }
     });
 </script>
 @endpush

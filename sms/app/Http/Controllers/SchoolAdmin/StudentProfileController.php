@@ -20,12 +20,24 @@ class StudentProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = User::role('Student')
+        $query = User::role('Student')
             ->where('school_id', auth()->user()->school_id)
-           ->with(['studentProfile.classLevel', 'studentProfile.section'])
-            ->get();
+            ->with(['studentProfile.classLevel', 'studentProfile.section']);
+
+        // Search Functionality
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('admission_number', 'like', "%{$search}%");
+            });
+        }
+
+        // paginate(10)
+        $students = $query->latest()->paginate(10);
 
         return view('schooladmin.studentProfile.index', compact('students'));
     }
@@ -56,7 +68,7 @@ class StudentProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
             'class_level_id' => 'required|exists:class_levels,id', 
-            'section' => 'nullable|string|max:255',
+            'section_id' => 'nullable|exists:sections,id',
             'admission_date' => 'nullable|date',
             'address' => 'nullable|string',
             'state' => 'nullable|string|max:255',
@@ -82,6 +94,7 @@ class StudentProfileController extends Controller
             'user_id' => $user->id,
             'school_id' => auth()->user()->school_id,
             'class_level_id' => $validated['class_level_id'],
+            'section_id' => $validated['section_id'] ?? null,
             'student_id' => $validated['admission_number'], 
             'admission_date' => $validated['admission_date'],
             'date_of_birth' => $validated['date_of_birth'],
@@ -141,7 +154,7 @@ class StudentProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'date_of_birth' => 'nullable|date',
             'class_level_id' => 'nullable|exists:class_levels,id',
-            'section' => 'nullable|string|max:255',
+            'section_id' => 'nullable|exists:sections,id',
             'admission_date' => 'nullable|date',
             'address' => 'nullable|string',
             'state' => 'nullable|string|max:255',
@@ -164,6 +177,7 @@ class StudentProfileController extends Controller
         // Update Profile (Academic Info)
         $profileData = [
             'class_level_id' => $validated['class_level_id'], 
+            'section_id' => $validated['section_id'] ?? null,
             'student_id' => $validated['admission_number'],
             'admission_date' => $validated['admission_date'],
             'date_of_birth' => $validated['date_of_birth'],

@@ -23,8 +23,7 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('teacher.attendance.create') }}" method="POST">
-                                @csrf
+                            <form action="{{ route('teacher.attendance.create') }}" method="GET">
                                 
                                 {{-- Class Dropdown --}}
                                 <div class="mb-3">
