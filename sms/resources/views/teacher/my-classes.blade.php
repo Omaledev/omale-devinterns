@@ -54,7 +54,7 @@
                                     <div class="d-flex justify-content-between align-items-center mb-4">
                                         <div>
                                             <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Total Students</small>
-                                            <h3 class="fw-bold text-dark mb-0">{{ $class->students->count() ?? 0 }}</h3>
+                                            <h3 class="fw-bold text-dark mb-0">{{ $class->studentProfiles->count() ?? 0 }}</h3>
                                         </div>
                                         <div class="icon-circle bg-light text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                                             <i class="fas fa-users fa-lg"></i>

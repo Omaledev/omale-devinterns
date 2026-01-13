@@ -47,4 +47,13 @@ class Section extends Model
         return $this->hasMany(ClassroomAssignment::class);
     }
 
+    /**
+     * Get the attendance records for this section.
+     * The inverse of Attendance::section()
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
 }

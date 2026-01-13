@@ -13,6 +13,7 @@ class Attendance extends Model
         'school_id',
         'teacher_id',
         'class_level_id',
+        'section_id',
         'student_id',
         'date',
         'status',
@@ -31,5 +32,10 @@ class Attendance extends Model
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 }

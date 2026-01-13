@@ -18,9 +18,7 @@ class AttendanceController extends Controller
     public function select()
     {
         $schoolId = session('active_school');
-
         $classes = ClassLevel::where('school_id', $schoolId)->get(); 
-
         $sections = Section::where('school_id', $schoolId)->get();
         
         return view('teacher.attendance.select', compact('classes', 'sections'));
@@ -33,26 +31,37 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
+            'section_id' => 'nullable|exists:sections,id', 
             'date' => 'required|date',
         ]);
 
         $classId = $request->class_level_id;
+        $sectionId = $request->section_id; 
         $date = $request->date;
         $schoolId = session('active_school');
 
-        // Fetch students in this class
-        $students = StudentProfile::where('school_id', $schoolId)
+        // Start building the query
+        $query = StudentProfile::where('school_id', $schoolId)
             ->where('class_level_id', $classId)
-            ->with('user') 
-            ->get();
+            ->with('user');
 
-        // Check if attendance was already taken for this date to pre-fill the form
-        $existingAttendance = Attendance::where('class_level_id', $classId)
-            ->where('date', $date)
-            ->get()
-            ->keyBy('student_id');
+        // If a section is selected, filter by it
+        if ($sectionId) {
+            $query->where('section_id', $sectionId);
+        }
 
-        return view('teacher.attendance.create', compact('students', 'classId', 'date', 'existingAttendance'));
+        $students = $query->get();
+
+        // Check if attendance was already taken
+        $attendanceQuery = Attendance::where('class_level_id', $classId)->where('date', $date);
+        
+        // Filter existing attendance record by section too if applicable
+        if ($sectionId) {
+            $attendanceQuery->where('section_id', $sectionId);
+        }
+        $existingAttendance = $attendanceQuery->get()->keyBy('student_id');
+
+        return view('teacher.attendance.create', compact('students', 'classId', 'sectionId', 'date', 'existingAttendance'));
     }
 
     /**
@@ -62,6 +71,7 @@ class AttendanceController extends Controller
     {
         $data = $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
+            'section_id' => 'nullable|exists:sections,id', 
             'date' => 'required|date',
             'attendances' => 'required|array', 
             'attendances.*' => 'in:PRESENT,ABSENT,LATE', 
@@ -80,6 +90,7 @@ class AttendanceController extends Controller
                     'school_id' => $schoolId,
                     'teacher_id' => $teacherId,
                     'class_level_id' => $data['class_level_id'],
+                    'section_id' => $data['section_id'] ?? null, 
                     'status' => $status,
                 ]
             );
@@ -89,9 +100,6 @@ class AttendanceController extends Controller
             ->with('success', 'Attendance recorded successfully for ' . $data['date']);
     }
     
-    /**
-     * SShow Class Summary View
-     */
     public function summary()
     {
          $schoolId = session('active_school');
