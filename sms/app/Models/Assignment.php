@@ -41,4 +41,13 @@ class Assignment extends Model
     {
         return $this->belongsTo(Section::class);
     }
+
+    public function submissions() {
+    return $this->hasMany(AssignmentSubmission::class);
+}
+
+    // Helper to check if a specific user submitted
+    public function getSubmissionForUser($userId) {
+        return $this->submissions->where('student_id', $userId)->first();
+    }
 }

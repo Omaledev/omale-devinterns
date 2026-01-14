@@ -34,15 +34,14 @@
                    href="{{ route('student.attendance') }}">
                     <i class="fas fa-calendar-check me-2"></i>
                     Attendance
-                    <span class="badge bg-success float-end">{{ $stats['attendance_rate'] ?? '0' }}%</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link text-white-50" href="">
+                <a class="nav-link {{ request()->routeIs('student.results') ? 'active text-white' : 'text-white-50' }}" 
+                href="{{ route('student.results') }}">
                     <i class="fas fa-chart-bar me-2"></i>
                     Results
-                    <span class="badge bg-info float-end">{{ $stats['average_grade'] ?? 'N/A' }}</span>
                 </a>
             </li>
 
@@ -51,11 +50,11 @@
                    href="{{ route('student.books') }}">
                     <i class="fas fa-book-open me-2"></i>
                     Study Books
-                    <span class="badge bg-info float-end">{{ $stats['new_books'] ?? 0 }}</span>
                 </a>
             </li> 
             <li class="nav-item">
-                <a class="nav-link text-white-50" href="#">
+                <a class="nav-link {{ request()->routeIs('student.fees') ? 'active text-white' : 'text-white-50' }}" 
+                href="{{ route('student.fees') }}">  
                     <i class="fas fa-money-bill-wave me-2"></i>
                     Fees
                     @if(($stats['fee_balance'] ?? 0) > 0)
@@ -70,7 +69,6 @@
                    href="{{ route('student.assignments') }}">
                     <i class="fas fa-tasks me-2"></i>
                     Assignments
-                    <span class="badge bg-warning float-end">{{ $stats['pending_assignments'] ?? 0 }}</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -88,16 +86,17 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('student.messages') ? 'active text-white' : 'text-white-50' }}" 
-                   href="{{ route('student.messages') }}">
+                <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white' : 'text-white-50' }}" 
+                href="{{ route('student.messages') }}">
                     <i class="fas fa-comments me-2"></i>
                     Messages
-                    <span class="badge bg-primary float-end">{{ $stats['unread_messages'] ?? 0 }}</span>
                 </a>
             </li>
-            <li class="nav-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('announcements.index') }}">
-                    <i class="fas fa-fw fa-bullhorn"></i>
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('announcements.*') ? 'active text-white' : 'text-white-50' }}" 
+                href="{{ route('announcements.index') }}">
+                    <i class="fas fa-fw fa-bullhorn me-2"></i> 
                     <span>Announcement</span>
                 </a>
             </li>

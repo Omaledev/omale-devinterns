@@ -41,21 +41,25 @@ use App\Http\Controllers\Teacher\AssessmentController as TeacherAssessmentContro
 use App\Http\Controllers\Teacher\BookController as TeacherBookController;
 use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentController;
 
-// Announcement controller
+
+// student routes
+use App\Http\Controllers\Student\StudentController as StudentStudentController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
+
+// Announcement routes
 use App\Http\Controllers\AnnouncementController;
 
-// Message controller
+// Message routes
 use App\Http\Controllers\MessageController;
 
-// Bursar Controller
+// Bursar routes
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\PaymentController as BursarPaymentController;
 use App\Http\Controllers\Bursar\ReportController as BursarReportController;
 
 
 
-use App\Http\Controllers\Student\DashboardController;
-use App\Http\Controllers\Student\StudentController;
+
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\ParentController;
 
@@ -170,6 +174,7 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
 // Teacher Routes
 Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::get('/dashboard', [TeacherDashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/timetable', [TeacherTimetableController::class, 'index'])
         ->name('timetable.index');
     Route::get('/assessments', [TeacherAssessmentController::class, 'index'])
@@ -208,20 +213,21 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
 
 // Student Routes
 Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/timetable', [StudentController::class, 'timetable'])->name('timetable');
-    Route::get('/results', [StudentController::class, 'results'])->name('student.results');
-    Route::get('/attendance', [StudentController::class, 'attendance'])->name('attendance');
-    Route::get('/fees', [StudentController::class, 'fees'])->name('student.fees');
-    Route::get('/assignments', [StudentController::class, 'assignment'])->name('assignments');
-    Route::get('/subjects', [StudentController::class, 'subjects'])->name('subjects');
-    Route::get('/teachers', [StudentController::class, 'teachers'])->name('teachers');
-    Route::get('/messages', [StudentController::class, 'messages'])->name('messages');
-    Route::get('/reports', [StudentController::class, 'index'])->name('reports.index');
-    Route::get('/reports/download/{student}', [StudentController::class,'download'])
-    ->name('reports.download');
-    Route::get('/books', [StudentController::class, 'books'])->name('books');
-    Route::get('/books/{book}/download', [StudentController::class, 'downloadBook'])->name('books.download');
+    Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/timetable', [StudentStudentController::class, 'timetable'])->name('timetable');
+    Route::get('/results', [StudentStudentController::class, 'results'])->name('results');
+    Route::get('/results/print/{term_id}/{session_id}', [StudentStudentController::class, 'printResult'])->name('results.print');
+    Route::get('/attendance', [StudentStudentController::class, 'attendance'])->name('attendance');
+    Route::get('/fees', [StudentStudentController::class, 'fees'])->name('fees');
+    Route::get('/assignments', [StudentStudentController::class, 'assignment'])->name('assignments');
+    Route::post('/assignments/submit', [StudentStudentController::class, 'submitAssignment'])
+        ->name('assignments.submit');
+    Route::get('/subjects', [StudentStudentController::class, 'subjects'])->name('subjects');
+    Route::get('/teachers', [StudentStudentController::class, 'teachers'])->name('teachers');
+    Route::get('/messages', [StudentStudentController::class, 'messages'])->name('messages');
+    Route::post('/payments/upload', [StudentStudentController::class, 'uploadPayment'])->name('payments.upload');
+    Route::get('/books', [StudentStudentController::class, 'books'])->name('books');
+    Route::get('/books/{book}/download', [StudentStudentController::class, 'downloadBook'])->name('books.download');
 });
 
 // Parent Routes

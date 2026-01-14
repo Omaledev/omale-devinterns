@@ -37,7 +37,7 @@ class Invoice extends Model
     /**
      * Get the payments for the invoice.
      */
-    public function payment() {
+    public function payments() {
         return $this->hasMany(Payment::class);
     }
 

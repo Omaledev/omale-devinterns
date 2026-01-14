@@ -186,4 +186,14 @@ class User extends Authenticatable
         return $this->hasMany(Assignment::class);
     }
 
+    public function assignmentSubmissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class, 'student_id');
+    }
+
+    public function recordedPayments()
+    {
+        return $this->hasMany(Payment::class, 'recorded_by');
+    }
+
 }

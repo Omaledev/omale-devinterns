@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class payment extends Model
+class Payment extends Model
 {
 
     use HasFactory;
@@ -17,7 +17,10 @@ class payment extends Model
         'payment_method', 
         'reference_number', 
         'payment_date', 
-        'recorded_by'
+        'recorded_by',
+        'proof_file_path',  
+        'status',           
+        'bursar_remarks'
     ];
 
     /**
@@ -30,5 +33,9 @@ class payment extends Model
     public function recorder()
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function isVerified() {
+        return $this->status === 'approved';
     }
 }
