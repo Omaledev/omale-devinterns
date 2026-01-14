@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @php
-    // Get School Name
+    // Getting School Name
     $schoolName = $student->school->name ?? 'STD';
     
-    // Generate Prefix
+    // Generating Prefix for the JS button
     $schoolPrefix = '';
     $words = explode(' ', $schoolName);
     foreach($words as $word) {
@@ -54,6 +54,7 @@
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Personal Information</h6>
 
+                                        {{-- Name --}}
                                         <div class="mb-3">
                                             <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('full_name') is-invalid @enderror"
@@ -64,6 +65,7 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Email --}}
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
                                             <input type="email" class="form-control @error('email') is-invalid @enderror"
@@ -74,6 +76,7 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Phone --}}
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Phone Number</label>
                                             <input type="tel" class="form-control @error('phone') is-invalid @enderror"
@@ -84,21 +87,24 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Date of Birth --}}
                                         <div class="mb-3">
                                             <label for="date_of_birth" class="form-label">Date of Birth</label>
                                             <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
                                                    id="date_of_birth" name="date_of_birth" 
-                                                   value="{{ old('date_of_birth', optional($student->studentProfile->date_of_birth)->format('Y-m-d')) }}">
+                                                   {{-- Using ?-> to safely access properties on potentially null objects --}}
+                                                   value="{{ old('date_of_birth', $student->studentProfile?->date_of_birth?->format('Y-m-d')) }}">
                                             @error('date_of_birth')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         
+                                        {{-- Address --}}
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
                                             <textarea class="form-control @error('address') is-invalid @enderror"
                                                       id="address" name="address" rows="3"
-                                                      placeholder="Enter student's address">{{ old('address', $student->studentProfile->address ?? '') }}</textarea>
+                                                      placeholder="Enter student's address">{{ old('address', $student->studentProfile?->address) }}</textarea>
                                             @error('address')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -108,6 +114,7 @@
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Academic Information</h6>
 
+                                        {{-- Admission Number --}}
                                         <div class="mb-3">
                                             <label for="admission_number" class="form-label">
                                                 Admission Number <span class="text-danger">*</span>
@@ -128,11 +135,13 @@
                                                     <i class="fas fa-magic me-1"></i>Generate
                                                 </button>
                                             </div>
+                                            <div class="form-text">Click Generate to assign a new Matric Number.</div>
                                             @error('admission_number')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
+                                        {{-- Class Selection --}}
                                         <div class="mb-3">
                                             <label for="class_level_id" class="form-label">Class <span class="text-danger">*</span></label>
                                             <select class="form-select @error('class_level_id') is-invalid @enderror" 
@@ -143,7 +152,8 @@
                                                 
                                                 @foreach($classLevels as $class)
                                                     <option value="{{ $class->id }}" 
-                                                        {{ (old('class_level_id', $student->studentProfile->class_level_id ?? '') == $class->id) ? 'selected' : '' }}>
+                                                        {{-- Safely check if profile exists --}}
+                                                        {{ (old('class_level_id', $student->studentProfile?->class_level_id) == $class->id) ? 'selected' : '' }}>
                                                         {{ $class->name }}
                                                     </option>
                                                 @endforeach
@@ -154,6 +164,7 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Section Selection --}}
                                         <div class="mb-3">
                                             <label for="section_id" class="form-label">Section</label>
                                             <select class="form-select @error('section_id') is-invalid @enderror" 
@@ -164,7 +175,8 @@
                                                 
                                                 @foreach($sections as $section)
                                                     <option value="{{ $section->id }}" 
-                                                        {{ (old('section_id', $student->studentProfile->section_id ?? '') == $section->id) ? 'selected' : '' }}>
+                                                        {{-- Safely check if profile exists --}}
+                                                        {{ (old('section_id', $student->studentProfile?->section_id) == $section->id) ? 'selected' : '' }}>
                                                         {{ $section->name }} 
                                                     </option>
                                                 @endforeach
@@ -175,16 +187,18 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Admission Date --}}
                                         <div class="mb-3">
                                             <label for="admission_date" class="form-label">Admission Date</label>
                                             <input type="date" class="form-control @error('admission_date') is-invalid @enderror"
                                                    id="admission_date" name="admission_date" 
-                                                   value="{{ old('admission_date', optional($student->studentProfile->admission_date)->format('Y-m-d')) }}">
+                                                   value="{{ old('admission_date', $student->studentProfile?->admission_date?->format('Y-m-d')) }}">
                                             @error('admission_date')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
+                                        {{-- Approval Switch --}}
                                         <div class="card bg-light border-0 mb-3">
                                             <div class="card-body">
                                                 <label class="form-label fw-bold">Account Status</label>
@@ -196,7 +210,7 @@
                                                     </label>
                                                 </div>
                                                 <small class="text-muted">
-                                                    Unchecking this will make the student Inactive.
+                                                    Check this to verify the student and allow them to login.
                                                 </small>
                                             </div>
                                         </div>
@@ -231,8 +245,9 @@
     document.getElementById('generateIdBtn').addEventListener('click', function() {
         const prefix = this.getAttribute('data-prefix'); 
         const year = new Date().getFullYear();
+        // Generate a random number 
         const random = Math.floor(1000 + Math.random() * 9000);
-        const generatedId = prefix + year + random;
+        const generatedId = prefix + '/' + year + '/' + random; 
         document.getElementById('admission_number').value = generatedId;
     });
 </script>

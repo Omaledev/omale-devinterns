@@ -129,10 +129,20 @@ class StudentProfileController extends Controller
             abort(403);
         }
         
+        // Check if profile exists; if not, create an empty one to prevent errors
+        if (!$student->studentProfile) {
+            \App\Models\StudentProfile::create([
+                'user_id' => $student->id,
+                'school_id' => $student->school_id,
+                'student_id' => $student->admission_number, 
+            ]);
+            // Reload the relationship
+            $student->refresh(); 
+        }
+        
         $student->load('studentProfile');
 
         $classLevels = \App\Models\ClassLevel::where('school_id', auth()->user()->school_id)->get();
-
         $sections = \App\Models\Section::where('school_id', auth()->user()->school_id)->get();
 
         return view('schooladmin.studentProfile.edit', compact('student', 'classLevels', 'sections'));

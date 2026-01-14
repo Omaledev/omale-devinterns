@@ -13,7 +13,7 @@
                                 style="width: 100px; height: 100px;">
                                 <i class="fas fa-user-plus fa-3x text-white"></i>
                             </div>
-                            <h1 class="display-5 fw-bold mb-3">Create Your Account</h1>
+                            <h1 class="display-5 fw-bold mb-3">Sign Up Your Account</h1>
                             <p class="lead">Join thousands of educational professionals, students, and parents using our
                                 platform.</p>
                         </div>
@@ -91,7 +91,7 @@
                             style="width: 70px; height: 70px;">
                             <i class="fas fa-user-plus fa-2x text-white"></i>
                         </div>
-                        <h2 class="fw-bold text-primary mb-2">Create Account</h2>
+                        <h2 class="fw-bold text-primary mb-2">Sign Up</h2>
                         <p class="text-muted">Join our educational community today</p>
                     </div>
 
@@ -287,7 +287,7 @@
                                 <!-- Submit Button -->
                                 <div class="d-grid mb-4">
                                     <button type="submit" class="btn btn-primary btn-lg fw-semibold py-2">
-                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                        <i class="fas fa-user-plus me-2"></i>Sign Up
                                     </button>
                                 </div>
 
