@@ -106,10 +106,13 @@ class User extends Authenticatable
         );
     }
     
-
-    public function uploadedBooks()
+    /**
+     * Helper to get the first role name as a string
+     */
+    public function getRoleAttribute()
     {
-        return $this->hasMany(Book::class, 'teacher_id');
+        // Checking if roles relationship is loaded to avoid N+1, otherwise fetch it
+        return $this->roles->first()?->name ?? 'User';
     }
 
     //  public function roles()

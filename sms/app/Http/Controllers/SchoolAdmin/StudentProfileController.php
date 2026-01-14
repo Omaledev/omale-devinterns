@@ -126,24 +126,13 @@ class StudentProfileController extends Controller
     public function edit(User $student)
     {
         if ($student->school_id !== auth()->user()->school_id) {
-            abort(403);
-        }
-        
-        // Check if profile exists; if not, create an empty one to prevent errors
-        if (!$student->studentProfile) {
-            \App\Models\StudentProfile::create([
-                'user_id' => $student->id,
-                'school_id' => $student->school_id,
-                'student_id' => $student->admission_number, 
-            ]);
-            // Reload the relationship
-            $student->refresh(); 
-        }
-        
-        $student->load('studentProfile');
+        abort(403);
+    }
+    
+    $student->load('studentProfile');
 
-        $classLevels = \App\Models\ClassLevel::where('school_id', auth()->user()->school_id)->get();
-        $sections = \App\Models\Section::where('school_id', auth()->user()->school_id)->get();
+    $classLevels = \App\Models\ClassLevel::where('school_id', auth()->user()->school_id)->get();
+    $sections = \App\Models\Section::where('school_id', auth()->user()->school_id)->get();
 
         return view('schooladmin.studentProfile.edit', compact('student', 'classLevels', 'sections'));
     }
@@ -153,10 +142,12 @@ class StudentProfileController extends Controller
      */
     public function update(Request $request, User $student)
     {
+        // Security Check
         if ($student->school_id !== auth()->user()->school_id) {
             abort(403);
         }
 
+        // Validation
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $student->id,
@@ -170,40 +161,30 @@ class StudentProfileController extends Controller
             'state' => 'nullable|string|max:255',
             'emergency_contact' => 'nullable|string|max:255',
             'is_approved' => 'nullable|boolean',
-            
         ]);
 
-          \Log::info('Validated data:', $validated);
-
-        // Updating user basic info
         $student->update([
-            'name' => $validated['full_name'], 
+            'name' => $validated['full_name'],
             'email' => $validated['email'],
             'admission_number' => $validated['admission_number'],
             'phone' => $validated['phone'],
             'is_approved' => $request->boolean('is_approved'),
         ]);
 
-        // Update Profile (Academic Info)
-        $profileData = [
-            'class_level_id' => $validated['class_level_id'], 
-            'section_id' => $validated['section_id'] ?? null,
-            'student_id' => $validated['admission_number'],
-            'admission_date' => $validated['admission_date'],
-            'date_of_birth' => $validated['date_of_birth'],
-            'address' => $validated['address'],
-            'state' => $validated['state'] ?? null, 
-            'emergency_contact' => $validated['emergency_contact'] ?? null,
-        ];
-
-        if ($student->studentProfile) {
-            $student->studentProfile->update($profileData);
-        } else {
-            // If profile didn't exist for some reason, create it with the ID
-            $profileData['user_id'] = $student->id;
-            $profileData['school_id'] = auth()->user()->school_id;
-            \App\Models\StudentProfile::create($profileData);
-        }
+        \App\Models\StudentProfile::updateOrCreate(
+            ['user_id' => $student->id], 
+            [
+                'school_id' => auth()->user()->school_id,
+                'student_id' => $validated['admission_number'], 
+                'class_level_id' => $validated['class_level_id'],
+                'section_id' => $validated['section_id'] ?? null,
+                'admission_date' => $validated['admission_date'],
+                'date_of_birth' => $validated['date_of_birth'],
+                'address' => $validated['address'],
+                'state' => $validated['state'] ?? null,
+                'emergency_contact' => $validated['emergency_contact'] ?? null,
+            ]
+        );
 
         return redirect()->route('schooladmin.students.index')
             ->with('success', 'Student updated successfully!');

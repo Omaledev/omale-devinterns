@@ -49,7 +49,12 @@ class MessageController extends Controller
             $query->role(['Parent', 'Teacher', 'SchoolAdmin']);
         }
 
-        $potentialRecipients = $query->orderBy('name')->get();
+        $potentialRecipients = $query->with('roles') 
+            ->orderBy('name')
+            ->get()
+            ->groupBy(function($user) {
+                return $user->role; 
+            });
 
         return view('messages.index', compact('threads', 'potentialRecipients'));
     }

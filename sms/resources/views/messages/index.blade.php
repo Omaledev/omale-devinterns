@@ -127,16 +127,25 @@
                 <div class="modal-body">
                     
                     {{-- RECIPIENT DROPDOWN --}}
-                    <div class="mb-3">
+                   <div class="mb-3">
                         <label class="form-label small fw-bold">Recipient</label>
                         <select name="recipient_id" class="form-select" required>
                             <option value="">Select User...</option>
-                            @foreach($potentialRecipients as $recipient)
-                                <option value="{{ $recipient->id }}">
-                                    {{ $recipient->name }} ({{ $recipient->role }})
-                                </option>
+                            
+                            @foreach($potentialRecipients as $roleName => $users)
+                                <optgroup label="{{ ucfirst($roleName) }}s">
+                                    
+                                    @foreach($users as $recipient)
+                                        <option value="{{ $recipient->id }}">
+                                            {{ $recipient->name }} ({{ $recipient->role }})
+                                        </option>
+                                    @endforeach
+
+                                </optgroup>
                             @endforeach
+
                         </select>
+
                         @if($potentialRecipients->isEmpty())
                             <div class="alert alert-warning mt-2 small">
                                 <i class="fas fa-exclamation-circle me-1"></i>
@@ -163,7 +172,7 @@
                         <input type="file" name="attachment" class="form-control">
                         <div class="form-text small">Max size: 2MB. Allowed: PDF, JPG, PNG, DOCX.</div>
                     </div>
-                </div>
+                   </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">
