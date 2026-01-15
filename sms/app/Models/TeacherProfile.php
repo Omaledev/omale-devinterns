@@ -54,4 +54,9 @@ class TeacherProfile extends Model
         ->wherePivot('is_active', true); 
     }
 
+    public function meetings()
+    {
+        return $this->hasMany(ParentTeacherMeeting::class, 'teacher_id');
+    }
+
 }

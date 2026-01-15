@@ -39,6 +39,13 @@ class ParentProfile extends Model
                     ->withTimestamps();
     }
 
+    public function childrenUsers()
+    {
+         return $this->belongsToMany(User::class, 'parent_student', 'parent_profile_id', 'student_user_id')
+                    ->withPivot('relationship', 'is_primary')
+                    ->withTimestamps();
+    }
+
     
 
 }

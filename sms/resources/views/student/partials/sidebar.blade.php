@@ -87,7 +87,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white' : 'text-white-50' }}" 
-                href="{{ route('student.messages') }}">
+                href="{{ route('messages.index') }}">
                     <i class="fas fa-comments me-2"></i>
                     Messages
                 </a>

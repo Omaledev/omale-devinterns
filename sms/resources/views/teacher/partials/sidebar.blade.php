@@ -120,6 +120,15 @@
                 </a>
             </li>
 
+            {{-- Meetings--}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('meetings.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                   href="{{ route('teacher.meetings') }}">
+                    <i class="fas fa-fw fa-bullhorn me-2"></i>
+                    Meetings
+                </a>
+            </li>
+
             {{-- Reports --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.reports.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 

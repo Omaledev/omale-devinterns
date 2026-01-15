@@ -46,6 +46,10 @@ use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentContro
 use App\Http\Controllers\Student\StudentController as StudentStudentController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 
+// parent routes
+use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
+use App\Http\Controllers\Parent\ParentController as ParentParentController;
+
 // Announcement routes
 use App\Http\Controllers\AnnouncementController;
 
@@ -56,12 +60,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Bursar\DashboardController as BursarDashboardController;
 use App\Http\Controllers\Bursar\PaymentController as BursarPaymentController;
 use App\Http\Controllers\Bursar\ReportController as BursarReportController;
-
-
-
-
-use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
-use App\Http\Controllers\Parent\ParentController;
 
 
 Route::get('/', function () {
@@ -201,11 +199,13 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::get('/my-subjects', [TeacherTeacherController::class, 'mySubjects'])
         ->name('my-subjects');
 
+    Route::get('/meetings', [TeacherTeacherController::class, 'meetings'])->name('meetings');
+    Route::post('/meetings/{id}/update', [TeacherTeacherController::class, 'updateMeetingStatus'])->name('meetings.update');
+
     Route::resource('assignments', TeacherAssignmentController::class);
 
     Route::resource('books', TeacherBookController::class);
-    // Route::get('/reports/download/{student}', [TeacherReportCardController::class,'download'])
-    // ->name('reports.download');
+  
 
     
    
@@ -231,19 +231,22 @@ Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')
 });
 
 // Parent Routes
-Route::middleware(['auth', 'role:Parent'])->prefix('parent')->group(function () {
-    Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('parent.dashboard');
-    Route::get('/children', [ParentController::class, 'children'])->name('parent.children');
-    Route::get('/child/{id}/results', [ParentController::class, 'childResults'])->name('parent.child-results');
-    Route::get('/child/{id}/attendance', [ParentController::class, 'childAttendance'])->name('parent.child-attendance');
-    Route::get('/child/{id}/fees', [ParentController::class, 'childFees'])->name('parent.child-fees');
-    Route::get('/attendance', [ParentController::class, 'attendance'])->name('parent.attendance');
-    Route::get('/results', [ParentController::class, 'results'])->name('parent.results');
-    Route::get('/fees', [ParentController::class, 'fees'])->name('parent.fees');
-    Route::get('/timetable', [ParentController::class, 'timetable'])->name('parent.timetable');
-    Route::get('/teachers', [ParentController::class, 'teachers'])->name('parent.teachers');
-    Route::get('/messages', [ParentController::class, 'messages'])->name('parent.messages');
-    Route::get('/meetings', [ParentController::class, 'meetings'])->name('parent.meetings');
+Route::middleware(['auth', 'role:Parent'])->prefix('parent')->name('parent.')->group(function () {
+    Route::get('/dashboard', [ParentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/children', [ParentParentController::class, 'children'])->name('children');
+    Route::get('/child/{id}/results', [ParentParentController::class, 'childResults'])->name('child-results');
+    Route::get('/child/{id}/attendance', [ParentParentController::class, 'childAttendance'])->name('child-attendance');
+    Route::get('/child/{id}/fees', [ParentParentController::class, 'childFees'])->name('child-fees');
+    Route::get('/attendance', [ParentParentController::class, 'attendance'])->name('attendance');
+    Route::get('/results', [ParentParentController::class, 'results'])->name('results');
+    Route::get('/fees', [ParentParentController::class, 'fees'])->name('fees');
+    Route::get('/timetable', [ParentParentController::class, 'timetable'])->name('timetable');
+    Route::get('/teachers', [ParentParentController::class, 'teachers'])->name('teachers');
+    Route::get('/messages', [ParentParentController::class, 'messages'])->name('messages');
+    Route::get('/meetings', [ParentParentController::class, 'meetings'])->name('meetings');
+    Route::post('/meetings', [ParentParentController::class, 'storeMeeting'])->name('meetings.store');
+    Route::get('/announcements', [ParentParentController::class, 'announcements'])->name('announcements');
+    Route::get('/report-card/{term_id}/{session_id}/{student_id}', [ParentParentController::class, 'downloadReportCard'])->name('report.download');
 });
 
 // Bursar Routes

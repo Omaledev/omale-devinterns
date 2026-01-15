@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\TeacherProfile;
 use App\Models\ClassLevel;
@@ -69,9 +70,47 @@ class TeacherController extends Controller
         // Fetching Assignments
         $assignments = ClassroomAssignment::where('teacher_id', $user->teacherProfile->id)
             ->where('is_active', true)
-            ->with(['classLevel', 'section', 'subject']) // Load relationships
+            ->with(['classLevel', 'section', 'subject']) 
             ->get();
 
         return view('teacher.subjects.index', compact('assignments'));
+    }
+
+    public function meetings()
+    {
+        // Getting the authenticated teacher's profile
+        $teacherProfile = Auth::user()->teacherProfile;
+
+        // Fetching meetings assigned to this teacher
+        $meetings = \App\Models\ParentTeacherMeeting::where('teacher_id', $teacherProfile->id)
+            ->with(['parent', 'student']) 
+            ->orderBy('scheduled_at', 'asc') // Show upcoming first
+            ->get();
+
+        return view('teacher.meetings', compact('meetings'));
+    }
+
+    /**
+     * Meeting Status (Approve/Decline)
+     */
+    public function updateMeetingStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,declined,completed'
+        ]);
+
+        $meeting = \App\Models\ParentTeacherMeeting::findOrFail($id);
+        
+        // Security: Ensure this meeting belongs to the logged-in teacher
+        if ($meeting->teacher_id !== Auth::user()->teacherProfile->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $meeting->update([
+            'status' => $request->status
+        ]);
+
+
+        return back()->with('success', 'Meeting status updated successfully.');
     }
 }

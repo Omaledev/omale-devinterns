@@ -196,4 +196,15 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class, 'recorded_by');
     }
 
+    public function parentMeetings()
+    {
+        return $this->hasMany(ParentTeacherMeeting::class, 'parent_id');
+    }
+
+    // Get meetings where this user is the STUDENT
+    public function studentMeetings()
+    {
+        return $this->hasMany(ParentTeacherMeeting::class, 'student_id');
+    }
+
 }

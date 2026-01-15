@@ -89,5 +89,10 @@ class School extends Model
         return $this->hasMany(Assignment::class);
     }
 
+    public function parentProfiles()
+    {
+        return $this->hasMany(ParentProfile::class);
+    }
+
 
 }
