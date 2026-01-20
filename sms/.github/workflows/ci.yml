@@ -10,7 +10,7 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     
-    # 1. This ensures all commands run inside your 'sms' folder
+    # This ensures all commands run inside your 'sms' folder
     defaults:
       run:
         working-directory: ./sms
@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # 2. Setup PHP
+    # Setting up PHP
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -26,7 +26,7 @@ jobs:
         extensions: mbstring, dom, fileinfo, sqlite3, zip, intl, bcmath
         coverage: none
 
-    # 3. Setup Node.js (NEW STEP)
+    # Setting up Node.js 
     # This is required to build your CSS/JS files
     - name: Setup Node
       uses: actions/setup-node@v4
@@ -36,12 +36,11 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    # 4. Install PHP Dependencies
+    # Installing PHP Dependencies
     - name: Install Composer Dependencies
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    # 5. Install Node Dependencies & Build (NEW STEP)
-    # This creates the 'manifest.json' file so your views don't crash
+    # Installing Node Dependencies & Build 
     - name: Install NPM & Build Assets
       run: |
         npm install
@@ -64,8 +63,6 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: php artisan test --env=testing
 
-    # 6. Debugging Help (NEW STEP)
-    # If tests fail again, this prints the error log so we can see WHY.
     - name: Show Laravel Logs on Failure
       if: failure()
       run: cat storage/logs/laravel.log
