@@ -10,6 +10,11 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
+    # It tells GitHub your app is in the 'sms' folder
+    defaults:
+      run:
+        working-directory: ./sms
+
     steps:
     - uses: actions/checkout@v4
 
@@ -22,7 +27,6 @@ jobs:
 
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
 
     - name: Install Dependencies
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
@@ -42,4 +46,5 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan test
+      # Explicitly point to the database file relative to the 'sms' folder
+      run: php artisan test --env=testing
