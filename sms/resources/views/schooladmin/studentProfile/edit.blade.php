@@ -116,9 +116,8 @@
                                                 Admission Number
                                             </label>
                                             <div class="input-group">
-                                                <span class="input-group-text bg-light"><i class="fas fa-id-card"></i></span>
                                                 <input type="text" 
-                                                    class="form-control bg-light fw-bold"
+                                                    class="form-control bg-light"
                                                     id="admission_number" 
                                                     name="admission_number" 
                                                     value="{{ old('admission_number', $student->admission_number) }}"

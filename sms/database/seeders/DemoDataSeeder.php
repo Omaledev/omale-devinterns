@@ -10,11 +10,21 @@ use App\Models\Section;
 use App\Models\TeacherProfile;
 use App\Models\StudentProfile;
 use App\Models\ParentProfile;
+use Spatie\Permission\Models\Role;
 
 class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
+        // Creating Roles & Permissions
+        $this->command->info('Creating Roles...');
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        
+        $roles = ['SuperAdmin', 'SchoolAdmin', 'Teacher', 'Student', 'Parent', 'Bursar'];
+        foreach ($roles as $roleName) {
+            Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
+        }
+
         $this->command->info('Creating Axia Demo Academy...');
 
         // Creating the School
@@ -23,7 +33,6 @@ class DemoDataSeeder extends Seeder
             'email' => 'info@axiademo.com'
         ]);
 
-        // Defining Prefix and Year for consistent IDs
         $prefix = 'AXI'; 
         $year = date('Y');
 
@@ -31,7 +40,7 @@ class DemoDataSeeder extends Seeder
         $classLevels = ClassLevel::factory(3)->sequence(
             ['name' => 'JSS 1'],
             ['name' => 'JSS 2'],
-            ['name' => 'SSS 1']
+            ['name' => 'JSS 3']
         )->create(['school_id' => $school->id]);
 
         foreach ($classLevels as $class) {
@@ -52,31 +61,33 @@ class DemoDataSeeder extends Seeder
             'email' => 'principal@demo.com',
             'password' => bcrypt('password'),
             'school_id' => $school->id,
+            'phone' => '08011111111', 
         ]);
         $admin->assignRole('SchoolAdmin');
 
 
-        // Creating Bursar 
+        // Creating Bursar
         $bursar = User::factory()->create([
             'name' => 'Demo Bursar',
             'email' => 'bursar@demo.com',
             'password' => bcrypt('password'),
             'school_id' => $school->id,
-            // Manually setting ID
-            'employee_id' => "{$prefix}BUR{$year}001", 
+            'employee_id' => "{$prefix}BUR{$year}001",
+            'phone' => '08022222222', 
         ]);
         $bursar->assignRole('Bursar');
 
 
-        // Creating Teachers 
+        // Creating Teachers
         $this->command->info('Hiring Teachers...');
         
         User::factory(5)
             ->sequence(fn ($sequence) => [
                 'school_id' => $school->id,
-                // Generates AXITCH2026001, AXITCH2026002...
                 'employee_id' => $prefix . 'TCH' . $year . str_pad($sequence->index + 1, 3, '0', STR_PAD_LEFT),
             ])
+            // Generate random phone for each teacher
+            ->state(fn (array $attributes) => ['phone' => fake()->phoneNumber()]) 
             ->create()
             ->each(function ($user) use ($school) {
                 $user->assignRole('Teacher');
@@ -84,21 +95,21 @@ class DemoDataSeeder extends Seeder
                 TeacherProfile::factory()->create([
                     'user_id' => $user->id,
                     'school_id' => $school->id,
-                    // Ensure profile uses the same ID
                     'employee_id' => $user->employee_id 
                 ]);
             });
 
 
-        // Creating Students 
+        // Creating Students
         $this->command->info('Enrolling Students...');
         
         User::factory(20)
             ->sequence(fn ($sequence) => [
                 'school_id' => $school->id,
-                // Generates AXI/2026/001, AXI/2026/002...
                 'admission_number' => $prefix . '/' . $year . '/' . str_pad($sequence->index + 1, 3, '0', STR_PAD_LEFT),
             ])
+            // Generate random phone for each student
+            ->state(fn (array $attributes) => ['phone' => fake()->phoneNumber()])
             ->create()
             ->each(function ($user) use ($school, $sections) {
                 $user->assignRole('Student');
@@ -110,7 +121,6 @@ class DemoDataSeeder extends Seeder
                     'school_id' => $school->id,
                     'class_level_id' => $randomSection->class_level_id,
                     'section_id' => $randomSection->id,
-                    // Sync student_id in profile with admission_number
                     'student_id' => $user->admission_number 
                 ]);
             });
@@ -118,7 +128,10 @@ class DemoDataSeeder extends Seeder
 
         // Creating Parents 
         $this->command->info('Registering Parents...');
-        User::factory(10)->create(['school_id' => $school->id])
+        User::factory(10)
+            // Generate random phone for each parent
+            ->state(fn (array $attributes) => ['phone' => fake()->phoneNumber()])
+            ->create(['school_id' => $school->id])
             ->each(function ($user) use ($school) {
                 $user->assignRole('Parent');
 

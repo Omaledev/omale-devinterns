@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
          $this->call([
             RoleSeeder::class, // This is a call to includes roles, permissions, and SuperAdmin user
+            DemoDataSeeder::class,
         ]);
     }
 }
