@@ -3,15 +3,12 @@
 @php
     // Getting School Name
     $schoolName = $student->school->name ?? 'STD';
-    
-    // Generating Prefix for the JS button
-    $schoolPrefix = '';
-    $words = explode(' ', $schoolName);
-    foreach($words as $word) {
-        $schoolPrefix .= strtoupper(substr($word, 0, 1));
-    }
-    $schoolPrefix = substr($schoolPrefix, 0, 4);
+
+    $cleanName = preg_replace('/[^a-zA-Z]/', '', $schoolName);
+    $schoolPrefix = strtoupper(substr($cleanName, 0, 3));
 @endphp
+
+@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
@@ -92,7 +89,6 @@
                                             <label for="date_of_birth" class="form-label">Date of Birth</label>
                                             <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror"
                                                    id="date_of_birth" name="date_of_birth" 
-                                                   {{-- Using ?-> to safely access properties on potentially null objects --}}
                                                    value="{{ old('date_of_birth', $student->studentProfile?->date_of_birth?->format('Y-m-d')) }}">
                                             @error('date_of_birth')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -114,31 +110,21 @@
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Academic Information</h6>
 
-                                        {{-- Admission Number --}}
+                                        {{-- Admission Number (READ ONLY) --}}
                                         <div class="mb-3">
                                             <label for="admission_number" class="form-label">
-                                                Admission Number <span class="text-danger">*</span>
+                                                Admission Number
                                             </label>
                                             <div class="input-group">
+                                                <span class="input-group-text bg-light"><i class="fas fa-id-card"></i></span>
                                                 <input type="text" 
-                                                    class="form-control @error('admission_number') is-invalid @enderror"
+                                                    class="form-control bg-light fw-bold"
                                                     id="admission_number" 
                                                     name="admission_number" 
                                                     value="{{ old('admission_number', $student->admission_number) }}"
-                                                    placeholder="Enter or Generate ID" 
-                                                    required>
-                                                    
-                                                <button class="btn btn-outline-secondary" 
-                                                        type="button" 
-                                                        id="generateIdBtn"
-                                                        data-prefix="{{ $schoolPrefix }}">
-                                                    <i class="fas fa-magic me-1"></i>Generate
-                                                </button>
+                                                    readonly>
                                             </div>
-                                            <div class="form-text">Click Generate to assign a new Matric Number.</div>
-                                            @error('admission_number')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            <small class="text-muted">Admission number cannot be changed.</small>
                                         </div>
 
                                         {{-- Class Selection --}}
@@ -152,7 +138,6 @@
                                                 
                                                 @foreach($classLevels as $class)
                                                     <option value="{{ $class->id }}" 
-                                                        {{-- Safely check if profile exists --}}
                                                         {{ (old('class_level_id', $student->studentProfile?->class_level_id) == $class->id) ? 'selected' : '' }}>
                                                         {{ $class->name }}
                                                     </option>
@@ -175,7 +160,6 @@
                                                 
                                                 @foreach($sections as $section)
                                                     <option value="{{ $section->id }}" 
-                                                        {{-- Safely check if profile exists --}}
                                                         {{ (old('section_id', $student->studentProfile?->section_id) == $section->id) ? 'selected' : '' }}>
                                                         {{ $section->name }} 
                                                     </option>
@@ -245,9 +229,11 @@
     document.getElementById('generateIdBtn').addEventListener('click', function() {
         const prefix = this.getAttribute('data-prefix'); 
         const year = new Date().getFullYear();
-        // Generate a random number 
         const random = Math.floor(1000 + Math.random() * 9000);
+        
+        // Random generation with slashes for Edit mode
         const generatedId = prefix + '/' + year + '/' + random; 
+        
         document.getElementById('admission_number').value = generatedId;
     });
 </script>

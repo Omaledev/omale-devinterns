@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\StudentProfile;
 use App\Models\ClassLevel;
 use App\Models\Section;
+use App\Models\School;
 use Illuminate\Support\Facades\Hash;
 use App\Exports\StudentsExport;
 use App\Imports\StudentsImport;
@@ -20,13 +21,12 @@ class StudentProfileController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+   public function index(Request $request)
     {
         $query = User::role('Student')
             ->where('school_id', auth()->user()->school_id)
             ->with(['studentProfile.classLevel', 'studentProfile.section']);
 
-        // Search Functionality
         if ($request->has('search') && $request->search != '') {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
@@ -36,28 +36,57 @@ class StudentProfileController extends Controller
             });
         }
 
-        // paginate(10)
         $students = $query->latest()->paginate(10);
-
         return view('schooladmin.studentProfile.index', compact('students'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //Fetch ClassLevels created by this school
-        $classLevels = ClassLevel::where('school_id', auth()->user()->school_id)->get();
+        $schoolId = auth()->user()->school_id;
+        $classLevels = ClassLevel::where('school_id', $schoolId)->get();
+        $sections = Section::where('school_id', $schoolId)->get();
 
-        $sections = Section::where('school_id', auth()->user()->school_id)->get();
-        //Passing them to the view
-        return view('schooladmin.studentProfile.create', compact('classLevels', 'sections'));
+        // Generate Sequential ID: first three letter of school/2026/001
+        $nextAdmissionNumber = $this->generateAdmissionNumber();
+
+        return view('schooladmin.studentProfile.create', compact('classLevels', 'sections', 'nextAdmissionNumber'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    private function generateAdmissionNumber()
+    {
+        $schoolId = auth()->user()->school_id;
+        $school = School::find($schoolId);
+        
+        // Prefix 
+        $cleanName = preg_replace('/[^a-zA-Z]/', '', $school->name ?? 'SCH');
+        $prefix = strtoupper(substr($cleanName, 0, 3));
+        $year = date('Y');
+        
+        // Search Pattern: 
+        $searchPattern = "{$prefix}/{$year}/%";
+
+        // Find Last Student
+        $lastStudent = User::role('Student')
+            ->where('school_id', $schoolId)
+            ->where('admission_number', 'like', $searchPattern)
+            ->orderByRaw('LENGTH(admission_number) DESC') 
+            ->orderBy('admission_number', 'desc')
+            ->first();
+
+        if (!$lastStudent) {
+            return "{$prefix}/{$year}/001";
+        }
+
+        // Extract Number (Explode by / and take the last part)
+        $parts = explode('/', $lastStudent->admission_number);
+        $lastNumber = end($parts);
+        
+        $newNumber = intval($lastNumber) + 1;
+        $paddedNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        return "{$prefix}/{$year}/{$paddedNumber}";
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -75,7 +104,6 @@ class StudentProfileController extends Controller
             'emergency_contact' => 'required|string|max:255',
         ]);
 
-        // Creating the user
         $user = User::create([
             'name' => $validated['full_name'], 
             'email' => $validated['email'],
@@ -86,10 +114,8 @@ class StudentProfileController extends Controller
             'is_approved' => true
         ]);
 
-        // Assigning Student role
         $user->assignRole('Student');
 
-        // Creating student profile
         StudentProfile::create([
             'user_id' => $user->id,
             'school_id' => auth()->user()->school_id,
@@ -103,7 +129,7 @@ class StudentProfileController extends Controller
         ]);
 
         return redirect()->route('schooladmin.students.index')
-            ->with('success', 'Student created and Assigned to class successfully!');
+            ->with('success', 'Student created successfully!');
     }
 
     /**

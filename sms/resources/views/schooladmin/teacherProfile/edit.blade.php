@@ -1,15 +1,5 @@
 @extends('layouts.app')
 
-@php
-    $schoolName = $teacher->school->name ?? 'EMP';
-    $schoolPrefix = '';
-    $words = explode(' ', $schoolName);
-    foreach($words as $word) {
-        $schoolPrefix .= strtoupper(substr($word, 0, 1));
-    }
-    $schoolPrefix = substr($schoolPrefix, 0, 4);
-@endphp
-
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -28,7 +18,7 @@
                     </nav>
                 </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('schooladmin.teachers.index') }}" class="btn btn-outline-secondary me-2">
+                    <a href="{{ route('schooladmin.teachers.index') }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-1"></i>Back to Teachers
                     </a>
                 </div>
@@ -38,9 +28,7 @@
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary">
-                                Edit Teacher Information
-                            </h6>
+                            <h6 class="m-0 fw-bold text-primary">Edit Teacher Information</h6>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('schooladmin.teachers.update', $teacher) }}" method="POST">
@@ -54,8 +42,7 @@
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                                   id="name" name="name" value="{{ old('name', $teacher->name) }}" 
-                                                   placeholder="Enter teacher's full name" required>
+                                                   id="name" name="name" value="{{ old('name', $teacher->name) }}" required>
                                             @error('name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -64,8 +51,7 @@
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
                                             <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                                   id="email" name="email" value="{{ old('email', $teacher->email) }}"
-                                                   placeholder="Enter email address" required>
+                                                   id="email" name="email" value="{{ old('email', $teacher->email) }}" required>
                                             @error('email')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -74,8 +60,7 @@
                                         <div class="mb-3">
                                             <label for="phone" class="form-label">Phone Number</label>
                                             <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                                   id="phone" name="phone" value="{{ old('phone', $teacher->phone) }}"
-                                                   placeholder="Enter phone number">
+                                                   id="phone" name="phone" value="{{ old('phone', $teacher->phone) }}">
                                             @error('phone')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -84,8 +69,7 @@
                                         <div class="mb-3">
                                             <label for="address" class="form-label">Address</label>
                                             <textarea class="form-control @error('address') is-invalid @enderror"
-                                                      id="address" name="address" rows="3"
-                                                      placeholder="Enter teacher's address">{{ old('address', $teacher->teacherProfile->address ?? '') }}</textarea>
+                                                      id="address" name="address" rows="3">{{ old('address', $teacher->teacherProfile->address ?? '') }}</textarea>
                                             @error('address')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -96,26 +80,16 @@
                                         <h6 class="text-primary mb-3">Professional Information</h6>
 
                                         <div class="mb-3">
-                                            <label for="employee_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
+                                            <label for="employee_id" class="form-label">Employee ID</label>
                                             <div class="input-group">
                                                 <input type="text" 
-                                                    class="form-control @error('employee_id') is-invalid @enderror"
+                                                    class="form-control bg-light"
                                                     id="employee_id" 
                                                     name="employee_id" 
                                                     value="{{ old('employee_id', $teacher->employee_id) }}"
-                                                    placeholder="Enter or Generate ID" 
-                                                    required>
-                                                    
-                                                <button class="btn btn-outline-secondary" 
-                                                        type="button" 
-                                                        id="generateIdBtn"
-                                                        data-prefix="{{ $schoolPrefix }}">
-                                                    <i class="fas fa-magic me-1"></i>Generate
-                                                </button>
+                                                    readonly>
                                             </div>
-                                            @error('employee_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            <small class="text-muted">Employee ID cannot be modified.</small>
                                         </div>
 
                                         <div class="card bg-light border-0 mb-3">
@@ -130,8 +104,6 @@
                                                 </div>
                                                 <small class="text-muted">
                                                     Unchecking this will prevent the teacher from logging in.
-                                                    <br>
-                                                    <span class="text-danger"><i class="fas fa-info-circle"></i> Note: To see the green "Active" badge on the list, the teacher must be approved AND assigned to a subject.</span>
                                                 </small>
                                             </div>
                                         </div>
@@ -142,18 +114,17 @@
                                                     <label for="password" class="form-label">New Password</label>
                                                     <input type="password" class="form-control @error('password') is-invalid @enderror"
                                                            id="password" name="password" placeholder="Leave blank to keep current">
+                                                    <small class="text-muted">Only fill if changing.</small>
                                                     @error('password')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
-                                                    <small class="form-text text-muted">Leave blank if you don't want to change password</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="password_confirmation" class="form-label">Confirm New Password</label>
                                                     <input type="password" class="form-control"
-                                                           id="password_confirmation" name="password_confirmation" 
-                                                           placeholder="Confirm new password">
+                                                           id="password_confirmation" name="password_confirmation">
                                                 </div>
                                             </div>
                                         </div>
@@ -181,18 +152,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.getElementById('generateIdBtn').addEventListener('click', function() {
-        const prefix = this.getAttribute('data-prefix'); 
-        const year = new Date().getFullYear();
-        const random = Math.floor(1000 + Math.random() * 9000);
-        
-        // Result: SCH20248831
-        const generatedId = prefix + year + random;
-        
-        document.getElementById('employee_id').value = generatedId;
-    });
-</script>
-@endpush

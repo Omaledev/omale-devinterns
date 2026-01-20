@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Add New Bursar</h1>
@@ -27,7 +24,6 @@
                 </div>
             </div>
 
-            <!-- Create Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -69,12 +65,26 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="employee_id" class="form-label">Employee ID *</label>
-                                            <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
-                                                   id="employee_id" name="employee_id" value="{{ old('employee_id') }}"
-                                                   placeholder="e.g., BUR2024001" required>
+                                            <label for="employee_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
+                                            
+                                            <div class="input-group">
+                                                <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
+                                                    id="employee_id" 
+                                                    name="employee_id" 
+                                                    value="{{ old('employee_id') }}"
+                                                    placeholder="Click Generate to assign next ID" 
+                                                    readonly
+                                                    required>
+                                                    
+                                                <button class="btn btn-primary" 
+                                                        type="button" 
+                                                        id="generateIdBtn"
+                                                        data-next-id="{{ $nextEmployeeId }}">
+                                                    Generate ID
+                                                </button>
+                                            </div>
                                             @error('employee_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
@@ -140,3 +150,21 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateIdBtn');
+        const inputField = document.getElementById('employee_id');
+
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function() {
+                // Get the calculated ID from the Controller
+                const sequentialId = this.getAttribute('data-next-id');
+                // Fill the input
+                inputField.value = sequentialId;
+            });
+        }
+    });
+</script>
+@endpush

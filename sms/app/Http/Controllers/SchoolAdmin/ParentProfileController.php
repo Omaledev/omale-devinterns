@@ -43,6 +43,7 @@ class ParentProfileController extends Controller
     {
         $students = User::role('Student')
             ->where('school_id', auth()->user()->school_id)
+            ->with(['studentProfile.classLevel', 'studentProfile.section'])
             ->get();
             
         return view('schooladmin.parentProfile.create', compact('students'));
@@ -119,9 +120,10 @@ class ParentProfileController extends Controller
 
         $students = User::role('Student')
             ->where('school_id', auth()->user()->school_id)
+            ->with(['studentProfile.classLevel', 'studentProfile.section'])
             ->get();
             
-        $parent->load('children');
+        $parent->load(['children.studentProfile.classLevel']);
         
         return view('schooladmin.parentProfile.edit', compact('parent', 'students'));
     }

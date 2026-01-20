@@ -3,12 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
         @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Add New Teacher</h1>
@@ -27,21 +24,17 @@
                 </div>
             </div>
 
-            <!-- Teacher Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
-                            <h6 class="m-0 fw-bold text-primary">
-                                Teacher Information
-                            </h6>
+                            <h6 class="m-0 fw-bold text-primary">Teacher Information</h6>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('schooladmin.teachers.store') }}" method="POST">
                                 @csrf
 
                                 <div class="row">
-                                    <!-- Personal Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Personal Information</h6>
 
@@ -76,21 +69,36 @@
                                         </div>
                                     </div>
 
-                                    <!-- Professional Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Professional Information</h6>
 
-                                        <div class="mb-3">
+                                       <div class="mb-3">
                                             <label for="employee_id" class="form-label">Employee ID <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
-                                                   id="employee_id" name="employee_id" value="{{ old('employee_id') }}"
-                                                   placeholder="e.g., EMP2024001" required>
+                                            
+                                            <div class="input-group">
+                                                <input type="text" 
+                                                    class="form-control @error('employee_id') is-invalid @enderror"
+                                                    id="employee_id" 
+                                                    name="employee_id" 
+                                                    value="{{ old('employee_id') }}"
+                                                    placeholder="Click Generate to assign next ID" 
+                                                    readonly
+                                                    required>
+                                                    
+                                                <button class="btn btn-primary" 
+                                                        type="button" 
+                                                        id="generateIdBtn"
+                                                        data-next-id="{{ $nextEmployeeId }}">
+                                                    Generate ID
+                                                </button>
+                                            </div>
+                                            <small class="text-muted">Auto-generated sequential ID</small>
+
                                             @error('employee_id')
-                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
 
-                                        <!-- Password Fields Side by Side -->
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -114,7 +122,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Address Information -->
                                 <div class="row mt-3">
                                     <div class="col-12">
                                         <h6 class="text-primary mb-3">Address Information</h6>
@@ -130,7 +137,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Form Actions -->
                                 <div class="row mt-4">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">
@@ -159,7 +165,6 @@
         min-height: calc(100vh - 56px);
         box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
     }
-
     .sidebar .nav-link {
         color: #adb5bd;
         padding: 0.75rem 1rem;
@@ -167,40 +172,52 @@
         margin: 0.125rem 0.5rem;
         transition: all 0.15s ease;
     }
-
     .sidebar .nav-link:hover {
         color: #fff;
         background-color: rgba(255, 255, 255, 0.1);
     }
-
     .sidebar .nav-link.active {
         color: #fff;
         background-color: rgba(255, 255, 255, 0.2);
     }
-
     .sidebar .nav-link i {
         width: 20px;
         text-align: center;
     }
-
     .card {
         border: none;
         border-radius: 0.5rem;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
     .card:hover {
         transform: translateY(-2px);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     }
-
     .form-label {
         font-weight: 500;
         color: #495057;
     }
-
     .breadcrumb {
         margin-bottom: 0;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateIdBtn');
+        const inputField = document.getElementById('employee_id');
+
+        if (generateBtn) {
+            generateBtn.addEventListener('click', function() {
+                // Fetch the calculated ID from the button attribute
+                const sequentialId = this.getAttribute('data-next-id');
+                
+                // Fill the input box
+                inputField.value = sequentialId;
+            });
+        }
+    });
+</script>
 @endpush

@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
+@section('styles')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-       @include('schooladmin.partials.sidebar')
+        @include('schooladmin.partials.sidebar')
 
-        <!-- Main Content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <!-- Header -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <div>
                     <h1 class="h2">Add New Parent</h1>
@@ -27,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- Parent Form -->
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
@@ -41,7 +42,6 @@
                                 @csrf
 
                                 <div class="row">
-                                    <!-- Personal Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Personal Information</h6>
 
@@ -93,7 +93,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Additional Information -->
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Additional Information</h6>
 
@@ -107,71 +106,36 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Student Selection - FIXED VERSION -->
                                         <div class="mb-3">
-                                            <label class="form-label">Assign Children</label>
+                                            <label class="form-label fw-bold">Assign Children</label>
                                             
-                                            <!-- Search Box -->
-                                            <div class="mb-3">
-                                                <input type="text" class="form-control" id="studentSearch" 
-                                                       placeholder="Search students by name, admission number, or class...">
-                                            </div>
-                                            
-                                            <!-- Selected Students Display -->
-                                            <div class="mb-3" id="selectedStudents" style="display: none;">
-                                                <label class="form-label">Selected Students:</label>
-                                                <div id="selectedList" class="d-flex flex-wrap gap-2 p-3 border rounded bg-light"></div>
-                                            </div>
-                                            
-                                            <!-- Students List -->
-                                            <div class="border rounded" style="max-height: 300px; overflow-y: auto;">
-                                                <div class="p-3">
-                                                    <div id="studentsList">
-                                                        @foreach($students->chunk(2) as $chunk)
-                                                        <div class="row">
-                                                            @foreach($chunk as $student)
-                                                            <div class="col-md-6 mb-2 student-item">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input student-checkbox" 
-                                                                           type="checkbox" 
-                                                                           name="children[]" 
-                                                                           value="{{ $student->id }}"
-                                                                           id="student_{{ $student->id }}"
-                                                                           {{ in_array($student->id, old('children', [])) ? 'checked' : '' }}>
-                                                                    <label class="form-check-label w-100" for="student_{{ $student->id }}">
-                                                                        <div class="d-flex justify-content-between">
-                                                                            <span class="fw-bold">{{ $student->name }}</span>
-                                                                            <small class="text-muted">{{ $student->admission_number }}</small>
-                                                                        </div>
-                                                                        <small class="text-muted d-block">
-                                                                            {{ $student->class ?? 'No Class' }} • {{ $student->section ?? 'No Section' }}
-                                                                        </small>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            @endforeach
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
+                                        <select class="form-select" name="children[]" id="student_select" multiple="multiple" style="width: 100%;">
+                                            @foreach($students as $student)
+                                                <option value="{{ $student->id }}" 
+                                                    {{ in_array($student->id, old('children', [])) ? 'selected' : '' }}>
                                                     
-                                                    @if($students->isEmpty())
-                                                    <div class="text-center text-muted py-4">
-                                                        <i class="fas fa-user-graduate fa-2x mb-2"></i>
-                                                        <p>No students available</p>
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            
+                                                    {{ $student->name }} 
+                                                    
+                                                    (
+                                                    {{ $student->studentProfile->classLevel->name ?? 'No Class' }} 
+                                                    - 
+                                                    {{ $student->studentProfile->section->name ?? 'No Section' }}
+                                                    )
+                                                    
+                                                </option>
+                                            @endforeach
+                                        </select>
+
                                             @error('children')
                                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
-                                            <small class="text-muted">Select students by checking the boxes. Use search to filter the list.</small>
+                                            <div class="form-text text-muted">
+                                                <i class="fas fa-search me-1"></i> Type name or admission number to search. Click to select multiple.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Form Actions -->
                                 <div class="row mt-4">
                                     <div class="col-12">
                                         <div class="d-flex justify-content-end gap-2">
@@ -195,87 +159,19 @@
 @endsection
 
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('studentSearch');
-    const studentItems = document.querySelectorAll('.student-item');
-    const selectedDiv = document.getElementById('selectedStudents');
-    const selectedList = document.getElementById('selectedList');
-    const checkboxes = document.querySelectorAll('.student-checkbox');
-    
-    let selectedStudents = new Set();
-    
-    // Initialize selected students from checked boxes
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            addSelectedStudent(checkbox);
-        }
+$(document).ready(function() {
+    // Initialize Select2 on the student select box
+    $('#student_select').select2({
+        theme: "bootstrap-5",
+        placeholder: "Search students by name or admission number...",
+        allowClear: true,
+        width: '100%',
+        closeOnSelect: false, 
     });
-    
-    // Search functionality
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        
-        studentItems.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(searchTerm) ? 'block' : 'none';
-        });
-    });
-    
-    // Checkbox change handler
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                addSelectedStudent(this);
-            } else {
-                removeSelectedStudent(this);
-            }
-        });
-    });
-    
-    function addSelectedStudent(checkbox) {
-        const studentId = checkbox.value;
-        const label = checkbox.closest('.form-check').querySelector('.form-check-label');
-        const studentName = label.querySelector('.fw-bold').textContent;
-        const admissionNo = label.querySelector('small.text-muted').textContent;
-        
-        selectedStudents.add(studentId);
-        
-        const badge = document.createElement('span');
-        badge.className = 'badge bg-primary d-flex align-items-center';
-        badge.innerHTML = `
-            ${studentName}
-            <button type="button" class="btn-close btn-close-white ms-2" 
-                    data-student-id="${studentId}"></button>
-        `;
-        
-        selectedList.appendChild(badge);
-        selectedDiv.style.display = 'block';
-        
-        // Remove button handler
-        badge.querySelector('.btn-close').addEventListener('click', function() {
-            const id = this.getAttribute('data-student-id');
-            const correspondingCheckbox = document.querySelector(`.student-checkbox[value="${id}"]`);
-            if (correspondingCheckbox) {
-                correspondingCheckbox.checked = false;
-                removeSelectedStudent(correspondingCheckbox);
-            }
-        });
-    }
-    
-    function removeSelectedStudent(checkbox) {
-        const studentId = checkbox.value;
-        selectedStudents.delete(studentId);
-        
-        const badge = selectedList.querySelector(`[data-student-id="${studentId}"]`)?.closest('.badge');
-        if (badge) {
-            badge.remove();
-        }
-        
-        if (selectedStudents.size === 0) {
-            selectedDiv.style.display = 'none';
-        }
-    }
 });
 </script>
 @endpush
