@@ -8,8 +8,6 @@
     $schoolPrefix = strtoupper(substr($cleanName, 0, 3));
 @endphp
 
-@extends('layouts.app')
-
 @section('content')
 <div class="container-fluid">
     <div class="row">

@@ -82,14 +82,6 @@
                 </a>
             </li>
 
-            {{-- Attendance (Placeholder Logic) --}}
-            <li class="nav-item">
-                <a class="nav-link text-white-50" href="#">
-                    <i class="fas fa-calendar-check me-2"></i>
-                    Attendance
-                </a>
-            </li>
-
             {{-- Fees (Dropdown) --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('finance.*') ? 'active text-white' : 'text-white-50' }} collapsed" 
