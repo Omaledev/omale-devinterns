@@ -96,27 +96,23 @@ class SuperAdminController extends Controller
             $userGrowthData[] = $userCount;
         }
 
-        //NEW: PLATFORM HEALTH & TARGETS
-        // ---------------------------------------------------------
-
-        // 1. "Inactive Schools" (Schools with 0 students)
+        // Inactive Schools (Schools with 0 students)
         $inactiveSchoolsCount = School::doesntHave('users')->count();
 
-        // 2. "New Schools Today"
+        // New Schools Today
         $newSchoolsToday = School::whereDate('created_at', Carbon::today())->count();
 
-        // 3. Server Storage (Real functionality)
-        // Note: usage might be 0 on some shared hosts if permission denied
+        // Server Storage (Real functionality)
         $diskTotal = disk_total_space('/'); 
         $diskFree = disk_free_space('/');
         $diskUsed = $diskTotal - $diskFree;
         $diskPercentage = round(($diskUsed / $diskTotal) * 100);
 
-        // 4. Growth Targets (Gamification)
+        // Growth Targets (Gamification)
         $userGoal = 1000; // Set a goal (e.g., 1000 users)
         $userProgress = min(round(($stats['total_users'] / $userGoal) * 100), 100);
 
-        $schoolGoal = 50; // Set a goal (e.g., 50 schools)
+        $schoolGoal = 50; // Setting a goal (50 schools)
         $schoolProgress = min(round(($stats['total_schools'] / $schoolGoal) * 100), 100);
 
         $platformHealth = [

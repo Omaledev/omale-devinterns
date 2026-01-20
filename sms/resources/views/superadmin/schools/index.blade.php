@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         
-        {{-- Include the Sidebar --}}
+        {{-- Sidebar --}}
         @include('superadmin.partials.sidebar')
 
         {{-- Main Content Area --}}

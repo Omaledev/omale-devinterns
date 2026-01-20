@@ -3,16 +3,15 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        {{-- 1. Include the Sidebar --}}
+        {{-- Sidebar --}}
         @include('superadmin.partials.sidebar')
 
-        {{-- 2. Main Content Area --}}
+        {{--  Main Content Area --}}
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
             
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
                 <div class="mb-3 mb-md-0">
                     <h2 class="h4 mb-0">Users Management</h2>
-                    {{-- Optional: Breadcrumb or back link --}}
                     {{-- <a href="{{ route('superadmin.dashboard') }}" class="text-decoration-none small">
                         <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
                     </a> --}}
