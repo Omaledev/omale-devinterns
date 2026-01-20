@@ -40,7 +40,7 @@ jobs:
     - name: Install Composer Dependencies
       run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    # 5. Install Node Dependencies & Build (NEW STEP)
+    # Installing Node Dependencies & Build 
     # This creates the 'manifest.json' file so your views don't crash
     - name: Install NPM & Build Assets
       run: |
