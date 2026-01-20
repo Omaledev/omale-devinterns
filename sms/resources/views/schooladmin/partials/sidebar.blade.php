@@ -82,6 +82,24 @@
                 </a>
             </li>
 
+            {{-- Timetables --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('schooladmin.timetables.*') ? 'active text-white' : 'text-white-50' }}" 
+                   href="{{ route('schooladmin.timetables.index') }}">
+                    <i class="fas fa-calendar-day me-2"></i>
+                    Timetables
+                </a>
+            </li>
+
+            {{-- Assessments --}}
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('schooladmin.assessments.*') ? 'active text-white' : 'text-white-50' }}" 
+                   href="{{ route('schooladmin.assessments.index') }}">
+                    <i class="fas fa-clipboard-check me-2"></i>
+                    Assessments
+                </a>
+            </li>
+
             {{-- Fees (Dropdown) --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('finance.*') ? 'active text-white' : 'text-white-50' }} collapsed" 
