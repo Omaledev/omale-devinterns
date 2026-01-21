@@ -94,12 +94,16 @@
                                                     </td>
                                                     <td>
                                                         @if($invoice->status !== 'PAID')
+                                                            {{-- Data Attributes for JS --}}
                                                             <button class="btn btn-sm btn-primary" 
                                                                     data-bs-toggle="modal" 
                                                                     data-bs-target="#paymentModal"
                                                                     data-invoice-id="{{ $invoice->id }}"
                                                                     data-invoice-number="{{ $invoice->invoice_number }}"
-                                                                    data-balance="{{ $invoice->total_amount - $invoice->paid_amount }}">
+                                                                    data-balance="{{ $invoice->total_amount - $invoice->paid_amount }}"
+                                                                    data-bank-name="{{ $invoice->school->bank_name ?? 'Contact School' }}"
+                                                                    data-account-number="{{ $invoice->school->account_number ?? 'Unavailable' }}"
+                                                                    data-account-name="{{ $invoice->school->account_name ?? '' }}">
                                                                 Pay / Upload
                                                             </button>
                                                         @else
@@ -136,10 +140,11 @@
                 <div class="modal-body">
                     <input type="hidden" name="invoice_id" id="modalInvoiceId">
                     
+                    {{-- Bank Details Section --}}
                     <div class="alert alert-info small">
                         <strong>Bank Details:</strong><br>
-                        Bank: First Bank<br>
-                        Acct: 1234567890 (School Fees)
+                        Bank: <span id="modalBankName" class="fw-bold">...</span><br>
+                        Acct: <span id="modalAccountNumber" class="fw-bold text-dark">...</span> <span id="modalAccountName"></span>
                     </div>
 
                     <p class="mb-3">Invoice: <strong id="modalInvoiceNumber" class="text-primary"></strong></p>
@@ -168,20 +173,36 @@
     </div>
 </div>
 
-@endsection
-
-@section('scripts')
 <script>
-    var paymentModal = document.getElementById('paymentModal');
-    paymentModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var invoiceId = button.getAttribute('data-invoice-id');
-        var invoiceNumber = button.getAttribute('data-invoice-number');
-        var balance = button.getAttribute('data-balance');
+    document.addEventListener('DOMContentLoaded', function () {
+        var paymentModal = document.getElementById('paymentModal');
         
-        document.getElementById('modalInvoiceId').value = invoiceId;
-        document.getElementById('modalInvoiceNumber').textContent = invoiceNumber;
-        document.getElementById('modalAmount').value = balance;
+        // Only run if modal exists
+        if (paymentModal) {
+            paymentModal.addEventListener('show.bs.modal', function (event) {
+                // Button that triggered the modal
+                var button = event.relatedTarget;
+                
+                // Extracting info from data-* attributes
+                var invoiceId = button.getAttribute('data-invoice-id');
+                var invoiceNumber = button.getAttribute('data-invoice-number');
+                var balance = button.getAttribute('data-balance');
+                var bankName = button.getAttribute('data-bank-name');
+                var accountNumber = button.getAttribute('data-account-number');
+                var accountName = button.getAttribute('data-account-name');
+                
+                // Updating the modal's content
+                document.getElementById('modalInvoiceId').value = invoiceId;
+                document.getElementById('modalInvoiceNumber').textContent = invoiceNumber;
+                document.getElementById('modalAmount').value = balance;
+                
+                // Updating Bank Details Text
+                document.getElementById('modalBankName').textContent = bankName;
+                document.getElementById('modalAccountNumber').textContent = accountNumber;
+                document.getElementById('modalAccountName').textContent = accountName ? '(' + accountName + ')' : '';
+            });
+        }
     });
 </script>
+
 @endsection

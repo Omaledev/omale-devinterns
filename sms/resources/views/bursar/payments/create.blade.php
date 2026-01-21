@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        {{-- INCLUDE SIDEBAR --}}
+        {{-- SIDEBAR --}}
         @include('bursar.partials.sidebar')
 
         {{-- MAIN CONTENT WRAPPER --}}

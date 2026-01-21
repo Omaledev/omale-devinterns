@@ -3,70 +3,80 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        {{-- 1. INCLUDE SIDEBAR (This fixes the missing dark column) --}}
         @include('bursar.partials.sidebar')
-
-        {{-- 2. WRAP CONTENT IN MAIN TAG (To push it to the right of the sidebar) --}}
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
             
-            {{-- Header Section --}}
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Receipts Log</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="{{ route('finance.invoices.index') }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-plus me-1"></i> New Payment
-                    </a>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Payment Logs</h1>
+                <a href="{{ route('finance.invoices.index') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i> Record Cash Payment
+                </a>
             </div>
 
-            {{-- Table Section --}}
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover table-bordered">
+                        <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Receipt #</th>
                                     <th>Date</th>
                                     <th>Student</th>
                                     <th>Amount</th>
                                     <th>Method</th>
-                                    <th>Ref Number</th>
+                                    <th>Proof</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($payments as $payment)
                                 <tr>
-                                    <td>#{{ str_pad($payment->id, 6, '0', STR_PAD_LEFT) }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($payment->payment_date)->format('d M, Y') }}</td>
-                                    <td>{{ $payment->invoice->student->name ?? 'Unknown' }}</td>
-                                    <td class="fw-bold text-success">₦{{ number_format($payment->amount, 2) }}</td>
-                                    <td><span class="badge bg-secondary">{{ ucfirst($payment->payment_method) }}</span></td>
-                                    <td>{{ $payment->reference_number ?? '-' }}</td>
+                                    <td>{{ $payment->created_at->format('d M, Y') }}</td>
                                     <td>
-                                        <a href="{{ route('bursar.payments.receipt', $payment->id) }}" 
-                                           class="btn btn-sm btn-outline-dark" target="_blank">
-                                            <i class="fas fa-print"></i> Print
-                                        </a>
+                                        <div class="fw-bold">{{ $payment->invoice->student->name ?? 'Unknown' }}</div>
+                                        <small class="text-muted">{{ $payment->invoice->invoice_number }}</small>
+                                    </td>
+                                    <td class="fw-bold">₦{{ number_format($payment->amount, 2) }}</td>
+                                    <td>{{ $payment->payment_method }}</td>
+                                    <td>
+                                        @if($payment->proof_file_path)
+                                            <i class="fas fa-paperclip text-primary"></i> Uploaded
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($payment->status === 'pending')
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        @elseif($payment->status === 'approved')
+                                            <span class="badge bg-success">Approved</span>
+                                        @else
+                                            <span class="badge bg-danger">Declined</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($payment->status === 'pending')
+                                            <a href="{{ route('bursar.payments.verify', $payment->id) }}" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-eye me-1"></i> Verify
+                                            </a>
+                                        @else
+                                            <a href="{{ route('bursar.payments.receipt', $payment->id) }}" class="btn btn-sm btn-outline-secondary">
+                                                <i class="fas fa-print"></i> Receipt
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-4">No payments recorded yet.</td>
+                                    <td colspan="7" class="text-center py-4">No payments found.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
-                    
-                    {{-- Pagination --}}
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $payments->links() }}
-                    </div>
+                    <div class="mt-3">{{ $payments->links() }}</div>
                 </div>
             </div>
-
         </main>
     </div>
 </div>

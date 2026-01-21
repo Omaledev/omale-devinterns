@@ -83,13 +83,21 @@ class ParentController extends Controller
         $stats = $this->getSidebarStats($children);
         
         $timetableData = [];
+
         foreach ($children as $child) {
             if ($child->studentProfile && $child->studentProfile->class_level_id) {
-                $timetableData[$child->id] = Timetable::where('class_level_id', $child->studentProfile->class_level_id)
-                    ->with(['subject', 'teacher']) 
+                // Fetching raw data
+                $rawTimetable = Timetable::where('class_level_id', $child->studentProfile->class_level_id)
+                    ->with(['subject', 'teacher', 'section']) 
                     ->orderBy('start_time')
-                    ->get()
-                    ->groupBy('day_of_week');
+                    ->get();
+
+                // Grouping by Weekday and Time 
+                $timetableData[$child->id] = $rawTimetable->groupBy('weekday')->map(function ($dayEntries) {
+                    return $dayEntries->keyBy(function ($entry) {
+                        return $entry->start_time . '-' . $entry->end_time;
+                    });
+                });
             }
         }
 
@@ -130,14 +138,15 @@ class ParentController extends Controller
      */
     public function fees()
     {
-        $children = Auth::user()->children()
-            ->with(['studentProfile', 'invoices.academicSession', 'invoices.term'])
+        $parent = auth()->user();
+        
+        $children = $parent->children()
+            ->with(['invoices' => function($query) {
+                $query->latest()->with(['academicSession', 'term', 'school']); 
+            }])
             ->get();
-            
-        $statsChildren = $this->getMyChildren();
-        $stats = $this->getSidebarStats($statsChildren);
 
-        return view('parent.fees', compact('children', 'stats'));
+        return view('parent.fees', compact('children'));
     }
 
     /**

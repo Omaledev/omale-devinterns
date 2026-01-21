@@ -12,6 +12,7 @@ use App\Models\Grade;
 use App\Models\Book;
 use App\Models\Invoice;
 use App\Models\Assignment;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Subject;
 use App\Models\ClassroomAssignment; 
 use App\Models\ReportCard; 
@@ -26,13 +27,18 @@ class StudentController extends Controller
     {
         $classId = auth()->user()->studentProfile->class_level_id;
         
-        $timetable = Timetable::where('class_level_id', $classId)
-            ->with(['subject', 'teacher']) 
+        $timetables = Timetable::where('class_level_id', $classId)
+            ->with(['subject', 'teacher', 'section']) 
             ->orderBy('start_time')
-            ->get()
-            ->groupBy('weekday'); 
+            ->get();
+
+        $weeklyTimetable = $timetables->groupBy('weekday')->map(function ($dayEntries) {
+            return $dayEntries->keyBy(function ($entry) {
+                return $entry->start_time . '-' . $entry->end_time;
+            });
+        });
             
-        return view('student.timetable', compact('timetable'));
+        return view('student.timetable', compact('weeklyTimetable'));
     }
 
     /**
@@ -56,7 +62,6 @@ class StudentController extends Controller
     {
         $studentId = auth()->user()->studentProfile->id;
         
-        // Fetch grades and group them by Term
         $results = Grade::where('student_id', $studentId)
             ->with(['subject', 'academicSession', 'term'])
             ->get()
@@ -83,7 +88,9 @@ class StudentController extends Controller
         return view('student.assignments', compact('assignments'));
     }
 
-    // Handle the form submit method
+    /**
+     * Submit Assignment
+     */
     public function submitAssignment(Request $request)
     {
         $request->validate([
@@ -128,33 +135,81 @@ class StudentController extends Controller
      */
     public function downloadBook(Book $book)
     {
-        // Security Check: ensure file exists
         if (!$book->file_path || !Storage::disk('public')->exists($book->file_path)) {
             return back()->with('error', 'File not found on server.');
         }
 
-        // Download the file
-        
         return Storage::disk('public')->download(
             $book->file_path, 
             Str::slug($book->title) . '.' . pathinfo($book->file_path, PATHINFO_EXTENSION)
         );
     }
-   
 
     /**
-     * Financials / Fees
+     * Financials / Fees Dashboard
      */
     public function fees()
     {
-        $studentId = auth()->user()->studentProfile->id;
+        $studentId = auth()->id();
         
         $invoices = Invoice::where('student_id', $studentId)
-            ->with('payments')
+            ->with(['payments', 'term', 'academicSession'])
             ->latest()
             ->get();
+            
+        $totalBilled = $invoices->sum('total_amount');
+        $totalPaid = $invoices->sum('paid_amount');
+        $totalOutstanding = $totalBilled - $totalPaid;
         
-        return view('student.fees', compact('invoices'));
+        $school = auth()->user()->school;
+
+        return view('student.fees', compact('invoices', 'totalBilled', 'totalPaid', 'totalOutstanding', 'school'));
+    }
+
+    /**
+     * Upload Payment Proof
+     */
+    public function uploadPayment(Request $request)
+    {
+        $request->validate([
+            'invoice_id' => 'required|exists:invoices,id',
+            'amount' => 'required|numeric|min:1',
+            'reference_number' => 'required|string',
+            'proof' => 'required|file|mimes:jpeg,png,pdf|max:2048', 
+        ]);
+
+        $path = $request->file('proof')->store('payment_proofs', 'public');
+
+        Payment::create([
+            'invoice_id' => $request->invoice_id,
+            'amount' => $request->amount,
+            'payment_method' => 'Bank Transfer', 
+            'reference_number' => $request->reference_number,
+            'payment_date' => now(), 
+            'recorded_by' => auth()->id(), 
+            'proof_file_path' => $path,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Payment proof uploaded successfully! The Bursar will review and update your balance shortly.');
+    }
+
+    /**
+     * Download Invoice PDF
+     */
+    public function printInvoice($id)
+    {
+        $studentId = auth()->id();
+
+        $invoice = Invoice::where('id', $id)
+            ->where('student_id', $studentId)
+            ->with(['payments', 'student', 'term', 'academicSession']) 
+            ->firstOrFail();
+        
+        $school = auth()->user()->school; 
+
+        $pdf = Pdf::loadView('student.invoice_pdf', compact('invoice', 'school'));
+        return $pdf->download('Invoice_' . $invoice->invoice_number . '.pdf');
     }
 
     /**
@@ -162,11 +217,8 @@ class StudentController extends Controller
      */
     public function subjects()
     {
-    
         $classId = auth()->user()->studentProfile->class_level_id;
         
-        // Find subjects via the ClassroomAssignments table (where teachers are assigned)
-        // This ensures subjects that actually have a teacher/class assigned
         $subjects = ClassroomAssignment::where('class_level_id', $classId)
             ->with('subject')
             ->get()
@@ -183,7 +235,6 @@ class StudentController extends Controller
     {
         $classId = auth()->user()->studentProfile->class_level_id;
         
-        // Finding teachers assigned to this student's class
         $teachers = ClassroomAssignment::where('class_level_id', $classId)
             ->with(['teacher.user', 'subject'])
             ->get();
@@ -199,12 +250,14 @@ class StudentController extends Controller
         return redirect()->route('messages.index');
     }
 
+    /**
+     * Print Result
+     */
     public function printResult($termId, $sessionId)
     {
         $user = auth()->user();
         $studentProfile = $user->studentProfile;
 
-        // Fetching the Grades for this specific Term & Session
         $grades = \App\Models\Grade::where('student_id', $studentProfile->id)
             ->where('term_id', $termId)
             ->where('academic_session_id', $sessionId)
@@ -215,7 +268,6 @@ class StudentController extends Controller
             return back()->with('error', 'No grades found for this term.');
         }
 
-        // Calculate Summary Stats
         $stats = [
             'total_score' => $grades->sum('total_score'),
             'average' => $grades->avg('total_score'),
@@ -225,32 +277,5 @@ class StudentController extends Controller
         ];
 
         return view('student.result_print', compact('user', 'studentProfile', 'grades', 'stats'));
-    }
-
-    public function uploadPayment(Request $request)
-    {
-        $request->validate([
-            'invoice_id' => 'required|exists:invoices,id',
-            'amount' => 'required|numeric|min:1',
-            'reference_number' => 'required|string',
-            'proof' => 'required|file|mimes:jpeg,png,pdf|max:2048', // Max 2MB
-        ]);
-
-        // Uploading the file
-        $path = $request->file('proof')->store('payment_proofs', 'public');
-
-        // Creating the Payment Record
-        \App\Models\Payment::create([
-            'invoice_id' => $request->invoice_id,
-            'amount' => $request->amount,
-            'payment_method' => 'Bank Transfer/Upload', 
-            'reference_number' => $request->reference_number,
-            'payment_date' => now(), 
-            'recorded_by' => auth()->id(), 
-            'proof_file_path' => $path,
-            'status' => 'pending' 
-        ]);
-
-        return back()->with('success', 'Payment proof uploaded! Waiting for Bursar verification.');
     }
 }

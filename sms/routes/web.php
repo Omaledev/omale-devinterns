@@ -25,6 +25,7 @@ use App\Http\Controllers\SchoolAdmin\AcademicSessionController as SchoolAdminAca
 use App\Http\Controllers\SchoolAdmin\TermController as SchoolAdminTermController;
 use App\Http\Controllers\SchoolAdmin\TimetableController as SchoolAdminTimetableController;
 use App\Http\Controllers\SchoolAdmin\AssessmentTypeController as SchoolAdminAssessmentTypeController;
+use App\Http\Controllers\SchoolAdmin\SchoolBankAccountSettingsController as SchoolAdminSchoolBankAccountSettingsController;
 // Shared Routes between schooladmin and bursar
 use App\Http\Controllers\SchoolAdmin\FeeStructureController as SchoolAdminFeeStructureController;
 use App\Http\Controllers\SchoolAdmin\InvoiceController as SchoolAdminInvoiceController;
@@ -146,7 +147,8 @@ Route::middleware(['auth', 'role:SchoolAdmin'])->prefix('admin')->name('schoolad
     Route::post('/assessments', [SchoolAdminAssessmentTypeController::class, 'store'])->name('assessments.store');
     Route::delete('/assessments/{assessmentType}', [SchoolAdminAssessmentTypeController::class, 'destroy'])->name('assessments.destroy');
 
-// });
+    Route::get('/settings', [SchoolAdminSchoolBankAccountSettingsController::class, 'edit'])->name('settings.edit');
+    Route::post('/settings', [SchoolAdminSchoolBankAccountSettingsController::class, 'update'])->name('settings.update');
     
      // Resource Routes
     Route::resource('students', SchoolAdminStudentProfileController::class);
@@ -195,6 +197,7 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
     Route::post('/grades/lock', [TeacherGradeController::class, 'lock'])->name('grades.lock');
 
     Route::get('/reports', [TeacherReportCardController::class, 'index'])->name('reports.index');
+    Route::get('/reports/{student}/download', [TeacherReportCardController::class, 'download'])->name('reports.download');
 
     Route::get('/my-subjects', [TeacherTeacherController::class, 'mySubjects'])
         ->name('my-subjects');
@@ -204,10 +207,7 @@ Route::middleware(['auth', 'role:Teacher'])->prefix('teacher')->name('teacher.')
 
     Route::resource('assignments', TeacherAssignmentController::class);
 
-    Route::resource('books', TeacherBookController::class);
-  
-
-    
+    Route::resource('books', TeacherBookController::class);  
    
 });
 
@@ -226,6 +226,7 @@ Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')
     Route::get('/teachers', [StudentStudentController::class, 'teachers'])->name('teachers');
     Route::get('/messages', [StudentStudentController::class, 'messages'])->name('messages');
     Route::post('/payments/upload', [StudentStudentController::class, 'uploadPayment'])->name('payments.upload');
+    Route::get('/invoices/{id}/print', [StudentStudentController::class, 'printInvoice'])->name('invoices.print');
     Route::get('/books', [StudentStudentController::class, 'books'])->name('books');
     Route::get('/books/{book}/download', [StudentStudentController::class, 'downloadBook'])->name('books.download');
 });
@@ -262,7 +263,11 @@ Route::middleware(['auth', 'role:Bursar'])->prefix('bursar')->name('bursar.')->g
     Route::get('/reports/outstanding', [BursarReportController::class, 'outstanding'])->name('reports.outstanding');
     Route::get('/reports/collections', [BursarReportController::class, 'collections'])->name('reports.collections');
     Route::get('/students', [BursarDashboardController::class, 'students'])->name('students.index');
-});
+
+    Route::get('/payments/{id}/verify', [BursarPaymentController::class, 'verify'])->name('payments.verify');
+    Route::post('/payments/{id}/approve', [BursarPaymentController::class, 'approve'])->name('payments.approve');
+    Route::post('/payments/{id}/decline', [BursarPaymentController::class, 'decline'])->name('payments.decline');
+    });
 
 //  Fees routes for schoolAdmin and Bursar (Allow BOTH roles)
 Route::middleware(['auth', 'role:SuperAdmin|SchoolAdmin|Bursar']) 

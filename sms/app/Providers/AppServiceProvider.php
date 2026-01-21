@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         // Share active session and term with all views
         $this->shareActiveSessionAndTerm();
 
-         Paginator::useBootstrap(); 
+         Paginator::useBootstrapFive();
     }
 
     protected function configureAuthRoutes()

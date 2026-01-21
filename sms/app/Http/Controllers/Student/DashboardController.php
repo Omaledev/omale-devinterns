@@ -42,8 +42,8 @@ class DashboardController extends Controller
         $averageGrade = $averageGrade ? number_format($averageGrade, 1) : 'N/A';
 
         // Fee Balance
-        $totalInvoiced = Invoice::where('student_id', $studentProfile->id)->sum('total_amount');
-        $totalPaid = Invoice::where('student_id', $studentProfile->id)->sum('paid_amount');
+        $totalInvoiced = Invoice::where('student_id', $user->id)->sum('total_amount');
+        $totalPaid = Invoice::where('student_id', $user->id)->sum('paid_amount');
         $feeBalance = $totalInvoiced - $totalPaid;
 
         $stats = [

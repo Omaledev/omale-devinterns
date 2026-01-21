@@ -106,8 +106,10 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice)
     {
          if($invoice->school_id !== auth()->user()->school_id) abort(403);
-         $invoice->load('items', 'student.studentProfile.classLevel');
-         return view('schooladmin.fees.invoices.show', compact('invoice'));
+    
+        $invoice->load(['items', 'student.studentProfile.classLevel', 'school']);
+    
+        return view('schooladmin.fees.invoices.show', compact('invoice'));
     }
 
     public function destroy($id)

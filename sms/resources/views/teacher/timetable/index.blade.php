@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <form action="{{ route('teacher.timetable.index') }}" method="GET" class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label class="form-label fw-bold">Select Class</label>
+                            <label class="form-label fw-bold">Select Class to View</label>
                             <select name="class_level_id" class="form-select" onchange="this.form.submit()">
                                 <option value="">-- Choose Class --</option>
                                 @foreach($classes as $class)
@@ -28,41 +28,77 @@
             </div>
 
             {{-- Timetable Display --}}
-            @if($selectedClassId && $timetable)
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        Timetable for Class
-                    </div>
-                    <div class="card-body text-center">
-                        {{-- Logic depends on how you store timetables (File upload vs Database Rows) --}}
-                        
-                        {{-- CASE A: If Timetable is a file upload --}}
-                        @if(!empty($timetable->file_path))
-                            <div class="mb-3">
-                                <i class="fas fa-file-pdf fa-5x text-danger"></i>
-                            </div>
-                            <h5>Download Timetable</h5>
-                            <a href="{{ asset('storage/' . $timetable->file_path) }}" class="btn btn-primary" target="_blank">
-                                <i class="fas fa-download me-2"></i> View / Download
-                            </a>
+            @if($selectedClassId && !empty($weeklyTimetable))
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center bg-white shadow-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="align-middle" style="width: 10%">Time</th>
+                                @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as $day)
+                                    <th style="width: 18%">{{ $day }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                // Calculatingunique time slots across the week
+                                $timeSlots = [];
+                                foreach ($weeklyTimetable as $day => $entries) {
+                                    $timeSlots = array_merge($timeSlots, $entries->keys()->all());
+                                }
+                                $timeSlots = array_unique($timeSlots);
+                                
+                                // Sort times chronologically
+                                usort($timeSlots, function($a, $b) {
+                                    return strtotime(explode('-', $a)[0]) - strtotime(explode('-', $b)[0]);
+                                });
+                            @endphp
 
-                        {{-- CASE B: If Timetable is just text/description --}}
-                        @elseif(!empty($timetable->description))
-                            <p class="lead">{{ $timetable->description }}</p>
+                            @if(count($timeSlots) > 0)
+                                @foreach($timeSlots as $slot)
+                                    @php
+                                        [$startTime, $endTime] = explode('-', $slot);
+                                    @endphp
+                                    <tr>
+                                        <td class="bg-light align-middle fw-bold">
+                                            {{ \Carbon\Carbon::parse($startTime)->format('H:i') }}<br>
+                                            -<br>
+                                            {{ \Carbon\Carbon::parse($endTime)->format('H:i') }}
+                                        </td>
 
-                        {{-- CASE C: Empty --}}
-                        @else
-                            <p class="text-muted">No details available for this timetable.</p>
-                        @endif
-                    </div>
+                                        @foreach(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as $day)
+                                            <td>
+                                                @if(isset($weeklyTimetable[$day][$slot]))
+                                                    @php $entry = $weeklyTimetable[$day][$slot]; @endphp
+                                                    <div class="p-2 border rounded bg-info text-white shadow-sm">
+                                                        <strong>{{ $entry->subject->name ?? 'Subject' }}</strong><br>
+                                                        <small>{{ $entry->section->name ?? 'Section' }}</small><br>
+                                                        <small>{{ $entry->teacher->name ?? 'Teacher' }}</small>
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <p class="text-muted">No timetable entries found for this class.</p>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
             @elseif($selectedClassId)
                 <div class="alert alert-warning">
-                    No timetable has been uploaded/set for this class by the Admin yet.
+                    No timetable has been created for this class yet.
                 </div>
             @else
                 <div class="alert alert-info">
-                    Please select a class to view its timetable.
+                    Please select a class above to view the schedule.
                 </div>
             @endif
         </main>

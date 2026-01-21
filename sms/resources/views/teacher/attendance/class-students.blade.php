@@ -59,7 +59,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $student->studentProfile->admission_number ?? 'N/A' }}</td>
+                                        <td>{{ $student->admission_number ?? 'N/A' }}</td>
                                         <td>
                                             {{-- Assuming parent relationship exists, otherwise generic placeholder --}}
                                             @if($student->parents && $student->parents->count() > 0)

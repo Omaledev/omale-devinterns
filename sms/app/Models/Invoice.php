@@ -45,4 +45,9 @@ class Invoice extends Model
     {
         return $this->total_amount - $this->paid_amount;
     }  
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

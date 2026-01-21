@@ -13,19 +13,28 @@ class TimetableController extends Controller
     {
         $schoolId = session('active_school');
         
-        // Get all classes to populate a dropdown filter
+        // Getting all classes for the dropdown
         $classes = ClassLevel::where('school_id', $schoolId)->get();
 
-        // If a class is selected, fetch that timetable, otherwise empty or first class
         $selectedClassId = $request->get('class_level_id');
-        $timetable = null;
+        $weeklyTimetable = [];
 
         if ($selectedClassId) {
-            $timetable = Timetable::where('school_id', $schoolId)
+            // Fetching ALL entries for this class
+            $timetables = Timetable::with('subject', 'teacher', 'section')
+                ->where('school_id', $schoolId)
                 ->where('class_level_id', $selectedClassId)
-                ->first(); 
+                ->orderBy('start_time')
+                ->get();
+
+            // Grouping them exactly like the Admin Controller does
+            $weeklyTimetable = $timetables->groupBy('weekday')->map(function ($dayEntries) {
+                return $dayEntries->keyBy(function ($entry) {
+                    return $entry->start_time . '-' . $entry->end_time;
+                });
+            });
         }
 
-        return view('teacher.timetable.index', compact('classes', 'timetable', 'selectedClassId'));
+        return view('teacher.timetable.index', compact('classes', 'weeklyTimetable', 'selectedClassId'));
     }
 }

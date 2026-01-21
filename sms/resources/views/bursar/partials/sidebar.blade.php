@@ -1,3 +1,19 @@
+@php
+    $schoolId = auth()->user()->school_id;
+
+    // Counting Invoices that are NOT fully paid (Unpaid or Partial)
+    $pendingInvoicesCount = \App\Models\Invoice::where('school_id', $schoolId)
+        ->whereIn('status', ['UNPAID', 'PARTIAL'])
+        ->count();
+
+    // Counting Payments that are 'pending' (Waiting for Verification)
+    $pendingPaymentsCount = \App\Models\Payment::whereHas('invoice', function($q) use ($schoolId) {
+            $q->where('school_id', $schoolId);
+        })
+        ->where('status', 'pending')
+        ->count();
+@endphp
+
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark text-dark sidebar collapse min-vh-100">
     <div class="position-sticky pt-3">
         <div class="text-center mb-4">
@@ -34,7 +50,9 @@
                    href="{{ route('finance.invoices.index') }}">
                     <i class="fas fa-file-invoice me-2"></i>
                     Invoices
-                    <span class="badge bg-primary float-end">{{ $stats['pending_invoices'] ?? 0 }}</span>
+                    @if($pendingInvoicesCount > 0)
+                        <span class="badge bg-primary float-end">{{ $pendingInvoicesCount }}</span>
+                    @endif
                 </a>
             </li>
             
@@ -47,15 +65,14 @@
                 </a>
             </li>
 
-            {{-- Payments--}}
+            {{-- Payments --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('bursar.payments.*') ? 'active text-white' : 'text-white-50' }}" 
                    href="{{ route('bursar.payments.index') }}">
                     <i class="fas fa-credit-card me-2"></i>
                     Payments
-                    {{-- Only show badge if stats exist --}}
-                    @if(isset($stats['recent_payments']))
-                        <span class="badge bg-success float-end">{{ $stats['recent_payments'] }}</span>
+                    @if($pendingPaymentsCount > 0)
+                        <span class="badge bg-danger float-end" title="Pending Verification">{{ $pendingPaymentsCount }}</span>
                     @endif
                 </a>
             </li>

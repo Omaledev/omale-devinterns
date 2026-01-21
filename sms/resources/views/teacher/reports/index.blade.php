@@ -78,7 +78,7 @@
                                 @foreach($students as $student)
                                 <tr>
                                     <td class="align-middle fw-bold text-dark">{{ $student->name }}</td>
-                                    <td class="align-middle">{{ $student->studentProfile->admission_number ?? 'N/A' }}</td>
+                                   <td class="align-middle">{{ $student->studentProfile->student_id ?? 'N/A' }}</td>
                                     <td class="text-end">
                                         <a href="{{ route('teacher.reports.download', ['student' => $student->id, 'session_id' => $selectedSession, 'term_id' => $selectedTerm]) }}" 
                                            class="btn btn-sm btn-danger shadow-sm" target="_blank">

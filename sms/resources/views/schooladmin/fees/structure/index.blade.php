@@ -20,6 +20,12 @@
                 
                 <div class="d-flex gap-2">
                     {{-- Action Buttons --}}
+
+                    @if(auth()->user()->hasRole('SchoolAdmin'))
+                        <a href="{{ route('schooladmin.settings.edit') }}" class="btn btn-info btn-sm shadow-sm text-nowrap text-white">
+                             <i class="fas fa-plus me-1"></i> Bank Settings
+                        </a>
+                    @endif
                     <a href="{{ route('finance.fee-structures.create') }}" class="btn btn-primary btn-sm shadow-sm text-nowrap">
                         <i class="fas fa-plus me-1"></i> Add Fee
                     </a>

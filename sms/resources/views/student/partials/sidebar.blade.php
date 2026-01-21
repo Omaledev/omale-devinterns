@@ -1,3 +1,15 @@
+@php
+    $user = auth()->user();
+    $balance = 0;
+                
+    // Checking if user is logged in
+    if($user) {
+        $invoices = \App\Models\Invoice::where('student_id', $user->id)->get();
+        $balance = $invoices->sum('total_amount') - $invoices->sum('paid_amount');
+    }
+@endphp
+
+
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
     <div class="position-sticky pt-3">
         <div class="text-center mb-4">
@@ -52,15 +64,17 @@
                     Study Books
                 </a>
             </li> 
+          
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('student.fees') ? 'active text-white' : 'text-white-50' }}" 
                 href="{{ route('student.fees') }}">  
                     <i class="fas fa-money-bill-wave me-2"></i>
                     Fees
-                    @if(($stats['fee_balance'] ?? 0) > 0)
-                    <span class="badge bg-danger float-end">Due</span>
+                    
+                    @if($balance > 0)
+                        <span class="badge bg-danger float-end">Due</span>
                     @else
-                    <span class="badge bg-success float-end">Paid</span>
+                        <span class="badge bg-success float-end">Paid</span>
                     @endif
                 </a>
             </li>

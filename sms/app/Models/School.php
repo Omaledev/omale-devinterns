@@ -14,6 +14,9 @@ class School extends Model
         'name',
         'address',
         'email',
+        'bank_name',      
+        'account_name',   
+        'account_number',
         'phone',
         'principal_name'
     ];

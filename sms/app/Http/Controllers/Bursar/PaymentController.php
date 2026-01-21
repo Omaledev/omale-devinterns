@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -14,9 +15,10 @@ class PaymentController extends Controller
     {
         $schoolId = auth()->user()->school_id;
 
-        // Fetch payments, latest first, with pagination
         $payments = Payment::with('invoice.student')
             ->whereHas('invoice', fn($q) => $q->where('school_id', $schoolId))
+            // Sorting by Pending first, then by date
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 1 ELSE 2 END")
             ->latest('payment_date')
             ->paginate(15);
 
@@ -76,6 +78,55 @@ class PaymentController extends Controller
         });
 
         return redirect()->route('bursar.dashboard')->with('success', 'Payment recorded successfully!');
+    }
+
+    /**
+     * Show the verification page with the uploaded receipt.
+     */
+    public function verify($id)
+    {
+        $payment = Payment::with('invoice.student')->findOrFail($id);
+        return view('bursar.payments.verify', compact('payment'));
+    }
+
+    /**
+     * Approve the payment and update the invoice.
+     */
+    public function approve($id)
+    {
+        DB::transaction(function () use ($id) {
+            $payment = Payment::with('invoice')->findOrFail($id);
+
+            if($payment->status === 'approved') {
+                return; // Prevent double approval
+            }
+
+            // Marking Payment as Approved
+            $payment->update(['status' => 'approved']);
+
+            // Updating Invoice Balance
+            $invoice = $payment->invoice;
+            $invoice->paid_amount += $payment->amount;
+
+            // Updating Invoice Status
+            if ($invoice->paid_amount >= $invoice->total_amount) {
+                $invoice->status = 'PAID';
+            } else {
+                $invoice->status = 'PARTIAL';
+            }
+            $invoice->save();
+        });
+
+        return redirect()->route('bursar.payments.index')->with('success', 'Payment verified and Invoice updated!');
+    }
+    
+    public function decline(Request $request, $id)
+    {
+        $payment = Payment::findOrFail($id);
+        $payment->update(['status' => 'declined']); 
+        // Note: We do NOT update the invoice balance if declined.
+        
+        return redirect()->route('bursar.payments.index')->with('error', 'Payment marked as declined.');
     }
 
     /**

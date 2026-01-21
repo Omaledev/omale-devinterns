@@ -83,12 +83,18 @@ class ReportCardController extends Controller
         }
 
         $assessmentTypes = \App\Models\AssessmentType::where('school_id', $session->school_id)->get();
-        // Generate PDF
+
+       // Generating PDF
         $pdf = Pdf::loadView('teacher.reports.pdf', compact('student', 'session', 'term', 'reportData', 'assessmentTypes'));
-        
-        // Download the file
-        return $pdf->download($student->admission_number . '_ReportCard.pdf');
-    }
+
+        // Get Admission Number
+        $admNo = $student->studentProfile->student_id ?? 'Student'; 
+
+        // Replacing '/' and '\' with '_' to prevent error
+        $safeFilename = str_replace(['/', '\\'], '_', $admNo);
+
+        return $pdf->download($safeFilename . '_ReportCard.pdf');
+            }
 
     // Helper: Get Letter Grade
     private function getLetterGrade($score) {
