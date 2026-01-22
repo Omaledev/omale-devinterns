@@ -110,7 +110,7 @@
                                                 <i class="fas fa-times me-1"></i>Cancel
                                             </a>
                                             <button type="submit" class="btn btn-primary">
-                                                <i class="fas fa-save me-1"></i>Create School
+                                                Create School
                                             </button>
                                         </div>
                                     </div>
