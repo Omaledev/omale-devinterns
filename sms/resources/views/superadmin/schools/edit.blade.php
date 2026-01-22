@@ -34,7 +34,7 @@
                     <div class="card shadow">
                         <div class="card-header bg-white py-3">
                             <h6 class="m-0 fw-bold text-primary">
-                                <i class="fas fa-edit me-2"></i>Edit School Information
+                                Edit School Information
                             </h6>
                         </div>
                         <div class="card-body">
