@@ -73,7 +73,8 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        $schools = School::all(); 
+        // $schools = School::all();
+        $schools = \App\Models\School::where('is_active', true)->get(); 
         return view('auth.register', compact('schools'));
     }
 

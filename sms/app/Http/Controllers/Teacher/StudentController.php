@@ -14,7 +14,11 @@ class StudentController extends Controller
      * Show list of classes to choose from
      */
     public function index()
-    {
+    {  
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $schoolId = session('active_school');
         
         // Fetch classes associated with this school
@@ -28,7 +32,11 @@ class StudentController extends Controller
      * Show students for a specific Class (and Section)
      */
     public function list(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
             'section_id' => 'nullable|exists:sections,id',
@@ -57,7 +65,10 @@ class StudentController extends Controller
     }
 
     public function performance(StudentProfile $student)
-    {
+    {  
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
         // Ensure the teacher is allowed to view this student (Optional security check)
         if($student->school_id !== session('active_school')) abort(403);
 

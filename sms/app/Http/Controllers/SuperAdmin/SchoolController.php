@@ -152,5 +152,21 @@ class SchoolController extends Controller
         return view('superadmin.schools.users', compact('school', 'users'));
     }
 
+        /**
+     * Toggle School Status (Active/Inactive)
+     */
+    public function toggleStatus($id)
+    {
+        $school = School::findOrFail($id);
+        
+        // Fliping the status (if true make false, if false make true)
+        $school->is_active = !$school->is_active;
+        $school->save();
+
+        $status = $school->is_active ? 'Activated' : 'Deactivated';
+
+        return back()->with('success', "School has been successfully $status.");
+    }
+
     
 }

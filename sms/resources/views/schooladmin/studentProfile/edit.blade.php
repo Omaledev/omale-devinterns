@@ -108,20 +108,30 @@
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Academic Information</h6>
 
-                                        {{-- Admission Number (READ ONLY) --}}
+                                        {{-- Admission Number--}}
                                         <div class="mb-3">
                                             <label for="admission_number" class="form-label">
-                                                Admission Number
+                                                Admission Number <span class="text-danger">*</span>
                                             </label>
                                             <div class="input-group">
                                                 <input type="text" 
-                                                    class="form-control bg-light"
+                                                    class="form-control {{ $student->admission_number ? 'bg-light' : '' }}"
                                                     id="admission_number" 
                                                     name="admission_number" 
                                                     value="{{ old('admission_number', $student->admission_number) }}"
-                                                    readonly>
+                                                    {{-- Make readonly only if they already have an ID --}}
+                                                    {{ $student->admission_number ? 'readonly' : '' }}
+                                                    required>
+                                                
+                                                {{-- Passing the calculated sequential number here --}}
+                                                <button class="btn btn-outline-primary" type="button" id="generateIdBtn" 
+                                                        data-next-id="{{ $nextAdmissionNumber }}">
+                                                    <i class="fas fa-magic me-1"></i> Generate
+                                                </button>
                                             </div>
-                                            <small class="text-muted">Admission number cannot be changed.</small>
+                                            <small class="text-muted">
+                                                Next available ID is: <strong>{{ $nextAdmissionNumber }}</strong>
+                                            </small>
                                         </div>
 
                                         {{-- Class Selection --}}
@@ -224,14 +234,14 @@
 @push('scripts')
 <script>
     document.getElementById('generateIdBtn').addEventListener('click', function() {
-        const prefix = this.getAttribute('data-prefix'); 
-        const year = new Date().getFullYear();
-        const random = Math.floor(1000 + Math.random() * 9000);
+        // Getting the sequential ID calculated in the controller
+        const nextId = this.getAttribute('data-next-id');
         
-        // Random generation with slashes for Edit mode
-        const generatedId = prefix + '/' + year + '/' + random; 
+        // Setting the value
+        document.getElementById('admission_number').value = nextId;
         
-        document.getElementById('admission_number').value = generatedId;
+        // Visual confirmation
+        // alert('Generated Next Sequential ID: ' + nextId);
     });
 </script>
 @endpush

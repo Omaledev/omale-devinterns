@@ -13,7 +13,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportCardController extends Controller
 {
    public function index(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $teacher = auth()->user();
         $schoolId = $teacher->school_id;
 
@@ -43,7 +47,11 @@ class ReportCardController extends Controller
 
     // Generate Report Card for a Single Student
     public function download(Request $request, User $student)
-    {
+    {  
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
         $session = AcademicSession::find($request->session_id);
         $term = Term::find($request->term_id);
 

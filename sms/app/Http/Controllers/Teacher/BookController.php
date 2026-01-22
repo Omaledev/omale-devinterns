@@ -13,6 +13,10 @@ class BookController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         // Show books uploaded by this teacher
         $books = Book::where('teacher_id', auth()->id())
             ->with(['classLevel', 'subject'])
@@ -24,6 +28,10 @@ class BookController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $schoolId = session('active_school');
         $classes = ClassLevel::where('school_id', $schoolId)->get();
         $subjects = Subject::where('school_id', $schoolId)->get();
@@ -32,7 +40,11 @@ class BookController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'class_level_id' => 'required|exists:class_levels,id',
@@ -62,7 +74,10 @@ class BookController extends Controller
     }
 
     public function destroy(Book $book)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
         // Security: Ensure teacher owns the book
         if($book->teacher_id !== auth()->id()) abort(403);
 

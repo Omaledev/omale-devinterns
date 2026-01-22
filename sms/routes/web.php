@@ -131,6 +131,8 @@ Route::middleware(['auth', 'role:SuperAdmin'])->prefix('superadmin')->name('supe
     Route::get('/schools/{school}/create-user', [SchoolController::class, 'createUser'])->name('schools.create-user');
     Route::post('/schools/{school}/store-user', [SchoolController::class, 'storeUser'])->name('schools.store-user');
     Route::get('/schools/{school}/users', [SchoolController::class, 'showUsers'])->name('schools.users');
+    Route::patch('/schools/{id}/toggle-status', [SchoolController::class, 'toggleStatus'])
+    ->name('schools.toggle-status');
 });
 
 // SchoolAdmin Routes
@@ -219,7 +221,7 @@ Route::middleware(['auth', 'role:Student'])->prefix('student')->name('student.')
     Route::get('/results/print/{term_id}/{session_id}', [StudentStudentController::class, 'printResult'])->name('results.print');
     Route::get('/attendance', [StudentStudentController::class, 'attendance'])->name('attendance');
     Route::get('/fees', [StudentStudentController::class, 'fees'])->name('fees');
-    Route::get('/assignments', [StudentStudentController::class, 'assignment'])->name('assignments');
+    Route::get('/assignments', [StudentStudentController::class, 'assignments'])->name('assignments');
     Route::post('/assignments/submit', [StudentStudentController::class, 'submitAssignment'])
         ->name('assignments.submit');
     Route::get('/subjects', [StudentStudentController::class, 'subjects'])->name('subjects');

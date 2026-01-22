@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Notification;
 class AnnouncementController extends Controller
 {
     public function index()
-    {
+    {  
+        
         $user = auth()->user();
         
         // Active announcements

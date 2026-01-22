@@ -7,11 +7,14 @@ use App\Models\AssessmentType;
 
 class AssessmentController extends Controller
 {
-    public function index()
+   public function index()
     {
-        $schoolId = session('active_school');
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
+        $schoolId = session('active_school') ?? auth()->user()->school_id;
 
-        // Fetch Assessment Types set by School Admin
         $assessmentTypes = AssessmentType::where('school_id', $schoolId)
             ->orderBy('name')
             ->get();

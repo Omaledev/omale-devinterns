@@ -79,17 +79,35 @@
                                     <div class="col-md-6">
                                         <h6 class="text-primary mb-3">Professional Information</h6>
 
+                                        {{-- Employee ID Section --}}
                                         <div class="mb-3">
-                                            <label for="employee_id" class="form-label">Employee ID</label>
+                                            <label for="employee_id" class="form-label">
+                                                Employee ID <span class="text-danger">*</span>
+                                            </label>
                                             <div class="input-group">
                                                 <input type="text" 
-                                                    class="form-control bg-light"
+                                                    class="form-control {{ $teacher->employee_id ? 'bg-light' : '' }}"
                                                     id="employee_id" 
                                                     name="employee_id" 
                                                     value="{{ old('employee_id', $teacher->employee_id) }}"
-                                                    readonly>
+                                                    {{-- Only lock the field if they ALREADY have an ID --}}
+                                                    {{ $teacher->employee_id ? 'readonly' : '' }}
+                                                    required>
+                                                <button class="btn btn-outline-primary" type="button" id="generateIdBtn" 
+                                                        data-next-id="{{ $nextEmployeeId }}">
+                                                    <i class="fas fa-magic me-1"></i> Generate
+                                                </button>
                                             </div>
-                                            <small class="text-muted">Employee ID cannot be modified.</small>
+                                            @error('employee_id')
+                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                            @enderror
+                                            <small class="text-muted">
+                                                @if($teacher->employee_id)
+                                                    ID cannot be modified.
+                                                @else
+                                                    Next available ID: <strong>{{ $nextEmployeeId }}</strong>
+                                                @endif
+                                            </small>
                                         </div>
 
                                         <div class="card bg-light border-0 mb-3">
@@ -152,3 +170,20 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const generateBtn = document.getElementById('generateIdBtn');
+        if(generateBtn) {
+            generateBtn.addEventListener('click', function() {
+                // Getting the ID passed from controller
+                const nextId = this.getAttribute('data-next-id');
+                
+                // Setting the value
+                document.getElementById('employee_id').value = nextId;
+            });
+        }
+    });
+</script>
+@endpush

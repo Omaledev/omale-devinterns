@@ -12,12 +12,18 @@
                 </div>
             @endif
             <h6 class="text-white mb-1">{{ auth()->user()->name }}</h6>
-            <small class="text-white-50">Teacher • {{ auth()->user()->teacherProfile->employee_id ?? 'N/A' }}</small>
+            
+            {{-- Check if Profile Exists --}}
+            @if(auth()->user()->teacherProfile)
+                <small class="text-white-50">Teacher • {{ auth()->user()->teacherProfile->employee_id ?? 'Pending' }}</small>
+            @else
+                <small class="text-warning">Profile Pending</small>
+            @endif
         </div>
 
         <ul class="nav flex-column">
             
-            {{-- Dashboard --}}
+            {{-- DASHBOARD (Visible) --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('teacher.dashboard') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
                    href="{{ route('teacher.dashboard') }}">
@@ -26,126 +32,126 @@
                 </a>
             </li>
 
-            {{-- My Classes --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.my-classes*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.my-classes') }}">
-                    <i class="fas fa-door-open me-2"></i>
-                    My Classes
-                </a>
-            </li>
-            
-            {{-- my-subject --}}
-           <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.my-subjects') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                href="{{ route('teacher.my-subjects') }}">
-                    <i class="fas fa-chalkboard-teacher me-2"></i>
-                    My Subjects
-                </a>
-            </li>
+            {{-- ONLY SHOW THESE IF TEACHER HAS A PROFILE AND IS APPROVED --}}
+            @if(auth()->user()->teacherProfile && auth()->user()->is_approved)
 
-            {{-- Attendance --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.attendance.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.attendance.select') }}">
-                    <i class="fas fa-calendar-check me-2"></i>
-                    Attendance
-                </a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.my-classes*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.my-classes') }}">
+                        <i class="fas fa-door-open me-2"></i>
+                        My Classes
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.my-subjects') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.my-subjects') }}">
+                        <i class="fas fa-chalkboard-teacher me-2"></i>
+                        My Subjects
+                    </a>
+                </li>
 
-
-             {{-- Assignments --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.assignments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                href="{{ route('teacher.assignments.index') }}">
-                    <i class="fas fa-pen-square me-2"></i>
-                    Assignments
-                </a>
-            </li>
-
-            {{-- Grades --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.grades.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.grades.index') }}">
-                    <i class="fas fa-chart-bar me-2"></i>
-                    Grades
-                </a>
-            </li>
+                {{-- Attendance --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.attendance.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.attendance.select') }}">
+                        <i class="fas fa-calendar-check me-2"></i>
+                        Attendance
+                    </a>
+                </li>
 
 
-            {{-- Assessments --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.assessments.index') }}">
-                    <i class="fas fa-tasks me-2"></i>
-                    Assessments
-                    {{-- @if(isset($stats['pending_assessments']))
-                        <span class="badge bg-warning float-end">{{ $stats['pending_assessments'] }}</span>
-                    @endif --}}
-                </a>
-            </li>
+                {{-- Assignments --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.assignments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.assignments.index') }}">
+                        <i class="fas fa-pen-square me-2"></i>
+                        Assignments
+                    </a>
+                </li>
 
-            {{-- Timetable --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.timetable.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.timetable.index') }}">
-                    <i class="fas fa-calendar-alt me-2"></i>
-                    Timetable
-                </a>
-            </li>
-            {{-- Students --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.students.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.students.index') }}">
-                    <i class="fas fa-user-graduate me-2"></i>
-                    Students
-                </a>
-            </li>
+                {{-- Grades --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.grades.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.grades.index') }}">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Grades
+                    </a>
+                </li>
 
-            {{-- Messages --}}
-            <li class="nav-item">
-               <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                href="{{ route('messages.index') }}"> 
-                    <i class="fas fa-comments me-2"></i>
-                    Messages
-                </a>
-            </li>
+                {{-- Assessments --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.assessments.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.assessments.index') }}">
+                        <i class="fas fa-tasks me-2"></i>
+                        Assessments
+                    </a>
+                </li>
 
-            {{-- Notifications --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('announcements.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('announcements.index') }}">
-                    <i class="fas fa-fw fa-bullhorn me-2"></i>
-                    Notifications
-                </a>
-            </li>
+                {{-- Timetable --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.timetable.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.timetable.index') }}">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Timetable
+                    </a>
+                </li>
 
-            {{-- Meetings--}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('meetings.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.meetings') }}">
-                    <i class="fas fa-fw fa-bullhorn me-2"></i>
-                    Meetings
-                </a>
-            </li>
+                {{-- Students --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.students.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.students.index') }}">
+                        <i class="fas fa-user-graduate me-2"></i>
+                        Students
+                    </a>
+                </li>
 
-            {{-- Reports --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.reports.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                   href="{{ route('teacher.reports.index') }}">
-                    <i class="fas fa-chart-pie me-2"></i>
-                    Reports
-                </a>
-            </li>
+                {{-- Messages --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('messages.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('messages.index') }}"> 
+                        <i class="fas fa-comments me-2"></i>
+                        Messages
+                    </a>
+                </li>
 
-            {{-- library --}}
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('teacher.books.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
-                href="{{ route('teacher.books.index') }}">
-                    <i class="fas fa-book-reader me-2"></i>
-                    Library
-                </a>
-            </li>
+                {{-- Notifications --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('announcements.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('announcements.index') }}">
+                        <i class="fas fa-fw fa-bullhorn me-2"></i>
+                        Notifications
+                    </a>
+                </li>
+
+                {{-- Meetings --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('meetings.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.meetings') }}">
+                        <i class="fas fa-fw fa-bullhorn me-2"></i>
+                        Meetings
+                    </a>
+                </li>
+
+                {{-- Reports --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.reports.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.reports.index') }}">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Reports
+                    </a>
+                </li>
+
+                {{-- Library --}}
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('teacher.books.*') ? 'active text-white bg-secondary bg-opacity-25 rounded' : 'text-white-50' }}" 
+                    href="{{ route('teacher.books.index') }}">
+                        <i class="fas fa-book-reader me-2"></i>
+                        Library
+                    </a>
+                </li>
+
+            @endif
         </ul>
     </div>
 </div>

@@ -152,15 +152,18 @@ class StudentProfileController extends Controller
     public function edit(User $student)
     {
         if ($student->school_id !== auth()->user()->school_id) {
-        abort(403);
-    }
-    
-    $student->load('studentProfile');
+            abort(403);
+        }
+        
+        $student->load('studentProfile');
 
-    $classLevels = \App\Models\ClassLevel::where('school_id', auth()->user()->school_id)->get();
-    $sections = \App\Models\Section::where('school_id', auth()->user()->school_id)->get();
+        $classLevels = \App\Models\ClassLevel::where('school_id', auth()->user()->school_id)->get();
+        $sections = \App\Models\Section::where('school_id', auth()->user()->school_id)->get();
 
-        return view('schooladmin.studentProfile.edit', compact('student', 'classLevels', 'sections'));
+        // This looks at the database, finds the last one (e.g. 020), and adds 1 (021)
+        $nextAdmissionNumber = $this->generateAdmissionNumber();
+
+        return view('schooladmin.studentProfile.edit', compact('student', 'classLevels', 'sections', 'nextAdmissionNumber'));
     }
 
     /**

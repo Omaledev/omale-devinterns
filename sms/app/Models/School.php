@@ -18,7 +18,8 @@ class School extends Model
         'account_name',   
         'account_number',
         'phone',
-        'principal_name'
+        'principal_name',
+        'is_active',
     ];
 
     protected $rules = [
@@ -28,6 +29,12 @@ class School extends Model
         'phone' => 'nullable|string',
         'principal_name' => 'nullable|string|max:255'
     ];
+
+    // Helper to check if school is active
+    public function isActive()
+    {
+        return $this->is_active === 1 || $this->is_active === true;
+    }
 
     public function users() {
         return $this->hasMany(User::class);

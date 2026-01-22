@@ -116,7 +116,10 @@ class TeacherProfileController extends Controller
     public function edit(User $teacher)
     {
          if ($teacher->school_id !== auth()->user()->school_id) abort(403);
-         return view('schooladmin.teacherProfile.edit', compact('teacher'));
+
+         $nextEmployeeId = $this->generateEmployeeId();
+
+         return view('schooladmin.teacherProfile.edit', compact('teacher', 'nextEmployeeId'));
     }
 
     public function update(Request $request, User $teacher)

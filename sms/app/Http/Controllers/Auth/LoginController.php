@@ -42,6 +42,27 @@ class LoginController extends Controller
     // Overriding the authenticated method to redirect based on role
     protected function authenticated(Request $request, $user)
     {
+        // SECURITY CHECK: Is the school active? 
+        // Check if user belongs to a school and that school is marked inactive
+        if ($user->school && !$user->school->is_active) {
+            
+            // Exception: Allow SuperAdmin to login regardless of school status
+            if (!$user->hasRole('SuperAdmin')) {
+                
+                // A. Log them out immediately
+                auth()->logout();
+                
+                // B. Kill the session
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                // C. Redirect back to login with an error message
+                return redirect()->route('sign-in')->withErrors([
+                    'email' => 'Your school has been deactivated. Access denied.'
+                ]);
+            }
+        }
+        // If check passes, proceed to dashboard
         return $this->redirectToRoleBasedDashboard($user);
     }
 

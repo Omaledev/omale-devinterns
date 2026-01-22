@@ -10,7 +10,11 @@ use App\Models\ClassLevel;
 class TimetableController extends Controller
 {
     public function index(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
         $schoolId = session('active_school');
         
         // Getting all classes for the dropdown

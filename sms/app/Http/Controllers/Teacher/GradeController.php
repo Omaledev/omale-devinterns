@@ -19,7 +19,11 @@ class GradeController extends Controller
      * Step 1: Select Class and Subject
      */
     public function index()
-    {
+    {  
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $teacher = auth()->user();
         $teacherProfile = TeacherProfile::where('user_id', $teacher->id)->firstOrFail();
 
@@ -34,7 +38,11 @@ class GradeController extends Controller
      * Show the Grading Sheet
      */
     public function create(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
             'subject_id' => 'required|exists:subjects,id',
@@ -102,7 +110,11 @@ class GradeController extends Controller
      * Save Grades
      */
     public function store(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
         $request->validate([
             'grades' => 'required|array',
             'class_level_id' => 'required',

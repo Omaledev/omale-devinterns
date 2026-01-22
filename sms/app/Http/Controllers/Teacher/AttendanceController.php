@@ -17,6 +17,10 @@ class AttendanceController extends Controller
      */
     public function select()
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $schoolId = session('active_school');
         $classes = ClassLevel::where('school_id', $schoolId)->get(); 
         $sections = Section::where('school_id', $schoolId)->get();
@@ -28,7 +32,11 @@ class AttendanceController extends Controller
      * Actual attendance form with student list.
      */
     public function create(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
             'section_id' => 'nullable|exists:sections,id', 
@@ -68,7 +76,11 @@ class AttendanceController extends Controller
      * Storing the bulk attendance data.
      */
     public function store(Request $request)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $data = $request->validate([
             'class_level_id' => 'required|exists:class_levels,id',
             'section_id' => 'nullable|exists:sections,id', 
@@ -101,7 +113,11 @@ class AttendanceController extends Controller
     }
     
     public function summary()
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
          $schoolId = session('active_school');
          $attendanceHistory = Attendance::where('school_id', $schoolId)
             ->with(['student.user', 'classLevel'])

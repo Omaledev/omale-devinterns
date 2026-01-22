@@ -12,6 +12,10 @@ class AssignmentController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $assignments = Assignment::where('teacher_id', auth()->id())
             ->with(['classLevel', 'subject', 'section'])
             ->latest()
@@ -22,6 +26,10 @@ class AssignmentController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $user = auth()->user();
 
         // Safety Check: Ensuring User is actually a teacher
@@ -40,6 +48,10 @@ class AssignmentController extends Controller
 
     public function store(Request $request)
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'classroom_assignment_id' => 'required|exists:classroom_assignments,id',
@@ -84,6 +96,10 @@ class AssignmentController extends Controller
 
     public function edit(Assignment $assignment)
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         if ($assignment->teacher_id !== auth()->id()) {
             abort(403);
         }
@@ -101,6 +117,10 @@ class AssignmentController extends Controller
 
     public function update(Request $request, Assignment $assignment)
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         if ($assignment->teacher_id !== auth()->id()) {
             abort(403);
         }
@@ -145,6 +165,10 @@ class AssignmentController extends Controller
 
     public function destroy(Assignment $assignment)
     {
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
         if ($assignment->teacher_id !== auth()->id()) {
             abort(403);
         }

@@ -55,26 +55,62 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Principal</th>
+                                    <th>Status</th> 
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($schools as $school)
-                                    <tr>
+                                    <tr class="{{ !$school->is_active ? 'table-secondary text-muted' : '' }}">
                                         <td>{{ $school->id }}</td>
-                                        <td>{{ $school->name }}</td>
+                                        <td>
+                                            {{ $school->name }}
+                                            @if(!$school->is_active)
+                                                <span class="badge bg-danger">Inactive</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $school->email }}</td>
                                         <td>{{ $school->phone ?? 'N/A' }}</td>
-                                        <td>{{ $school->principal_name ?? 'N/A' }}</td>
+                                        
+                                        {{-- Status Badge Column --}}
                                         <td>
-                                            <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-sm btn-info">View</a>
-                                            <a href="{{ route('superadmin.schools.edit', $school) }}" class="btn btn-sm btn-warning">Edit</a>
-                                            <form action="{{ route('superadmin.schools.destroy', $school) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                            </form>
+                                            @if($school->is_active)
+                                                <span class="badge bg-success">Active</span>
+                                            @else
+                                                <span class="badge bg-secondary">Inactive</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{{ route('superadmin.schools.show', $school) }}" class="btn btn-sm btn-info" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('superadmin.schools.edit', $school) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                {{-- Toggle Status Button--}}
+                                                <form action="{{ route('superadmin.schools.toggle-status', $school->id) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    
+                                                    @if($school->is_active)
+                                                        {{-- Button to Deactivate --}}
+                                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                                onclick="return confirm('Are you sure you want to deactivate this school? Users will not be able to log in, but data will be kept.')"
+                                                                title="Deactivate School">
+                                                            <i class="fas fa-power-off"></i> Disable
+                                                        </button>
+                                                    @else
+                                                        {{-- Button to Activate --}}
+                                                        <button type="submit" class="btn btn-sm btn-success" 
+                                                                title="Activate School">
+                                                            <i class="fas fa-power-off"></i> Enable
+                                                        </button>
+                                                    @endif
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty

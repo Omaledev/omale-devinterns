@@ -13,14 +13,18 @@ use App\Models\ClassroomAssignment;
 class TeacherController extends Controller
 {
     public function myClasses()
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $user = auth()->user();
         $schoolId = session('active_school');
         
-        $teacherProfile = TeacherProfile::where('user_id', $user->id)->first();
+        $teacherProfile = \App\Models\TeacherProfile::where('user_id', $user->id)->first();
 
-        if (!$teacherProfile) {
-            return view('teacher.my-classes', ['classes' => []]);
+        if (!$teacherProfile || !$user->is_approved) {
+            return view('teacher.my-classes', ['classes' => collect()]);
         }
 
         $classes = $teacherProfile->assignedClasses()
@@ -32,7 +36,11 @@ class TeacherController extends Controller
     }
 
     public function classStudents($classId)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $user = auth()->user();
         $teacherProfile = TeacherProfile::where('user_id', $user->id)->firstOrFail();
 
@@ -58,7 +66,11 @@ class TeacherController extends Controller
     }
 
     public function mySubjects()
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         $user = auth()->user();
 
         // Ensuring Teacher Profile exists
@@ -77,7 +89,11 @@ class TeacherController extends Controller
     }
 
     public function meetings()
-    {
+    {  
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+
         // Getting the authenticated teacher's profile
         $teacherProfile = Auth::user()->teacherProfile;
 
@@ -94,7 +110,11 @@ class TeacherController extends Controller
      * Meeting Status (Approve/Decline)
      */
     public function updateMeetingStatus(Request $request, $id)
-    {
+    {   
+        if (!auth()->user()->teacherProfile || !auth()->user()->is_approved) {
+            return redirect()->route('teacher.dashboard')->with('error', 'Account pending approval.');
+        }
+        
         $request->validate([
             'status' => 'required|in:approved,declined,completed'
         ]);

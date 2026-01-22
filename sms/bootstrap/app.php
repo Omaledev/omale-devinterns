@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Global Middleware (Runs on every request)
         $middleware->web(append: [
             \App\Http\Middleware\SetActiveSchool::class,
+            \App\Http\Middleware\CheckSchoolStatus::class,
         ]);
 
         // API middleware

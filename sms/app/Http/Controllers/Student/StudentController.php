@@ -12,6 +12,7 @@ use App\Models\Grade;
 use App\Models\Book;
 use App\Models\Invoice;
 use App\Models\Assignment;
+use App\Models\AssignmentSubmission;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Subject;
 use App\Models\ClassroomAssignment; 
@@ -25,7 +26,14 @@ class StudentController extends Controller
      */
     public function timetable()
     {
-        $classId = auth()->user()->studentProfile->class_level_id;
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile andclass
+        if (!$user->studentProfile || !$user->studentProfile->class_level_id) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not been assigned to a class yet.');
+        }
+
+        $classId = $user->studentProfile->class_level_id;
         
         $timetables = Timetable::where('class_level_id', $classId)
             ->with(['subject', 'teacher', 'section']) 
@@ -46,7 +54,14 @@ class StudentController extends Controller
      */
     public function attendance()
     {
-        $studentId = auth()->user()->studentProfile->id;
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile
+        if (!$user->studentProfile) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        $studentId = $user->studentProfile->id;
         
         $attendanceRecords = Attendance::where('student_id', $studentId)
             ->orderBy('date', 'desc')
@@ -60,7 +75,14 @@ class StudentController extends Controller
      */
     public function results()
     {
-        $studentId = auth()->user()->studentProfile->id;
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile
+        if (!$user->studentProfile) {
+            return redirect()->route('student.dashboard')->with('error', 'Student profile not found.');
+        }
+
+        $studentId = $user->studentProfile->id;
         
         $results = Grade::where('student_id', $studentId)
             ->with(['subject', 'academicSession', 'term'])
@@ -70,13 +92,18 @@ class StudentController extends Controller
         return view('student.results', compact('results'));
     }
 
-    /**
-     * Assignments
-     */
-    public function assignment()
+    // assignments
+    public function assignments() 
     {
-        $classId = auth()->user()->studentProfile->class_level_id;
-        $studentId = auth()->id();
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile and class
+        if (!$user->studentProfile || !$user->studentProfile->class_level_id) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not been assigned to a class yet.');
+        }
+
+        $classId = $user->studentProfile->class_level_id;
+        $studentId = $user->id;
 
         $assignments = Assignment::where('class_level_id', $classId)
             ->with(['subject', 'submissions' => function($query) use ($studentId) {
@@ -101,7 +128,7 @@ class StudentController extends Controller
 
         $filePath = $request->file('file')->store('submissions', 'public');
 
-        \App\Models\AssignmentSubmission::create([
+        AssignmentSubmission::create([
             'assignment_id' => $request->assignment_id,
             'student_id' => auth()->id(),
             'file_path' => $filePath,
@@ -117,6 +144,12 @@ class StudentController extends Controller
     public function books()
     {
         $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile and class
+        if (!$user->studentProfile || !$user->studentProfile->class_level_id) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not been assigned to a class yet.');
+        }
+
         $classId = $user->studentProfile->class_level_id;
 
         $books = Book::where(function($query) use ($classId) {
@@ -147,6 +180,7 @@ class StudentController extends Controller
 
     /**
      * Financials / Fees Dashboard
+     * (Safe without checks because it uses User ID)
      */
     public function fees()
     {
@@ -217,7 +251,14 @@ class StudentController extends Controller
      */
     public function subjects()
     {
-        $classId = auth()->user()->studentProfile->class_level_id;
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile and class
+        if (!$user->studentProfile || !$user->studentProfile->class_level_id) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not been assigned to a class yet.');
+        }
+
+        $classId = $user->studentProfile->class_level_id;
         
         $subjects = ClassroomAssignment::where('class_level_id', $classId)
             ->with('subject')
@@ -233,7 +274,14 @@ class StudentController extends Controller
      */
     public function teachers()
     {
-        $classId = auth()->user()->studentProfile->class_level_id;
+        $user = auth()->user();
+
+        // SAFETY CHECK: Must have profile and class
+        if (!$user->studentProfile || !$user->studentProfile->class_level_id) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not been assigned to a class yet.');
+        }
+
+        $classId = $user->studentProfile->class_level_id;
         
         $teachers = ClassroomAssignment::where('class_level_id', $classId)
             ->with(['teacher.user', 'subject'])
@@ -256,9 +304,15 @@ class StudentController extends Controller
     public function printResult($termId, $sessionId)
     {
         $user = auth()->user();
+        
+        // SAFETY CHECK: Must have profile
+        if (!$user->studentProfile) {
+            return back()->with('error', 'Student profile not found.');
+        }
+
         $studentProfile = $user->studentProfile;
 
-        $grades = \App\Models\Grade::where('student_id', $studentProfile->id)
+        $grades = Grade::where('student_id', $studentProfile->id)
             ->where('term_id', $termId)
             ->where('academic_session_id', $sessionId)
             ->with(['subject', 'term', 'academicSession']) 
